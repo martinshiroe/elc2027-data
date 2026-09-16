@@ -6,11 +6,47 @@
 // sans cette fonction /api/data renvoyait la page index.html et aucune
 // modification de l'admin n'était jamais enregistrée.
 //
-// Les données vivent dans Supabase (voir _supabase.ts), pas sur le disque :
-// le disque d'une fonction serverless est éphémère et propre à chaque
-// instance, deux appareils n'y verraient jamais la même chose.
+// Les données vivent dans Supabase, pas sur le disque : le disque d'une
+// fonction serverless est éphémère et propre à chaque instance, deux appareils
+// n'y verraient jamais la même chose.
+//
+// Ce fichier est volontairement autonome — aucun import relatif. Le dépôt est
+// en "type": "module" et Vercel exécute la fonction compilée en ESM, où un
+// import sans extension (« ./_supabase ») fait planter le chargement du module
+// avant même que le handler ne s'exécute.
 
-import { getData, putData, supabaseConfigured, adminKeyConfigured, verifyAdminKey } from './_supabase';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const ADMIN_KEY = process.env.ADMIN_KEY;
+
+const TABLE = 'showcase_data';
+const ROW_ID = 1;
+
+function restUrl(suffix = ''): string {
+  return `${String(SUPABASE_URL).replace(/\/$/, '')}/rest/v1/${TABLE}${suffix}`;
+}
+
+function headers(extra?: Record<string, string>): Record<string, string> {
+  return {
+    apikey: String(SUPABASE_SERVICE_KEY),
+    Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+    'Content-Type': 'application/json',
+    ...extra,
+  };
+}
+
+// Compare en temps constant, pour ne pas laisser fuiter le code caractère par
+// caractère via le temps de réponse. Aucun repli sur une valeur par défaut :
+// sans ADMIN_KEY côté serveur, personne ne peut écrire.
+function verifyAdminKey(provided: string | undefined | null): boolean {
+  if (!ADMIN_KEY || !provided) return false;
+  const a = Buffer.from(String(provided));
+  const b = Buffer.from(ADMIN_KEY);
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  return diff === 0;
+}
 
 interface Req {
   method?: string;
@@ -31,9 +67,9 @@ function header(req: Req, name: string): string | undefined {
 }
 
 export default async function handler(req: Req, res: Res): Promise<void> {
-  if (!supabaseConfigured) {
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
     res.status(500).json({
-      error: 'Stockage non configuré : SUPABASE_URL et SUPABASE_SERVICE_KEY sont absents des variables d\'environnement du projet Vercel.',
+      error: "Stockage non configuré : SUPABASE_URL et SUPABASE_SERVICE_KEY sont absents des variables d'environnement du projet Vercel.",
     });
     return;
   }
@@ -41,17 +77,19 @@ export default async function handler(req: Req, res: Res): Promise<void> {
   // --- Lecture (libre) ---
   if (req.method === 'GET') {
     try {
-      const data = await getData();
-      if (!data) {
+      const r = await fetch(restUrl(`?id=eq.${ROW_ID}&select=data`), { headers: headers() });
+      if (!r.ok) throw new Error(`Supabase a répondu ${r.status} : ${await r.text()}`);
+      const rows = (await r.json()) as { data: unknown }[];
+      if (!rows.length) {
         res.status(404).json({
-          error: 'Aucune donnée dans Supabase (table showcase_data vide). Lancez l\'import initial : node scripts/seed-supabase.mjs',
+          error: "Aucune donnée dans Supabase (table showcase_data vide). Lancez l'import initial : node scripts/seed-supabase.mjs",
         });
         return;
       }
       // Sans cette en-tête, un navigateur mobile ou un proxy opérateur peut
       // resservir une réponse périmée et masquer les dernières modifications.
       res.setHeader('Cache-Control', 'no-store');
-      res.status(200).json(data);
+      res.status(200).json(rows[0].data);
     } catch (err) {
       res.status(500).json({ error: 'Impossible de lire les données.', details: String((err as Error).message || err) });
     }
@@ -60,9 +98,9 @@ export default async function handler(req: Req, res: Res): Promise<void> {
 
   // --- Écriture (protégée) ---
   if (req.method === 'POST') {
-    if (!adminKeyConfigured) {
+    if (!ADMIN_KEY) {
       res.status(500).json({
-        error: 'Écriture impossible : la variable d\'environnement ADMIN_KEY n\'est pas définie sur le projet Vercel.',
+        error: "Écriture impossible : la variable d'environnement ADMIN_KEY n'est pas définie sur le projet Vercel.",
       });
       return;
     }
@@ -86,10 +124,15 @@ export default async function handler(req: Req, res: Res): Promise<void> {
 
     try {
       incoming.meta.derniereMaj = new Date().toISOString();
-      await putData(incoming);
+      const r = await fetch(restUrl(), {
+        method: 'POST',
+        headers: headers({ Prefer: 'resolution=merge-duplicates,return=minimal' }),
+        body: JSON.stringify({ id: ROW_ID, data: incoming, updated_at: new Date().toISOString() }),
+      });
+      if (!r.ok) throw new Error(`Supabase a répondu ${r.status} : ${await r.text()}`);
       res.status(200).json({ ok: true, savedAt: incoming.meta.derniereMaj });
     } catch (err) {
-      res.status(500).json({ error: 'Impossible d\'enregistrer les données.', details: String((err as Error).message || err) });
+      res.status(500).json({ error: "Impossible d'enregistrer les données.", details: String((err as Error).message || err) });
     }
     return;
   }
