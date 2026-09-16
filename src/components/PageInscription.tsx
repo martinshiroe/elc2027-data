@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ELCData } from '../types';
 import { FileText, ExternalLink, CheckCircle, HelpCircle, MessageSquare, Mail, ShieldCheck, Sparkles } from 'lucide-react';
 
@@ -17,9 +17,6 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
     if (url.includes('embedded=true')) return url;
     return `${url}${url.includes('?') ? '&' : '?'}embedded=true`;
   };
-
-  const [customFormInput, setCustomFormInput] = useState(googleFormUrl);
-  const [isEditingUrl, setIsEditingUrl] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0e0e0e] text-white py-12 px-4 sm:px-6 lg:px-8">
@@ -184,10 +181,6 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
                     <Mail className="w-4 h-4" />
                     <span>{meta.contact.email}</span>
                   </a>
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-white/[0.08] text-[11px] text-white/40 font-mono">
-                  Astuce administrateur : Vous pouvez ajouter l'URL de votre Google Form dans l'Admin Portal ou via le fichier de données.
                 </div>
               </div>
             )}
