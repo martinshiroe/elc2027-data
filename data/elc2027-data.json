@@ -1,0 +1,852 @@
+{
+  "meta": {
+    "organisateur": "Ligue Esport Est Cameroun",
+    "competitionCode": "ELC",
+    "competitionNom": "East League of Cameroun",
+    "saison": "2027",
+    "badgeHaut": "100% Mobile & Online",
+    "derniereMaj": "2026-09-16T00:19:30.629Z",
+    "contact": {
+      "telephone": "",
+      "email": "ligue_regional_est@zohomail.com"
+    },
+    "reseaux": {
+      "youtube": "https://youtube.com/@east_ligue?si=GyP5LXjM-BFQhKQE",
+      "facebook": "https://www.facebook.com/profile.php?id=61584942290414",
+      "whatsapp": "https://wa.me/237693732598",
+      "tiktok": "https://www.tiktok.com/@east_ligue"
+    },
+    "liens": {
+      "statuts": "",
+      "statutsTexte": "L'East Cameroon League est le programme compétitif officiel de la Ligue Esport de l'Est Cameroun, membre affilié de la Fédération Camerounaise des Sports Électroniques (FECASES). Toute participation aux événements ECL implique l'acceptation du règlement intérieur de la ligue, des conditions de fair-play et des décisions arbitrales. Les résultats et classements officiels sont transmis à la FECASES dans le cadre du suivi national des compétitions régionales. La Ligue se réserve le droit de suspendre ou disqualifier tout participant ne respectant pas ces engagements.  © 2026 Ligue Esport Est Cameroun — Tous droits réservés."
+    },
+    "heroImage": "https://media.ouest-france.fr/v1/pictures/MjAyMTAyNjY4YjBkMjBjNWY4NjlhOGM2NWQxZjVjYjk3Y2YwNWE?width=1260&focuspoint=50%2C25&cropresize=1&client_id=bpeditorial&sign=275f0a3ec82312e40925a2cb033c4541d95cf343033067d6bc461965281e910a",
+    "ctaImage": "https://gamingonphone.com/wp-content/uploads/2026/03/honor-of-kings-world-upcoming-launch-cover-1.jpg"
+  },
+  "visual1": {
+    "footer": "SAISON 2027",
+    "bandeau": "ORGANISÉ PAR LIGUE ESPORT EST CAMEROUN",
+    "titreCentral": "TITRES SÉLECTIONNÉS",
+    "sousTitreCentral": "CHAMPIONNAT RÉGIONAL DU CAMEROUN",
+    "titres": [
+      {
+        "id": "hok",
+        "discipline": "DISCIPLINE MOBA",
+        "badge": "16 ÉQUIPES",
+        "nom": "HONOR OF KINGS",
+        "sousTitre": "Titre Principal MOBA",
+        "lancement": "Janvier 2027",
+        "plateforme": "Mobile"
+      },
+      {
+        "id": "mlbb",
+        "discipline": "DISCIPLINE MOBA",
+        "badge": "16 ÉQUIPES",
+        "nom": "MOBILE LEGENDS",
+        "sousTitre": "Bang Bang",
+        "lancement": "Février 2027",
+        "plateforme": "Mobile"
+      },
+      {
+        "id": "pubgm",
+        "discipline": "BATTLE ROYALE / TPS",
+        "badge": "32 JOUEURS",
+        "nom": "PUBG MOBILE",
+        "sousTitre": "Classement Individuel",
+        "lancement": "Avril 2027",
+        "plateforme": "Mobile"
+      },
+      {
+        "id": "ff",
+        "discipline": "BATTLE ROYALE / TPS",
+        "badge": "32 JOUEURS",
+        "nom": "FREE FIRE",
+        "sousTitre": "Classement Individuel",
+        "lancement": "Juin 2027",
+        "plateforme": "Mobile"
+      }
+    ],
+    "footerGauche": "LIGUE RÉGIONALE D'ESPORT DE L'EST CAMEROUN"
+  },
+  "visual2": {
+    "bandeauSousTitre": "Compétition 100% Mobile & Online · Finales Présentiel",
+    "calendrierLabel": "CALENDRIER PRÉVISIONNEL",
+    "calendrierPeriode": "JANVIER — NOVEMBRE 2027",
+    "phases": [
+      {
+        "titre": "PHASE 1 : LANCEMENT MOBA (HOK & MLBB)",
+        "sousTitre": "Qualifications ouvertes & Phase de groupes",
+        "periode": "JANVIER – MARS 2027",
+        "tag": ""
+      },
+      {
+        "titre": "PHASE 2 : LANCEMENT TPS (PUBG MOBILE & FREE FIRE)",
+        "sousTitre": "Qualifications 32 joueurs & Groupes Battle Royale",
+        "periode": "AVRIL – JUILLET 2027",
+        "tag": ""
+      },
+      {
+        "titre": "PHASE 3 : PLAYOFFS RÉGIONAUX DES 4 TITRES",
+        "sousTitre": "Sélection des finalistes pour l'Est Cameroun",
+        "periode": "AOÛT – OCTOBRE 2027",
+        "tag": ""
+      },
+      {
+        "titre": "FINALES CONJOINTES ELC 2027",
+        "sousTitre": "Sacre des champions régionaux des 4 disciplines",
+        "periode": "NOVEMBRE 2027",
+        "tag": "PRÉSENTIEL"
+      }
+    ],
+    "structure": {
+      "equipesMoba": "16 ÉQUIPES",
+      "joueursTps": "32 PAR TITRE",
+      "qualifsFinales": "Online BO3 / Présentiel",
+      "cashPrize": ""
+    },
+    "plateformes": "Plateformes : Android & iOS (Terminaux personnels avec contrôle technique)",
+    "diffusion": "Diffusion officielle en direct : YouTube"
+  },
+  "visual3": {
+    "sousTitre": "DIVISION SPOTLIGHT · BATTLE ROYALE & TPS",
+    "badges": [
+      "PLATEFORME : MOBILE",
+      "FORMAT : ONLINE"
+    ],
+    "pubg": {
+      "nom": "PUBG MOBILE",
+      "lancementBadge": "LANCEMENT AVRIL",
+      "placesJoueurs": "32",
+      "note": "Mode individuel · Qualifications en ligne (BO3)"
+    },
+    "ff": {
+      "nom": "FREE FIRE",
+      "lancementBadge": "LANCEMENT JUIN",
+      "placesJoueurs": "32",
+      "note": "Mode individuel · Qualifications en ligne (BO3)"
+    },
+    "titreReglement": "RÈGLEMENT",
+    "reglement": "",
+    "titreEtapes": "ÉTAPES DU TOURNOI",
+    "etapesTournoi": "",
+    "titrePrix": "PRIX TOTAL",
+    "prixTotal": "",
+    "footerGauche": "East League of Cameroun · Saison 2027",
+    "footerDroite": "Grande Finale : Présentiel Novembre 2027"
+  },
+  "visual4": {
+    "sousTitre": "DIVISION MOBA · HONOR OF KINGS & MOBILE LEGENDS",
+    "badges": [
+      "16 ÉQUIPES QUALIFIÉES",
+      "BRACKET OFFICIEL"
+    ],
+    "titrePrizePool": "PRIZE POOL",
+    "prizePool": "",
+    "colonnes": [
+      "SÉRIE DE FINALE (BO3)",
+      "QUARTS DE FINALE",
+      "DEMI-FINALES",
+      "GRANDE FINALE"
+    ],
+    "equipes": [
+      "Équipe 1",
+      "Équipe 2",
+      "Équipe 3",
+      "Équipe 4",
+      "Équipe 5",
+      "Équipe 6",
+      "Équipe 7",
+      "Équipe 8",
+      "Équipe 9",
+      "Équipe 10",
+      "Équipe 11",
+      "Équipe 12",
+      "Équipe 13",
+      "Équipe 14",
+      "Équipe 15",
+      "Équipe 16"
+    ],
+    "quarts": [
+      "QF 1",
+      "QF 2",
+      "QF 3",
+      "QF 4"
+    ],
+    "demis": [
+      "DEMI 1",
+      "DEMI 2"
+    ],
+    "champion": "[ VAINQUEUR ELC ]",
+    "footerGauche": "Arbre du tournoi officiel à 16 entités · Homologué ELC 2027",
+    "footerDroite": "Prize Pool : [ Non communiqué ]"
+  },
+  "competition": {
+    "hok": {
+      "nom": "Honor of Kings",
+      "family": "MOBA",
+      "calendrier": [
+        {
+          "phase": "Phase 1 · Qualifications ouvertes",
+          "periode": "Janvier 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Phase 2 · Phase de groupes",
+          "periode": "Février – Mars 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Phase 3 · Playoffs régionaux",
+          "periode": "Avril 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Finale conjointe ELC 2027",
+          "periode": "Novembre 2027",
+          "lieu": "Présentiel"
+        }
+      ],
+      "bareme": {
+        "victoire": 3,
+        "nul": 1,
+        "defaite": 0
+      },
+      "manches": [],
+      "bracket": {
+        "equipes": [
+          {
+            "id": "hok_t1",
+            "nom": "Équipe 1",
+            "logo": ""
+          },
+          {
+            "id": "hok_t2",
+            "nom": "Équipe 2",
+            "logo": ""
+          },
+          {
+            "id": "hok_t3",
+            "nom": "Équipe 3",
+            "logo": ""
+          },
+          {
+            "id": "hok_t4",
+            "nom": "Équipe 4",
+            "logo": ""
+          },
+          {
+            "id": "hok_t5",
+            "nom": "Équipe 5",
+            "logo": ""
+          },
+          {
+            "id": "hok_t6",
+            "nom": "Équipe 6",
+            "logo": ""
+          },
+          {
+            "id": "hok_t7",
+            "nom": "Équipe 7",
+            "logo": ""
+          },
+          {
+            "id": "hok_t8",
+            "nom": "Équipe 8",
+            "logo": ""
+          },
+          {
+            "id": "hok_t9",
+            "nom": "Équipe 9",
+            "logo": ""
+          },
+          {
+            "id": "hok_t10",
+            "nom": "Équipe 10",
+            "logo": ""
+          },
+          {
+            "id": "hok_t11",
+            "nom": "Équipe 11",
+            "logo": ""
+          },
+          {
+            "id": "hok_t12",
+            "nom": "Équipe 12",
+            "logo": ""
+          },
+          {
+            "id": "hok_t13",
+            "nom": "Équipe 13",
+            "logo": ""
+          },
+          {
+            "id": "hok_t14",
+            "nom": "Équipe 14",
+            "logo": ""
+          },
+          {
+            "id": "hok_t15",
+            "nom": "Équipe 15",
+            "logo": ""
+          },
+          {
+            "id": "hok_t16",
+            "nom": "Équipe 16",
+            "logo": ""
+          }
+        ],
+        "quarts": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "demis": [
+          "",
+          ""
+        ],
+        "champion": ""
+      },
+      "heroImage": "https://www.levelinfinite.com/wp-content/uploads/2024/03/honor-of-kings-global-launch-pc.jpg"
+    },
+    "mlbb": {
+      "nom": "Mobile Legends: Bang Bang",
+      "family": "MOBA",
+      "calendrier": [
+        {
+          "phase": "Phase 1 · Qualifications ouvertes",
+          "periode": "Février 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Phase 2 · Phase de groupes",
+          "periode": "Mars – Avril 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Phase 3 · Playoffs régionaux",
+          "periode": "Mai 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Finale conjointe ELC 2027",
+          "periode": "Novembre 2027",
+          "lieu": "Présentiel"
+        }
+      ],
+      "bareme": {
+        "victoire": 3,
+        "nul": 1,
+        "defaite": 0
+      },
+      "manches": [],
+      "bracket": {
+        "equipes": [
+          {
+            "id": "mlbb_t1",
+            "nom": "Équipe 1",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t2",
+            "nom": "Équipe 2",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t3",
+            "nom": "Équipe 3",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t4",
+            "nom": "Équipe 4",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t5",
+            "nom": "Équipe 5",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t6",
+            "nom": "Équipe 6",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t7",
+            "nom": "Équipe 7",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t8",
+            "nom": "Équipe 8",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t9",
+            "nom": "Équipe 9",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t10",
+            "nom": "Équipe 10",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t11",
+            "nom": "Équipe 11",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t12",
+            "nom": "Équipe 12",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t13",
+            "nom": "Équipe 13",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t14",
+            "nom": "Équipe 14",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t15",
+            "nom": "Équipe 15",
+            "logo": ""
+          },
+          {
+            "id": "mlbb_t16",
+            "nom": "Équipe 16",
+            "logo": ""
+          }
+        ],
+        "quarts": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "demis": [
+          "",
+          ""
+        ],
+        "champion": ""
+      },
+      "heroImage": "https://esportsinsider.com/wp-content/uploads/2025/03/MLBB-large.webp"
+    },
+    "pubgm": {
+      "nom": "PUBG Mobile",
+      "family": "TPS",
+      "calendrier": [
+        {
+          "phase": "Phase 1 · Qualifications ouvertes",
+          "periode": "Avril 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Phase 2 · Groupes Battle Royale",
+          "periode": "Mai – Juin 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Phase 3 · Playoffs régionaux",
+          "periode": "Juillet 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Finale conjointe ELC 2027",
+          "periode": "Novembre 2027",
+          "lieu": "Présentiel"
+        }
+      ],
+      "bareme": {
+        "places": [
+          15,
+          12,
+          10,
+          8,
+          6,
+          4,
+          2,
+          1
+        ],
+        "elimination": 1
+      },
+      "manches": [],
+      "roster": [
+        {
+          "id": "pubgm_p1",
+          "nom": "Joueur 1",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p2",
+          "nom": "Joueur 2",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p3",
+          "nom": "Joueur 3",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p4",
+          "nom": "Joueur 4",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p5",
+          "nom": "Joueur 5",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p6",
+          "nom": "Joueur 6",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p7",
+          "nom": "Joueur 7",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p8",
+          "nom": "Joueur 8",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p9",
+          "nom": "Joueur 9",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p10",
+          "nom": "Joueur 10",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p11",
+          "nom": "Joueur 11",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p12",
+          "nom": "Joueur 12",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p13",
+          "nom": "Joueur 13",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p14",
+          "nom": "Joueur 14",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p15",
+          "nom": "Joueur 15",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p16",
+          "nom": "Joueur 16",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p17",
+          "nom": "Joueur 17",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p18",
+          "nom": "Joueur 18",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p19",
+          "nom": "Joueur 19",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p20",
+          "nom": "Joueur 20",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p21",
+          "nom": "Joueur 21",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p22",
+          "nom": "Joueur 22",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p23",
+          "nom": "Joueur 23",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p24",
+          "nom": "Joueur 24",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p25",
+          "nom": "Joueur 25",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p26",
+          "nom": "Joueur 26",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p27",
+          "nom": "Joueur 27",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p28",
+          "nom": "Joueur 28",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p29",
+          "nom": "Joueur 29",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p30",
+          "nom": "Joueur 30",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p31",
+          "nom": "Joueur 31",
+          "photo": ""
+        },
+        {
+          "id": "pubgm_p32",
+          "nom": "Joueur 32",
+          "photo": ""
+        }
+      ],
+      "heroImage": "https://www.notebookcheck.biz/fileadmin/Notebooks/News/_nc3/PUBG_2.0.jpg"
+    },
+    "ff": {
+      "nom": "Free Fire",
+      "family": "TPS",
+      "calendrier": [
+        {
+          "phase": "Phase 1 · Qualifications ouvertes",
+          "periode": "Juin 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Phase 2 · Groupes Battle Royale",
+          "periode": "Juillet – Août 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Phase 3 · Playoffs régionaux",
+          "periode": "Septembre 2027",
+          "lieu": "100% en ligne"
+        },
+        {
+          "phase": "Finale conjointe ELC 2027",
+          "periode": "Novembre 2027",
+          "lieu": "Présentiel"
+        }
+      ],
+      "bareme": {
+        "places": [
+          15,
+          12,
+          10,
+          8,
+          6,
+          4,
+          2,
+          1
+        ],
+        "elimination": 1
+      },
+      "manches": [],
+      "roster": [
+        {
+          "id": "ff_p1",
+          "nom": "Joueur 1",
+          "photo": ""
+        },
+        {
+          "id": "ff_p2",
+          "nom": "Joueur 2",
+          "photo": ""
+        },
+        {
+          "id": "ff_p3",
+          "nom": "Joueur 3",
+          "photo": ""
+        },
+        {
+          "id": "ff_p4",
+          "nom": "Joueur 4",
+          "photo": ""
+        },
+        {
+          "id": "ff_p5",
+          "nom": "Joueur 5",
+          "photo": ""
+        },
+        {
+          "id": "ff_p6",
+          "nom": "Joueur 6",
+          "photo": ""
+        },
+        {
+          "id": "ff_p7",
+          "nom": "Joueur 7",
+          "photo": ""
+        },
+        {
+          "id": "ff_p8",
+          "nom": "Joueur 8",
+          "photo": ""
+        },
+        {
+          "id": "ff_p9",
+          "nom": "Joueur 9",
+          "photo": ""
+        },
+        {
+          "id": "ff_p10",
+          "nom": "Joueur 10",
+          "photo": ""
+        },
+        {
+          "id": "ff_p11",
+          "nom": "Joueur 11",
+          "photo": ""
+        },
+        {
+          "id": "ff_p12",
+          "nom": "Joueur 12",
+          "photo": ""
+        },
+        {
+          "id": "ff_p13",
+          "nom": "Joueur 13",
+          "photo": ""
+        },
+        {
+          "id": "ff_p14",
+          "nom": "Joueur 14",
+          "photo": ""
+        },
+        {
+          "id": "ff_p15",
+          "nom": "Joueur 15",
+          "photo": ""
+        },
+        {
+          "id": "ff_p16",
+          "nom": "Joueur 16",
+          "photo": ""
+        },
+        {
+          "id": "ff_p17",
+          "nom": "Joueur 17",
+          "photo": ""
+        },
+        {
+          "id": "ff_p18",
+          "nom": "Joueur 18",
+          "photo": ""
+        },
+        {
+          "id": "ff_p19",
+          "nom": "Joueur 19",
+          "photo": ""
+        },
+        {
+          "id": "ff_p20",
+          "nom": "Joueur 20",
+          "photo": ""
+        },
+        {
+          "id": "ff_p21",
+          "nom": "Joueur 21",
+          "photo": ""
+        },
+        {
+          "id": "ff_p22",
+          "nom": "Joueur 22",
+          "photo": ""
+        },
+        {
+          "id": "ff_p23",
+          "nom": "Joueur 23",
+          "photo": ""
+        },
+        {
+          "id": "ff_p24",
+          "nom": "Joueur 24",
+          "photo": ""
+        },
+        {
+          "id": "ff_p25",
+          "nom": "Joueur 25",
+          "photo": ""
+        },
+        {
+          "id": "ff_p26",
+          "nom": "Joueur 26",
+          "photo": ""
+        },
+        {
+          "id": "ff_p27",
+          "nom": "Joueur 27",
+          "photo": ""
+        },
+        {
+          "id": "ff_p28",
+          "nom": "Joueur 28",
+          "photo": ""
+        },
+        {
+          "id": "ff_p29",
+          "nom": "Joueur 29",
+          "photo": ""
+        },
+        {
+          "id": "ff_p30",
+          "nom": "Joueur 30",
+          "photo": ""
+        },
+        {
+          "id": "ff_p31",
+          "nom": "Joueur 31",
+          "photo": ""
+        },
+        {
+          "id": "ff_p32",
+          "nom": "Joueur 32",
+          "photo": ""
+        }
+      ],
+      "heroImage": "https://i.redd.it/ig2znxddb8pa1.jpg"
+    }
+  },
+  "joueurs": [],
+  "pantheon": {
+    "curated": []
+  },
+  "videos": []
+}

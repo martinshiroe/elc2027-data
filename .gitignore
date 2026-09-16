@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+tmp_*
+inspect_*
+vercel_data.json
+vercel_style.css
+data/admin-code.txt
+.DS_Store

@@ -1,0 +1,6 @@
+{
+  "name": "East League of Cameroun - ELC 2027",
+  "description": "Portail et plateforme officielle de l'East League of Cameroun (ELC) Saison 2027 organisée par la Ligue Esport Est Cameroun affiliée à la FECASES. Vitrine vidéo YouTube et TikTok, classements et compétitions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
