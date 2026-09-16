@@ -20,6 +20,7 @@ import { PageVideos } from './components/PageVideos';
 import { PageInscription } from './components/PageInscription';
 import { AdminPortal } from './components/AdminPortal';
 import { Footer } from './components/Footer';
+import { InstallPwaPrompt } from './components/InstallPwaPrompt';
 import { Trophy, Swords, Target, Crosshair, Users, ChevronRight, FileCheck, ExternalLink } from 'lucide-react';
 
 export function App() {
@@ -415,6 +416,9 @@ export function App() {
           onClose={() => setIsAdminOpen(false)}
         />
       )}
+
+      {/* PWA Install Prompt Banner */}
+      <InstallPwaPrompt />
     </div>
   );
 }
