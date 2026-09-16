@@ -1,93 +1,29 @@
-import React, { useState } from 'react';
-import { Trophy, RefreshCw, Edit2, Check, Shield, Award, Calendar, Swords, ExternalLink } from 'lucide-react';
+import React from 'react';
+import { Trophy, Calendar, Swords, ExternalLink, ShieldCheck } from 'lucide-react';
 import { ELCMobaGame } from '../types';
 
 interface MobaTournamentBracketProps {
   gameKey: 'hok' | 'mlbb';
   gameData: ELCMobaGame;
   startGgUrl?: string;
-  onUpdateGameBracket?: (updated: ELCMobaGame) => void;
 }
 
 export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
   gameKey,
   gameData,
   startGgUrl,
-  onUpdateGameBracket
 }) => {
-  // Local bracket state allowing interactivity
-  const [teams, setTeams] = useState<string[]>(
-    gameData.bracket.equipes.map((t) => t.nom || 'Équipe')
-  );
-  const [quarts, setQuarts] = useState<string[]>(
-    gameData.bracket.quarts.some(q => q) ? gameData.bracket.quarts : Array(4).fill('')
-  );
-  const [demis, setDemis] = useState<string[]>(
-    gameData.bracket.demis.some(d => d) ? gameData.bracket.demis : Array(2).fill('')
-  );
-  const [champion, setChampion] = useState<string>(
-    gameData.bracket.champion || ''
-  );
-
-  const [editingTeamIndex, setEditingTeamIndex] = useState<number | null>(null);
-  const [editingName, setEditingName] = useState<string>('');
-
-  const handleAdvanceToQuarter = (matchIndex: number, winningTeam: string) => {
-    const nextQuarts = [...quarts];
-    nextQuarts[matchIndex] = winningTeam;
-    setQuarts(nextQuarts);
-
-    // Also cascade reset any later rounds if that team changes
-    if (matchIndex < 2 && demis[0] && !nextQuarts.slice(0, 2).includes(demis[0])) {
-      const nextDemis = [...demis];
-      nextDemis[0] = '';
-      setDemis(nextDemis);
-      if (champion === demis[0]) setChampion('');
-    } else if (matchIndex >= 2 && demis[1] && !nextQuarts.slice(2, 4).includes(demis[1])) {
-      const nextDemis = [...demis];
-      nextDemis[1] = '';
-      setDemis(nextDemis);
-      if (champion === demis[1]) setChampion('');
-    }
+  const bracket = gameData.bracket || {
+    equipes: [],
+    quarts: [],
+    demis: [],
+    champion: ''
   };
 
-  const handleAdvanceToSemi = (semiIndex: number, winningTeam: string) => {
-    const nextDemis = [...demis];
-    nextDemis[semiIndex] = winningTeam;
-    setDemis(nextDemis);
-
-    if (champion && !nextDemis.includes(champion)) {
-      setChampion('');
-    }
-  };
-
-  const handleSetChampion = (winningTeam: string) => {
-    setChampion(winningTeam);
-  };
-
-  const handleReset = () => {
-    setQuarts(Array(4).fill(''));
-    setDemis(Array(2).fill(''));
-    setChampion('');
-  };
-
-  const handleSaveTeamName = (index: number) => {
-    if (!editingName.trim()) {
-      setEditingTeamIndex(null);
-      return;
-    }
-    const nextTeams = [...teams];
-    const oldName = nextTeams[index];
-    nextTeams[index] = editingName.trim();
-    setTeams(nextTeams);
-
-    // Update if already advanced
-    setQuarts(quarts.map(q => q === oldName ? editingName.trim() : q));
-    setDemis(demis.map(d => d === oldName ? editingName.trim() : d));
-    if (champion === oldName) setChampion(editingName.trim());
-
-    setEditingTeamIndex(null);
-  };
+  const teams = bracket.equipes || [];
+  const quarts = bracket.quarts || Array(4).fill('');
+  const demis = bracket.demis || Array(2).fill('');
+  const champion = bracket.champion || '';
 
   return (
     <div id={`bracket-container-${gameKey}`} className="space-y-6">
@@ -96,44 +32,35 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30">
-              Arbre Officiel Homologué
+              Arbre Officiel Homologué · Vitrine ELC 2027
             </span>
             <span className="text-xs text-slate-400">
               Format BO3 · Qualifications Online
             </span>
           </div>
           <h3 className="font-display text-xl font-bold text-white">
-            Tableau des 16 Équipes · {gameData.nom}
+            Tableau Officiel des Équipes · {gameData.nom}
           </h3>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2">
           {startGgUrl && (
             <a
               href={startGgUrl}
               target="_blank"
               rel="noreferrer"
               id={`link-startgg-${gameKey}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-950/60 hover:bg-red-900/80 text-red-300 hover:text-white text-xs font-bold border border-red-800/60 transition-colors shadow-sm cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-950/60 hover:bg-red-900/80 text-red-300 hover:text-white text-xs font-bold border border-red-800/60 transition-colors shadow-sm cursor-pointer"
               title="Voir l'arbre officiel en direct sur start.gg"
             >
-              <span>Voir le bracket en direct sur start.gg</span>
+              <span>Arbre officiel sur start.gg</span>
               <ExternalLink className="w-3.5 h-3.5 text-red-400" />
             </a>
           )}
-
-          <button
-            onClick={handleReset}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
-            title="Réinitialiser l'arbre"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Réinitialiser</span>
-          </button>
         </div>
       </div>
 
-      {/* Bracket Visualizer Grid */}
+      {/* Bracket Visualizer Grid (Consultation Only) */}
       <div className="overflow-x-auto pb-4">
         <div className="min-w-[860px] grid grid-cols-4 gap-4 items-stretch">
           
@@ -144,11 +71,10 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
             </div>
             
             {Array.from({ length: 8 }).map((_, matchIdx) => {
-              const team1 = teams[matchIdx * 2] || `Équipe ${matchIdx * 2 + 1}`;
-              const team2 = teams[matchIdx * 2 + 1] || `Équipe ${matchIdx * 2 + 2}`;
-              const qfIndex = Math.floor(matchIdx / 2);
-              const isSelected1 = quarts[qfIndex] === team1;
-              const isSelected2 = quarts[qfIndex] === team2;
+              const team1Obj = teams[matchIdx * 2];
+              const team2Obj = teams[matchIdx * 2 + 1];
+              const team1Name = typeof team1Obj === 'string' ? team1Obj : (team1Obj?.nom || `Équipe ${matchIdx * 2 + 1}`);
+              const team2Name = typeof team2Obj === 'string' ? team2Obj : (team2Obj?.nom || `Équipe ${matchIdx * 2 + 2}`);
 
               return (
                 <div
@@ -161,93 +87,15 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
                   </div>
 
                   {/* Team 1 */}
-                  <div className="flex items-center justify-between gap-1">
-                    {editingTeamIndex === matchIdx * 2 ? (
-                      <div className="flex items-center gap-1 flex-1">
-                        <input
-                          type="text"
-                          value={editingName}
-                          onChange={(e) => setEditingName(e.target.value)}
-                          className="w-full text-xs bg-slate-800 border border-emerald-500 rounded px-1.5 py-0.5 text-white"
-                          autoFocus
-                        />
-                        <button
-                          onClick={() => handleSaveTeamName(matchIdx * 2)}
-                          className="p-1 rounded bg-emerald-600 text-white"
-                        >
-                          <Check className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => handleAdvanceToQuarter(qfIndex, team1)}
-                          className={`flex-1 flex items-center justify-between px-2.5 py-1 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer ${
-                            isSelected1
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
-                              : 'bg-slate-850 hover:bg-slate-800 text-slate-200'
-                          }`}
-                        >
-                          <span className="truncate max-w-[110px]">{team1}</span>
-                          <span className="text-[10px] text-slate-400 ml-1">✓</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditingTeamIndex(matchIdx * 2);
-                            setEditingName(team1);
-                          }}
-                          className="p-1 text-slate-500 hover:text-slate-300 cursor-pointer"
-                          title="Modifier le nom de l'équipe"
-                        >
-                          <Edit2 className="w-3 h-3" />
-                        </button>
-                      </>
-                    )}
+                  <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-850 text-slate-200 text-xs font-medium">
+                    <span className="truncate">{team1Name}</span>
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   </div>
 
                   {/* Team 2 */}
-                  <div className="flex items-center justify-between gap-1">
-                    {editingTeamIndex === matchIdx * 2 + 1 ? (
-                      <div className="flex items-center gap-1 flex-1">
-                        <input
-                          type="text"
-                          value={editingName}
-                          onChange={(e) => setEditingName(e.target.value)}
-                          className="w-full text-xs bg-slate-800 border border-emerald-500 rounded px-1.5 py-0.5 text-white"
-                          autoFocus
-                        />
-                        <button
-                          onClick={() => handleSaveTeamName(matchIdx * 2 + 1)}
-                          className="p-1 rounded bg-emerald-600 text-white"
-                        >
-                          <Check className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => handleAdvanceToQuarter(qfIndex, team2)}
-                          className={`flex-1 flex items-center justify-between px-2.5 py-1 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer ${
-                            isSelected2
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
-                              : 'bg-slate-850 hover:bg-slate-800 text-slate-200'
-                          }`}
-                        >
-                          <span className="truncate max-w-[110px]">{team2}</span>
-                          <span className="text-[10px] text-slate-400 ml-1">✓</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditingTeamIndex(matchIdx * 2 + 1);
-                            setEditingName(team2);
-                          }}
-                          className="p-1 text-slate-500 hover:text-slate-300 cursor-pointer"
-                          title="Modifier le nom de l'équipe"
-                        >
-                          <Edit2 className="w-3 h-3" />
-                        </button>
-                      </>
-                    )}
+                  <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-850 text-slate-200 text-xs font-medium">
+                    <span className="truncate">{team2Name}</span>
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   </div>
                 </div>
               );
@@ -261,9 +109,7 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
             </div>
 
             {Array.from({ length: 4 }).map((_, qfIdx) => {
-              const team = quarts[qfIdx];
-              const semiIndex = Math.floor(qfIdx / 2);
-              const isSelected = demis[semiIndex] === team && team !== '';
+              const team = quarts[qfIdx] || '';
 
               return (
                 <div
@@ -275,17 +121,10 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
                   </div>
                   
                   {team ? (
-                    <button
-                      onClick={() => handleAdvanceToSemi(semiIndex, team)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-all cursor-pointer ${
-                        isSelected
-                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                          : 'bg-slate-800 hover:bg-slate-750 text-white'
-                      }`}
-                    >
+                    <div className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold">
                       <span className="truncate">{team}</span>
-                      <span className="text-[10px] text-amber-400">Qualifié Demi</span>
-                    </button>
+                      <span className="text-[10px] text-amber-400 font-mono">Qualifié</span>
+                    </div>
                   ) : (
                     <div className="w-full py-2 px-3 rounded-lg bg-slate-950/60 border border-dashed border-slate-800 text-[11px] text-slate-600 italic text-center">
                       En attente Huitièmes
@@ -303,8 +142,7 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
             </div>
 
             {Array.from({ length: 2 }).map((_, semiIdx) => {
-              const team = demis[semiIdx];
-              const isChamp = champion === team && team !== '';
+              const team = demis[semiIdx] || '';
 
               return (
                 <div
@@ -316,17 +154,10 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
                   </div>
 
                   {team ? (
-                    <button
-                      onClick={() => handleSetChampion(team)}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-bold text-left transition-all cursor-pointer ${
-                        isChamp
-                          ? 'bg-gradient-to-r from-amber-500/30 to-emerald-500/30 text-amber-300 border border-amber-400'
-                          : 'bg-slate-800 hover:bg-slate-750 text-white'
-                      }`}
-                    >
+                    <div className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
                       <span className="truncate">{team}</span>
-                      <span className="text-[10px] text-emerald-400">Vers Finale</span>
-                    </button>
+                      <span className="text-[10px] text-emerald-400 font-mono">Finaliste</span>
+                    </div>
                   ) : (
                     <div className="w-full py-2.5 px-3 rounded-lg bg-slate-950/60 border border-dashed border-slate-800 text-[11px] text-slate-600 italic text-center">
                       En attente Quarts
@@ -345,7 +176,7 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
 
             <div className="bg-gradient-to-b from-amber-950/40 via-slate-900 to-slate-900 border-2 border-amber-500/50 rounded-2xl p-6 shadow-2xl text-center">
               <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400">
-                <Trophy className="w-6 h-6 animate-pulse" />
+                <Trophy className="w-6 h-6" />
               </div>
 
               <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
@@ -353,7 +184,7 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
               </div>
 
               {champion ? (
-                <div className="p-3 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 font-display text-lg font-extrabold tracking-wide animate-bounce">
+                <div className="p-3 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 font-display text-lg font-extrabold tracking-wide">
                   🏆 {champion}
                 </div>
               ) : (

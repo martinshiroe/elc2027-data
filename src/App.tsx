@@ -17,6 +17,7 @@ import { DataManagementModal } from './components/DataManagementModal';
 import { PagePantheon } from './components/PagePantheon';
 import { PageJoueurs } from './components/PageJoueurs';
 import { PageVideos } from './components/PageVideos';
+import { PageInscription } from './components/PageInscription';
 import { AdminPortal } from './components/AdminPortal';
 import { Footer } from './components/Footer';
 import { Trophy, Swords, Target, Crosshair, Users, ChevronRight, FileCheck, ExternalLink } from 'lucide-react';
@@ -162,11 +163,8 @@ export function App() {
             <CtaBanner
               data={data}
               onOpenRegister={() => {
-                if (data.meta.googleFormUrl) {
-                  window.open(data.meta.googleFormUrl, '_blank');
-                } else {
-                  setActiveSection('joueurs');
-                }
+                setActiveSection('inscription');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             />
           </div>
@@ -353,6 +351,14 @@ export function App() {
           <PageVideos
             data={data}
             onUpdateVideos={handleUpdateVideos}
+          />
+        )}
+
+        {/* PAGE 7: INSCRIPTION & GOOGLE FORM */}
+        {activeSection === 'inscription' && (
+          <PageInscription
+            data={data}
+            onOpenRegulations={() => setIsRegulationsOpen(true)}
           />
         )}
       </main>

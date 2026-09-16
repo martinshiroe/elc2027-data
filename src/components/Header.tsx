@@ -26,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
     { label: 'Joueurs', id: 'joueurs' },
     { label: 'Panthéon', id: 'pantheon' },
     { label: 'Vidéos', id: 'videos' },
+    { label: 'Inscription', id: 'inscription' },
   ];
 
   const handleNavClick = (id: string) => {
@@ -37,10 +38,8 @@ export const Header: React.FC<HeaderProps> = ({
   const handleRegister = () => {
     if (onOpenRegister) {
       onOpenRegister();
-    } else if (data.meta.googleFormUrl) {
-      window.open(data.meta.googleFormUrl, '_blank');
     } else {
-      handleNavClick('joueurs');
+      handleNavClick('inscription');
     }
   };
 
