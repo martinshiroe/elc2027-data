@@ -13,7 +13,7 @@ interface AdminPortalProps {
 }
 
 export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, onClose }) => {
-  const [adminKey, setAdminKey] = useState<string>('2027ELC');
+  const [adminKey, setAdminKey] = useState<string>('');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string>('');
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
@@ -53,12 +53,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
         setAuthError(json.error || 'Code administrateur invalide.');
       }
     } catch (err: any) {
-      // In dev fallback, allow 2027ELC
-      if (adminKey === '2027ELC') {
-        setIsAuthenticated(true);
-      } else {
-        setAuthError('Erreur de connexion avec le serveur backend.');
-      }
+      // Aucun repli : seul le serveur peut valider le code. Ouvrir l'éditeur
+      // hors ligne ne servirait à rien de toute façon — aucune sauvegarde
+      // n'aboutirait — et laisserait le contenu de l'admin à la vue de
+      // n'importe qui sachant ajouter #admin à l'URL.
+      setAuthError('Serveur injoignable : impossible de vérifier le code administrateur.');
     } finally {
       setIsVerifying(false);
     }
@@ -84,6 +83,39 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
           success: `Enregistré avec succès (${new Date(json.savedAt).toLocaleTimeString('fr-FR')}) !`
         });
         onUpdateData(formData);
+        setTimeout(() => setSaveStatus({ loading: false }), 4000);
+      } else {
+        setSaveStatus({
+          loading: false,
+          error: json.error || "Impossible d'enregistrer les données."
+        });
+      }
+    } catch (err: any) {
+      setSaveStatus({
+        loading: false,
+        error: "Erreur réseau lors de l'enregistrement."
+      });
+    }
+  };
+
+  // Enregistrement immédiat, pour les actions sur les vidéos : elles n'ont pas
+  // de bouton « Enregistrer » à elles. Un échec doit se voir — le masquer
+  // laisserait croire que la modification est partie alors qu'elle n'existe
+  // que dans cet onglet.
+  const autoSave = async (payload: ELCData, successMessage: string) => {
+    setSaveStatus({ loading: true });
+    try {
+      const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': adminKey
+        },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (res.ok && json.ok) {
+        setSaveStatus({ loading: false, success: successMessage });
         setTimeout(() => setSaveStatus({ loading: false }), 4000);
       } else {
         setSaveStatus({
@@ -219,25 +251,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
     setFormData(updatedFormData);
     onUpdateData(updatedFormData);
 
-    // Also persist to backend automatically
-    fetch('/api/data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-admin-key': adminKey
-      },
-      body: JSON.stringify(updatedFormData)
-    }).then(res => res.json()).then(json => {
-      if (json.ok) {
-        setSaveStatus({
-          loading: false,
-          success: `Vidéo ajoutée et enregistrée avec succès !`
-        });
-        setTimeout(() => setSaveStatus({ loading: false }), 4000);
-      }
-    }).catch(err => {
-      console.warn('Auto-save error:', err);
-    });
+    autoSave(updatedFormData, 'Vidéo ajoutée et enregistrée avec succès !');
 
     setNewVideoUrl('');
     setNewVideoTitle('');
@@ -256,24 +270,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
     setFormData(updatedFormData);
     onUpdateData(updatedFormData);
 
-    fetch('/api/data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-admin-key': adminKey
-      },
-      body: JSON.stringify(updatedFormData)
-    }).then(res => res.json()).then(json => {
-      if (json.ok) {
-        setSaveStatus({
-          loading: false,
-          success: `Vidéo supprimée avec succès !`
-        });
-        setTimeout(() => setSaveStatus({ loading: false }), 4000);
-      }
-    }).catch(err => {
-      console.warn('Auto-save error:', err);
-    });
+    autoSave(updatedFormData, 'Vidéo supprimée avec succès !');
   };
 
   const handleToggleFeatured = (id: string) => {
@@ -285,24 +282,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
     setFormData(updatedFormData);
     onUpdateData(updatedFormData);
 
-    fetch('/api/data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-admin-key': adminKey
-      },
-      body: JSON.stringify(updatedFormData)
-    }).then(res => res.json()).then(json => {
-      if (json.ok) {
-        setSaveStatus({
-          loading: false,
-          success: `Statut mis à jour avec succès !`
-        });
-        setTimeout(() => setSaveStatus({ loading: false }), 4000);
-      }
-    }).catch(err => {
-      console.warn('Auto-save error:', err);
-    });
+    autoSave(updatedFormData, 'Statut mis à jour avec succès !');
   };
 
   // Login Screen
@@ -325,7 +305,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
             <div>
               <input
                 type="password"
-                placeholder="Code admin (défaut : 2027ELC)"
+                placeholder="Code administrateur"
                 value={adminKey}
                 onChange={(e) => setAdminKey(e.target.value)}
                 className="w-full text-center tracking-widest font-mono text-sm bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
