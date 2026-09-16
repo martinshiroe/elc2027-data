@@ -593,23 +593,114 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                 </div>
               </div>
 
-              {/* Visuels et Hero Image */}
+              {/* Visuels et Images d'Arrière-Plan */}
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
                 <div className="font-bold text-amber-400 text-xs uppercase tracking-wider flex items-center gap-2">
                   <Image className="w-4 h-4" />
-                  <span>Images d'Arrière-Plan (URLs)</span>
+                  <span>Zones d'insertion d'images (URLs)</span>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">
-                    Image du Héro d'accueil (heroImage)
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.meta.heroImage}
-                    onChange={(e) => updateMeta('heroImage', e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Image du Héro d'accueil (Hero)
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.meta.heroImage || ''}
+                      onChange={(e) => updateMeta('heroImage', e.target.value)}
+                      placeholder="https://images.unsplash.com/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Image Bannière — Honor of Kings (HOK)
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.competition.hok.heroImage || ''}
+                      onChange={(e) => {
+                        const url = e.target.value;
+                        setFormData(prev => ({
+                          ...prev,
+                          competition: {
+                            ...prev.competition,
+                            hok: { ...prev.competition.hok, heroImage: url }
+                          }
+                        }));
+                      }}
+                      placeholder="https://images.unsplash.com/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Image Bannière — Mobile Legends (MLBB)
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.competition.mlbb.heroImage || ''}
+                      onChange={(e) => {
+                        const url = e.target.value;
+                        setFormData(prev => ({
+                          ...prev,
+                          competition: {
+                            ...prev.competition,
+                            mlbb: { ...prev.competition.mlbb, heroImage: url }
+                          }
+                        }));
+                      }}
+                      placeholder="https://images.unsplash.com/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Image Bannière — PUBG Mobile (PUBGM)
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.competition.pubgm.heroImage || ''}
+                      onChange={(e) => {
+                        const url = e.target.value;
+                        setFormData(prev => ({
+                          ...prev,
+                          competition: {
+                            ...prev.competition,
+                            pubgm: { ...prev.competition.pubgm, heroImage: url }
+                          }
+                        }));
+                      }}
+                      placeholder="https://images.unsplash.com/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Image Bannière — Free Fire (FF)
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.competition.ff.heroImage || ''}
+                      onChange={(e) => {
+                        const url = e.target.value;
+                        setFormData(prev => ({
+                          ...prev,
+                          competition: {
+                            ...prev.competition,
+                            ff: { ...prev.competition.ff, heroImage: url }
+                          }
+                        }));
+                      }}
+                      placeholder="https://images.unsplash.com/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
