@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Shield, KeyRound, Save, CheckCircle2, AlertCircle, RefreshCw,
   Globe, Swords, Calendar, Users, Trophy, Image, Link, FileText, Plus, Trash2,
-  Film, Video, Play, ExternalLink, Star
+  Film, Video, Play, ExternalLink, Star, Camera, Upload, User, Target, Crosshair
 } from 'lucide-react';
 import { ELCData, ELCPantheonItem, ELCVideo } from '../types';
 
@@ -801,6 +801,345 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                   </div>
                 </div>
               </div>
+
+              {/* Logos personnalisés des 4 Jeux */}
+              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-800 pb-3">
+                  <div className="font-bold text-amber-400 text-xs uppercase tracking-wider flex items-center gap-2">
+                    <Image className="w-4 h-4" />
+                    <span>Images & Logos des 4 Jeux (Vitrine)</span>
+                  </div>
+                  <span className="text-[11px] text-slate-400 font-light">
+                    L'image importée remplacera directement l'espace <code className="text-amber-300 font-mono">[ Image JEU ]</code> sur la vitrine.
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* HOK */}
+                  <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-amber-400">Honor of Kings (HOK)</span>
+                      {formData.competition.hok.logoImage && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              competition: {
+                                ...prev.competition,
+                                hok: { ...prev.competition.hok, logoImage: '' }
+                              }
+                            }));
+                          }}
+                          className="text-[10px] text-red-400 hover:underline cursor-pointer"
+                        >
+                          Effacer le logo
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {formData.competition.hok.logoImage ? (
+                        <img
+                          src={formData.competition.hok.logoImage}
+                          alt="HOK"
+                          className="w-10 h-10 object-contain rounded-lg bg-black/40 p-1 border border-amber-500/40 shrink-0"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-slate-800 border border-dashed border-slate-700 flex items-center justify-center shrink-0 text-amber-400/50">
+                          <Swords className="w-5 h-5" />
+                        </div>
+                      )}
+                      <div className="flex-1 space-y-1">
+                        <input
+                          type="text"
+                          placeholder="URL du logo ou charger un fichier"
+                          value={formData.competition.hok.logoImage || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData(prev => ({
+                              ...prev,
+                              competition: {
+                                ...prev.competition,
+                                hok: { ...prev.competition.hok, logoImage: val }
+                              }
+                            }));
+                          }}
+                          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
+                        />
+                        <label className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-amber-400 cursor-pointer">
+                          <Upload className="w-3 h-3" />
+                          <span>Charger une image (PNG/SVG)</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                if (typeof reader.result === 'string') {
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    competition: {
+                                      ...prev.competition,
+                                      hok: { ...prev.competition.hok, logoImage: reader.result as string }
+                                    }
+                                  }));
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* MLBB */}
+                  <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-blue-400">Mobile Legends (MLBB)</span>
+                      {formData.competition.mlbb.logoImage && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              competition: {
+                                ...prev.competition,
+                                mlbb: { ...prev.competition.mlbb, logoImage: '' }
+                              }
+                            }));
+                          }}
+                          className="text-[10px] text-red-400 hover:underline cursor-pointer"
+                        >
+                          Effacer le logo
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {formData.competition.mlbb.logoImage ? (
+                        <img
+                          src={formData.competition.mlbb.logoImage}
+                          alt="MLBB"
+                          className="w-10 h-10 object-contain rounded-lg bg-black/40 p-1 border border-blue-500/40 shrink-0"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-slate-800 border border-dashed border-slate-700 flex items-center justify-center shrink-0 text-blue-400/50">
+                          <Swords className="w-5 h-5" />
+                        </div>
+                      )}
+                      <div className="flex-1 space-y-1">
+                        <input
+                          type="text"
+                          placeholder="URL du logo ou charger un fichier"
+                          value={formData.competition.mlbb.logoImage || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData(prev => ({
+                              ...prev,
+                              competition: {
+                                ...prev.competition,
+                                mlbb: { ...prev.competition.mlbb, logoImage: val }
+                              }
+                            }));
+                          }}
+                          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
+                        />
+                        <label className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-blue-400 cursor-pointer">
+                          <Upload className="w-3 h-3" />
+                          <span>Charger une image (PNG/SVG)</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                if (typeof reader.result === 'string') {
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    competition: {
+                                      ...prev.competition,
+                                      mlbb: { ...prev.competition.mlbb, logoImage: reader.result as string }
+                                    }
+                                  }));
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* PUBGM */}
+                  <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-emerald-400">PUBG Mobile (PUBGM)</span>
+                      {formData.competition.pubgm.logoImage && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              competition: {
+                                ...prev.competition,
+                                pubgm: { ...prev.competition.pubgm, logoImage: '' }
+                              }
+                            }));
+                          }}
+                          className="text-[10px] text-red-400 hover:underline cursor-pointer"
+                        >
+                          Effacer le logo
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {formData.competition.pubgm.logoImage ? (
+                        <img
+                          src={formData.competition.pubgm.logoImage}
+                          alt="PUBGM"
+                          className="w-10 h-10 object-contain rounded-lg bg-black/40 p-1 border border-emerald-500/40 shrink-0"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-slate-800 border border-dashed border-slate-700 flex items-center justify-center shrink-0 text-emerald-400/50">
+                          <Target className="w-5 h-5" />
+                        </div>
+                      )}
+                      <div className="flex-1 space-y-1">
+                        <input
+                          type="text"
+                          placeholder="URL du logo ou charger un fichier"
+                          value={formData.competition.pubgm.logoImage || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData(prev => ({
+                              ...prev,
+                              competition: {
+                                ...prev.competition,
+                                pubgm: { ...prev.competition.pubgm, logoImage: val }
+                              }
+                            }));
+                          }}
+                          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
+                        />
+                        <label className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-emerald-400 cursor-pointer">
+                          <Upload className="w-3 h-3" />
+                          <span>Charger une image (PNG/SVG)</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                if (typeof reader.result === 'string') {
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    competition: {
+                                      ...prev.competition,
+                                      pubgm: { ...prev.competition.pubgm, logoImage: reader.result as string }
+                                    }
+                                  }));
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Free Fire */}
+                  <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-orange-400">Free Fire (FF)</span>
+                      {formData.competition.ff.logoImage && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              competition: {
+                                ...prev.competition,
+                                ff: { ...prev.competition.ff, logoImage: '' }
+                              }
+                            }));
+                          }}
+                          className="text-[10px] text-red-400 hover:underline cursor-pointer"
+                        >
+                          Effacer le logo
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {formData.competition.ff.logoImage ? (
+                        <img
+                          src={formData.competition.ff.logoImage}
+                          alt="FF"
+                          className="w-10 h-10 object-contain rounded-lg bg-black/40 p-1 border border-orange-500/40 shrink-0"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-slate-800 border border-dashed border-slate-700 flex items-center justify-center shrink-0 text-orange-400/50">
+                          <Crosshair className="w-5 h-5" />
+                        </div>
+                      )}
+                      <div className="flex-1 space-y-1">
+                        <input
+                          type="text"
+                          placeholder="URL du logo ou charger un fichier"
+                          value={formData.competition.ff.logoImage || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData(prev => ({
+                              ...prev,
+                              competition: {
+                                ...prev.competition,
+                                ff: { ...prev.competition.ff, logoImage: val }
+                              }
+                            }));
+                          }}
+                          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
+                        />
+                        <label className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-orange-400 cursor-pointer">
+                          <Upload className="w-3 h-3" />
+                          <span>Charger une image (PNG/SVG)</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                if (typeof reader.result === 'string') {
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    competition: {
+                                      ...prev.competition,
+                                      ff: { ...prev.competition.ff, logoImage: reader.result as string }
+                                    }
+                                  }));
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1083,95 +1422,416 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
 
           {/* TAB 6: PANTHEON */}
           {activeTab === 'pantheon' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-slate-400">
-                  Ajout et modification des personnalités intronisées au Panthéon ELC.
-                </p>
-                <button
-                  onClick={handleAddLegend}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs cursor-pointer hover:bg-amber-400"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Ajouter une légende</span>
-                </button>
+            <div className="space-y-6">
+              {/* Panthéon General Texts */}
+              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
+                <h4 className="font-display font-bold text-amber-400 text-sm flex items-center gap-2">
+                  <Trophy className="w-4 h-4" />
+                  <span>Titres & Textes Généraux du Panthéon</span>
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                      Titre Principal de la Page
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.pantheon?.titrePrincipal || 'Panthéon'}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          pantheon: { ...formData.pantheon, titrePrincipal: e.target.value }
+                        });
+                      }}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
+                      placeholder="Panthéon"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                      Titre de la section d'attribution
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.pantheon?.titreAttribution || 'Comment sont-elles attribuées ?'}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          pantheon: { ...formData.pantheon, titreAttribution: e.target.value }
+                        });
+                      }}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
+                      placeholder="Comment sont-elles attribuées ?"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                      Sous-titre / Description de la page
+                    </label>
+                    <textarea
+                      value={formData.pantheon?.sousTitre || "Les distinctions qui gravent le nom d'un joueur dans l'histoire de l'ELC. Chaque cadre a une couleur fixe, reconnaissable au premier coup d'œil."}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          pantheon: { ...formData.pantheon, sousTitre: e.target.value }
+                        });
+                      }}
+                      rows={2}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
+                    />
+                  </div>
+                </div>
               </div>
 
+              {/* Distinctions Titles & Descriptions */}
+              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
+                <h4 className="font-display font-bold text-amber-400 text-sm">
+                  Textes des 4 Distinctions Officielles
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[
+                    { key: 'goat', defaultTitle: 'G.O.A.T', defaultSub: 'Greatest Of All Time', defaultDesc: 'Décerné au joueur le plus dominant de la saison, toutes disciplines confondues. Une seule attribution par saison.', color: 'text-amber-400 border-amber-500/30' },
+                    { key: 'godlike', defaultTitle: 'GodLike', defaultSub: 'Meilleur joueur MOBA', defaultDesc: 'Performance exceptionnelle dans les disciplines MOBA (Honor of Kings, Mobile Legends). Élu sur les stats de la saison entière.', color: 'text-blue-400 border-blue-500/30' },
+                    { key: 'demonking', defaultTitle: 'Demon King', defaultSub: 'Meilleur joueur TPS', defaultDesc: 'Domination absolue dans les disciplines Battle Royale (PUBG Mobile, Free Fire). Calculé sur le cumul des points saison.', color: 'text-red-400 border-red-500/30' },
+                    { key: 'mvp', defaultTitle: 'MVP', defaultSub: 'Most Valuable Player', defaultDesc: 'Élu par les pairs et les organisateurs pour son impact en jeu et son fair-play exemplaire tout au long de la saison.', color: 'text-teal-400 border-teal-500/30' },
+                  ].map((card) => {
+                    const current = (formData.pantheon?.distinctions || []).find(d => d.key === card.key) || {
+                      key: card.key,
+                      title: card.defaultTitle,
+                      subtitle: card.defaultSub,
+                      desc: card.defaultDesc,
+                    };
+
+                    const updateDistinction = (field: 'title' | 'subtitle' | 'desc' | 'nomineNom' | 'nominePhoto' | 'nomineDetails' | 'nomineStatut', val: string) => {
+                      const list = [...(formData.pantheon?.distinctions || [])];
+                      const idx = list.findIndex(d => d.key === card.key);
+                      if (idx >= 0) {
+                        list[idx] = { ...list[idx], [field]: val };
+                      } else {
+                        list.push({ ...current, [field]: val });
+                      }
+                      setFormData({
+                        ...formData,
+                        pantheon: { ...formData.pantheon, distinctions: list }
+                      });
+                    };
+
+                    const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        if (typeof reader.result === 'string') {
+                          updateDistinction('nominePhoto', reader.result);
+                        }
+                      };
+                      reader.readAsDataURL(file);
+                    };
+
+                    return (
+                      <div key={card.key} className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                          <span className={`text-xs font-bold uppercase ${card.color}`}>
+                            {card.defaultTitle}
+                          </span>
+                          <span className="text-[10px] text-slate-500 font-mono">
+                            ID: {card.key}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-[10px] text-slate-400 mb-0.5">Titre du cadre</label>
+                            <input
+                              type="text"
+                              value={current.title}
+                              onChange={(e) => updateDistinction('title', e.target.value)}
+                              className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] text-slate-400 mb-0.5">Sous-titre / Catégorie</label>
+                            <input
+                              type="text"
+                              value={current.subtitle}
+                              onChange={(e) => updateDistinction('subtitle', e.target.value)}
+                              className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] text-slate-400 mb-0.5">Description de la distinction</label>
+                          <textarea
+                            value={current.desc}
+                            onChange={(e) => updateDistinction('desc', e.target.value)}
+                            rows={2}
+                            className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-xs text-white"
+                          />
+                        </div>
+
+                        {/* Espace Photo & Profil du Nominé */}
+                        <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-bold text-amber-400 flex items-center gap-1.5">
+                              <Camera className="w-3.5 h-3.5" />
+                              <span>Espace Nominé / Lauréat ({card.defaultTitle})</span>
+                            </span>
+                          </div>
+
+                          <div className="flex items-start gap-3">
+                            {/* Photo Thumbnail / Preview */}
+                            <div className="relative group shrink-0">
+                              {current.nominePhoto ? (
+                                <div className="relative">
+                                  <img
+                                    src={current.nominePhoto}
+                                    alt={current.nomineNom || 'Nominé'}
+                                    className="w-14 h-14 rounded-xl object-cover border border-amber-500/40 shadow"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => updateDistinction('nominePhoto', '')}
+                                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] hover:bg-red-400 cursor-pointer shadow"
+                                    title="Supprimer la photo"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="w-14 h-14 rounded-xl bg-slate-800/80 border border-dashed border-slate-700 flex flex-col items-center justify-center text-slate-500">
+                                  <User className="w-5 h-5" />
+                                  <span className="text-[8px] mt-0.5">Photo</span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Inputs for photo URL and upload */}
+                            <div className="flex-1 space-y-1.5">
+                              <div>
+                                <label className="block text-[10px] text-slate-400 mb-0.5">URL de la photo ou fichier</label>
+                                <div className="flex gap-1.5">
+                                  <input
+                                    type="text"
+                                    value={current.nominePhoto || ''}
+                                    onChange={(e) => updateDistinction('nominePhoto', e.target.value)}
+                                    placeholder="https://... ou charger ->"
+                                    className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder:text-slate-600"
+                                  />
+                                  <label className="px-2 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded text-slate-300 text-[10px] flex items-center gap-1 cursor-pointer shrink-0">
+                                    <Upload className="w-3 h-3" />
+                                    <span>Fichier</span>
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={handlePhotoUpload}
+                                      className="hidden"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                            <div>
+                              <label className="block text-[10px] text-slate-400 mb-0.5">Nom / Pseudo</label>
+                              <input
+                                type="text"
+                                value={current.nomineNom || ''}
+                                onChange={(e) => updateDistinction('nomineNom', e.target.value)}
+                                placeholder="ex: Kratos"
+                                className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] text-slate-400 mb-0.5">Équipe / Discipline</label>
+                              <input
+                                type="text"
+                                value={current.nomineDetails || ''}
+                                onChange={(e) => updateDistinction('nomineDetails', e.target.value)}
+                                placeholder="ex: Vortex · Honor of Kings"
+                                className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] text-slate-400 mb-0.5">Statut</label>
+                              <input
+                                type="text"
+                                value={current.nomineStatut || ''}
+                                onChange={(e) => updateDistinction('nomineStatut', e.target.value)}
+                                placeholder="ex: Nominé Officiel"
+                                className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Attribution Steps */}
+              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
+                <h4 className="font-display font-bold text-teal-400 text-sm">
+                  Étapes d'Attribution (Section « Comment sont-elles attribuées ? »)
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  {[
+                    { step: '01', defaultTitle: 'Fin de saison', defaultDesc: "Les distinctions sont décernées à l'issue de la dernière journée de compétition, une fois tous les résultats validés." },
+                    { step: '02', defaultTitle: 'Calcul des stats', defaultDesc: 'G.O.A.T, GodLike et Demon King sont calculés automatiquement à partir du cumul des points saison par discipline.' },
+                    { step: '03', defaultTitle: 'Vote MVP', defaultDesc: 'Le MVP est élu par les joueurs participants et les organisateurs via un formulaire de vote interne.' },
+                    { step: '04', defaultTitle: 'Annonce officielle', defaultDesc: "Les lauréats sont annoncés sur les réseaux sociaux de l'ELC et leur profil est mis en avant sur cette page." },
+                  ].map((s, sIdx) => {
+                    const currentStep = (formData.pantheon?.attributionSteps || [])[sIdx] || {
+                      step: s.step,
+                      title: s.defaultTitle,
+                      desc: s.defaultDesc
+                    };
+
+                    const updateStep = (field: 'title' | 'desc', val: string) => {
+                      const list = [...(formData.pantheon?.attributionSteps || [
+                        { step: '01', title: 'Fin de saison', desc: "Les distinctions sont décernées à l'issue de la dernière journée de compétition, une fois tous les résultats validés." },
+                        { step: '02', title: 'Calcul des stats', desc: 'G.O.A.T, GodLike et Demon King sont calculés automatiquement à partir du cumul des points saison par discipline.' },
+                        { step: '03', title: 'Vote MVP', desc: 'Le MVP est élu par les joueurs participants et les organisateurs via un formulaire de vote interne.' },
+                        { step: '04', title: 'Annonce officielle', desc: "Les lauréats sont annoncés sur les réseaux sociaux de l'ELC et leur profil est mis en avant sur cette page." }
+                      ])];
+                      list[sIdx] = { ...list[sIdx], [field]: val };
+                      setFormData({
+                        ...formData,
+                        pantheon: { ...formData.pantheon, attributionSteps: list }
+                      });
+                    };
+
+                    return (
+                      <div key={s.step} className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs font-bold text-teal-400 px-1.5 py-0.5 rounded bg-teal-500/10 border border-teal-500/20">
+                            Étape {s.step}
+                          </span>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-slate-400 mb-0.5">Titre de l'étape</label>
+                          <input
+                            type="text"
+                            value={currentStep.title}
+                            onChange={(e) => updateStep('title', e.target.value)}
+                            className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-slate-400 mb-0.5">Description de l'étape</label>
+                          <textarea
+                            value={currentStep.desc}
+                            onChange={(e) => updateStep('desc', e.target.value)}
+                            rows={2}
+                            className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Legends list */}
               <div className="space-y-4">
-                {(formData.pantheon?.curated || []).map((item, idx) => (
-                  <div key={item.id} className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-amber-400 text-xs uppercase">
-                        Légende #{idx + 1}
-                      </span>
-                      <button
-                        onClick={() => handleRemoveLegend(item.id)}
-                        className="p-1 text-red-400 hover:text-red-300 cursor-pointer"
-                        title="Supprimer"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-slate-400">
+                    Lauréats et personnalités intronisées au Panthéon.
+                  </p>
+                  <button
+                    onClick={handleAddLegend}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs cursor-pointer hover:bg-amber-400"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Ajouter une légende</span>
+                  </button>
+                </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Nom / Pseudo</label>
-                        <input
-                          type="text"
-                          value={item.nom}
-                          onChange={(e) => {
-                            const next = [...(formData.pantheon?.curated || [])];
-                            next[idx].nom = e.target.value;
-                            setFormData({ ...formData, pantheon: { ...formData.pantheon, curated: next } });
-                          }}
-                          className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white"
-                        />
+                <div className="space-y-4">
+                  {(formData.pantheon?.curated || []).map((item, idx) => (
+                    <div key={item.id} className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-amber-400 text-xs uppercase">
+                          Légende #{idx + 1}
+                        </span>
+                        <button
+                          onClick={() => handleRemoveLegend(item.id)}
+                          className="p-1 text-red-400 hover:text-red-300 cursor-pointer"
+                          title="Supprimer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[11px] text-slate-400 mb-1">Nom / Pseudo</label>
+                          <input
+                            type="text"
+                            value={item.nom}
+                            onChange={(e) => {
+                              const next = [...(formData.pantheon?.curated || [])];
+                              next[idx].nom = e.target.value;
+                              setFormData({ ...formData, pantheon: { ...formData.pantheon, curated: next } });
+                            }}
+                            className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] text-slate-400 mb-1">Titre / Distinction</label>
+                          <input
+                            type="text"
+                            value={item.titre}
+                            onChange={(e) => {
+                              const next = [...(formData.pantheon?.curated || [])];
+                              next[idx].titre = e.target.value;
+                              setFormData({ ...formData, pantheon: { ...formData.pantheon, curated: next } });
+                            }}
+                            className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] text-slate-400 mb-1">Discipline</label>
+                          <input
+                            type="text"
+                            value={item.discipline}
+                            onChange={(e) => {
+                              const next = [...(formData.pantheon?.curated || [])];
+                              next[idx].discipline = e.target.value;
+                              setFormData({ ...formData, pantheon: { ...formData.pantheon, curated: next } });
+                            }}
+                            className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white"
+                          />
+                        </div>
                       </div>
 
                       <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Titre / Distinction</label>
-                        <input
-                          type="text"
-                          value={item.titre}
+                        <label className="block text-[11px] text-slate-400 mb-1">Biographie</label>
+                        <textarea
+                          value={item.biographie}
                           onChange={(e) => {
                             const next = [...(formData.pantheon?.curated || [])];
-                            next[idx].titre = e.target.value;
+                            next[idx].biographie = e.target.value;
                             setFormData({ ...formData, pantheon: { ...formData.pantheon, curated: next } });
                           }}
-                          className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Discipline</label>
-                        <input
-                          type="text"
-                          value={item.discipline}
-                          onChange={(e) => {
-                            const next = [...(formData.pantheon?.curated || [])];
-                            next[idx].discipline = e.target.value;
-                            setFormData({ ...formData, pantheon: { ...formData.pantheon, curated: next } });
-                          }}
+                          rows={2}
                           className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white"
                         />
                       </div>
                     </div>
-
-                    <div>
-                      <label className="block text-[11px] text-slate-400 mb-1">Biographie</label>
-                      <textarea
-                        value={item.biographie}
-                        onChange={(e) => {
-                          const next = [...(formData.pantheon?.curated || [])];
-                          next[idx].biographie = e.target.value;
-                          setFormData({ ...formData, pantheon: { ...formData.pantheon, curated: next } });
-                        }}
-                        rows={2}
-                        className="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white"
-                      />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           )}

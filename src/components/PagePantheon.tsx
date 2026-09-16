@@ -1,5 +1,5 @@
 import React from 'react';
-import { Crown, Swords, Flame, Shield, Trophy, User, Sparkles } from 'lucide-react';
+import { Crown, Swords, Flame, Shield, Trophy, User, Sparkles, Camera, Medal } from 'lucide-react';
 import { ELCData, ELCPantheonItem } from '../types';
 
 interface PagePantheonProps {
@@ -16,10 +16,15 @@ interface DistinctionCard {
   glow: string;
   gradient: string;
   icon: React.ReactNode;
+  nomineNom?: string;
+  nominePhoto?: string;
+  nomineDetails?: string;
+  nomineStatut?: string;
 }
 
 export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
   const curated = data.pantheon?.curated || [];
+  const pantheonData = data.pantheon || {};
 
   const getLaureat = (distinctionKey: string) => {
     return (
@@ -32,7 +37,7 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
     );
   };
 
-  const distinctions: DistinctionCard[] = [
+  const defaultDistinctions: DistinctionCard[] = [
     {
       key: 'goat',
       title: 'G.O.A.T',
@@ -79,7 +84,23 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
     },
   ];
 
-  const attributionSteps = [
+  // Merge custom titles, texts, and nominee photo/info configured in Admin
+  const distinctions = defaultDistinctions.map(def => {
+    const custom = pantheonData.distinctions?.find(d => d.key === def.key);
+    if (!custom) return def;
+    return {
+      ...def,
+      title: custom.title || def.title,
+      subtitle: custom.subtitle || def.subtitle,
+      desc: custom.desc || def.desc,
+      nomineNom: custom.nomineNom,
+      nominePhoto: custom.nominePhoto,
+      nomineDetails: custom.nomineDetails,
+      nomineStatut: custom.nomineStatut,
+    };
+  });
+
+  const defaultAttributionSteps = [
     {
       step: '01',
       title: 'Fin de saison',
@@ -102,6 +123,14 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
     },
   ];
 
+  const attributionSteps = (pantheonData.attributionSteps && pantheonData.attributionSteps.length > 0)
+    ? pantheonData.attributionSteps
+    : defaultAttributionSteps;
+
+  const pageTitle = pantheonData.titrePrincipal || 'Panthéon';
+  const pageSubtitle = pantheonData.sousTitre || "Les distinctions qui gravent le nom d'un joueur dans l'histoire de l'ELC. Chaque cadre a une couleur fixe, reconnaissable au premier coup d'œil.";
+  const attributionTitle = pantheonData.titreAttribution || 'Comment sont-elles attribuées ?';
+
   return (
     <div id="page-pantheon" className="bg-[#0e0e0e] min-h-screen text-white">
       {/* Header section matching Vercel version */}
@@ -113,10 +142,10 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
               Distinctions officielles · Saison 2027
             </div>
             <h1 className="font-audiowide text-4xl sm:text-6xl font-normal text-white mb-5 tracking-wide">
-              Panthéon
+              {pageTitle}
             </h1>
             <p className="text-base sm:text-lg text-white/50 max-w-2xl leading-relaxed font-light">
-              Les distinctions qui gravent le nom d'un joueur dans l'histoire de l'ELC. Chaque cadre a une couleur fixe, reconnaissable au premier coup d'œil.
+              {pageSubtitle}
             </p>
           </div>
         </div>
@@ -128,6 +157,11 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {distinctions.map(d => {
               const laureat = getLaureat(d.key);
+              const nomineeName = d.nomineNom || laureat?.nom;
+              const nomineePhoto = d.nominePhoto || laureat?.image;
+              const nomineeDetails = d.nomineDetails || laureat?.discipline || laureat?.titre || 'Candidat officiel';
+              const nomineeStatut = d.nomineStatut || (laureat ? 'Lauréat Homologué' : 'Nominé Officiel');
+              const hasNominee = !!(nomineeName || nomineePhoto);
 
               return (
                 <div
@@ -186,38 +220,77 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
                     </p>
                   </div>
 
-                  {/* Laureate status slot */}
+                  {/* Dedicated Nominee Photo & Profile Showcase Frame */}
                   <div className="pt-4 border-t border-white/[0.08]">
-                    {laureat ? (
-                      <div className="flex items-center gap-3">
-                        {laureat.image ? (
-                          <img
-                            src={laureat.image}
-                            alt={laureat.nom}
-                            className="w-10 h-10 rounded-full object-cover border"
-                            style={{ borderColor: d.border }}
-                          />
-                        ) : (
+                    {hasNominee ? (
+                      <div className="p-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur-sm flex items-center gap-3">
+                        {/* Photo container */}
+                        <div className="relative shrink-0">
+                          {nomineePhoto ? (
+                            <img
+                              src={nomineePhoto}
+                              alt={nomineeName || 'Nominé'}
+                              referrerPolicy="no-referrer"
+                              className="w-12 h-12 rounded-xl object-cover border-2 shadow-lg"
+                              style={{ borderColor: d.border }}
+                            />
+                          ) : (
+                            <div
+                              className="w-12 h-12 rounded-xl flex items-center justify-center border font-audiowide font-bold text-base"
+                              style={{ borderColor: d.border, background: `${d.border}20`, color: d.text }}
+                            >
+                              {(nomineeName || 'N').charAt(0).toUpperCase()}
+                            </div>
+                          )}
                           <div
-                            className="w-10 h-10 rounded-full flex items-center justify-center border"
-                            style={{ borderColor: d.border, background: `${d.border}20` }}
+                            className="absolute -bottom-1 -right-1 p-0.5 rounded-full bg-black border"
+                            style={{ borderColor: d.border }}
                           >
-                            <User className="w-5 h-5 text-white" />
+                            <Medal className="w-3 h-3" style={{ color: d.text }} />
                           </div>
-                        )}
-                        <div>
-                          <div className="text-sm font-bold text-white leading-tight">
-                            {laureat.nom}
+                        </div>
+
+                        {/* Nominee details */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <span
+                              className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded border"
+                              style={{
+                                color: d.text,
+                                borderColor: `${d.border}40`,
+                                backgroundColor: `${d.border}15`
+                              }}
+                            >
+                              {nomineeStatut}
+                            </span>
                           </div>
-                          <div className="text-[11px] font-mono" style={{ color: d.text }}>
-                            {laureat.titre || 'Lauréat Homologué'}
+                          <div className="text-sm font-bold text-white leading-tight truncate">
+                            {nomineeName}
+                          </div>
+                          <div className="text-[11px] text-white/50 truncate font-light">
+                            {nomineeDetails}
                           </div>
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-between text-xs text-white/40 font-mono py-1">
-                        <span>Attribution en cours</span>
-                        <span className="w-2 h-2 rounded-full bg-white/20 animate-pulse" />
+                      /* Placeholder Frame for Nominee Photo */
+                      <div className="p-3 rounded-xl bg-black/25 border border-dashed border-white/15 flex items-center gap-3">
+                        <div
+                          className="w-12 h-12 rounded-xl border border-dashed flex flex-col items-center justify-center shrink-0 text-white/30"
+                          style={{ borderColor: `${d.border}50` }}
+                        >
+                          <Camera className="w-5 h-5 text-white/40" />
+                          <span className="text-[7px] font-mono uppercase text-white/40 mt-0.5">Photo</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between text-xs text-white/50 font-mono mb-0.5">
+                            <span className="font-semibold text-white/70 text-[11px]">Espace Nominé</span>
+                            <span className="w-2 h-2 rounded-full bg-white/20 animate-pulse" />
+                          </div>
+                          <p className="text-[10px] text-white/40 leading-tight">
+                            Photo & candidat en cours d'attribution officielle
+                          </p>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -245,7 +318,7 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
               <div className="flex items-center gap-2 mb-8">
                 <Trophy className="w-5 h-5 text-teal-400" />
                 <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
-                  Comment sont-elles attribuées ?
+                  {attributionTitle}
                 </h2>
               </div>
 

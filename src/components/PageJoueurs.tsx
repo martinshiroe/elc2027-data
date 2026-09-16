@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Users, Search, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { ELCData, ELCJoueurProfil } from '../types';
+import { GameBadgeLogo } from './GameLogos';
 
 interface PageJoueursProps {
   data: ELCData;
@@ -75,53 +76,77 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onSelectGame }) 
         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
           <button
             onClick={() => setFilterGame('all')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
               filterGame === 'all'
-                ? 'bg-emerald-500 text-slate-950 font-bold'
-                : 'bg-slate-800 text-slate-300 hover:text-white'
+                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-950/40'
+                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
             }`}
           >
             Tous ({allPlayers.length})
           </button>
+
           <button
             onClick={() => setFilterGame('hok')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            title="Honor of Kings"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
               filterGame === 'hok'
-                ? 'bg-amber-500 text-slate-950 font-bold'
-                : 'bg-slate-800 text-slate-300 hover:text-white'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-950/40'
+                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
             }`}
           >
-            Honor of Kings
+            {data.competition?.hok?.logoImage ? (
+              <img src={data.competition.hok.logoImage} alt="HOK" className="h-4 w-auto max-w-[80px] object-contain" />
+            ) : (
+              <span className="font-mono text-[11px]">[ Image HOK ]</span>
+            )}
           </button>
+
           <button
             onClick={() => setFilterGame('mlbb')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            title="Mobile Legends"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
               filterGame === 'mlbb'
-                ? 'bg-blue-500 text-slate-950 font-bold'
-                : 'bg-slate-800 text-slate-300 hover:text-white'
+                ? 'bg-blue-500 text-slate-950 font-bold shadow-md shadow-blue-950/40'
+                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
             }`}
           >
-            Mobile Legends
+            {data.competition?.mlbb?.logoImage ? (
+              <img src={data.competition.mlbb.logoImage} alt="MLBB" className="h-4 w-auto max-w-[80px] object-contain" />
+            ) : (
+              <span className="font-mono text-[11px]">[ Image MLBB ]</span>
+            )}
           </button>
+
           <button
             onClick={() => setFilterGame('pubgm')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            title="PUBG Mobile"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
               filterGame === 'pubgm'
-                ? 'bg-emerald-500 text-slate-950 font-bold'
-                : 'bg-slate-800 text-slate-300 hover:text-white'
+                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-950/40'
+                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
             }`}
           >
-            PUBG Mobile
+            {data.competition?.pubgm?.logoImage ? (
+              <img src={data.competition.pubgm.logoImage} alt="PUBGM" className="h-4 w-auto max-w-[80px] object-contain" />
+            ) : (
+              <span className="font-mono text-[11px]">[ Image PUBGM ]</span>
+            )}
           </button>
+
           <button
             onClick={() => setFilterGame('ff')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            title="Free Fire"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
               filterGame === 'ff'
-                ? 'bg-orange-500 text-slate-950 font-bold'
-                : 'bg-slate-800 text-slate-300 hover:text-white'
+                ? 'bg-orange-500 text-slate-950 font-bold shadow-md shadow-orange-950/40'
+                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
             }`}
           >
-            Free Fire
+            {data.competition?.ff?.logoImage ? (
+              <img src={data.competition.ff.logoImage} alt="FF" className="h-4 w-auto max-w-[80px] object-contain" />
+            ) : (
+              <span className="font-mono text-[11px]">[ Image FF ]</span>
+            )}
           </button>
         </div>
 

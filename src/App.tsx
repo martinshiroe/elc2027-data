@@ -21,7 +21,8 @@ import { PageInscription } from './components/PageInscription';
 import { AdminPortal } from './components/AdminPortal';
 import { Footer } from './components/Footer';
 import { InstallPwaPrompt } from './components/InstallPwaPrompt';
-import { Trophy, Swords, Target, Crosshair, Users, ChevronRight, FileCheck, ExternalLink } from 'lucide-react';
+import { GameBadgeLogo } from './components/GameLogos';
+import { Trophy, Swords, Target, Crosshair, Users, ChevronRight, FileCheck, ExternalLink, ImageIcon } from 'lucide-react';
 
 export function App() {
   const [data, setData] = useState<ELCData>(initialELCData);
@@ -259,57 +260,133 @@ export function App() {
             </div>
 
             {/* Game Selector Tabs */}
-            <div className="flex flex-wrap gap-2.5 p-1.5 rounded-2xl bg-[#141414] border border-white/[0.08] mb-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 p-2 rounded-2xl bg-[#141414] border border-white/[0.08] mb-8">
+              {/* Tab HOK */}
               <button
                 id="tab-hok"
                 onClick={() => setSelectedGame('hok')}
-                className={`flex-1 min-w-[180px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                title="Honor of Kings (MOBA)"
+                className={`min-h-[58px] flex items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
                   selectedGame === 'hok'
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-lg shadow-amber-950/40'
-                    : 'text-white/50 hover:text-white hover:bg-white/[0.04]'
+                    ? 'bg-amber-500/20 border-2 border-amber-500/80 shadow-lg shadow-amber-950/60 ring-2 ring-amber-500/30'
+                    : 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/20'
                 }`}
               >
-                <Swords className="w-4 h-4 text-amber-400" />
-                <span>Honor of Kings (MOBA)</span>
+                {data.competition?.hok?.logoImage ? (
+                  <img
+                    src={data.competition.hok.logoImage}
+                    alt="Logo Honor of Kings"
+                    className="max-h-12 max-w-full object-contain filter drop-shadow-md"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center py-1">
+                    <div className="flex items-center gap-1.5 text-amber-400">
+                      <ImageIcon className="w-4 h-4" />
+                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
+                        [ Image HOK ]
+                      </span>
+                    </div>
+                    <span className="text-[9px] text-white/40 font-mono mt-0.5">
+                      Honor of Kings · MOBA
+                    </span>
+                  </div>
+                )}
               </button>
 
+              {/* Tab MLBB */}
               <button
                 id="tab-mlbb"
                 onClick={() => setSelectedGame('mlbb')}
-                className={`flex-1 min-w-[180px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                title="Mobile Legends: Bang Bang (MOBA)"
+                className={`min-h-[58px] flex items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
                   selectedGame === 'mlbb'
-                    ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 shadow-lg shadow-blue-950/40'
-                    : 'text-white/50 hover:text-white hover:bg-white/[0.04]'
+                    ? 'bg-blue-500/20 border-2 border-blue-500/80 shadow-lg shadow-blue-950/60 ring-2 ring-blue-500/30'
+                    : 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/20'
                 }`}
               >
-                <Swords className="w-4 h-4 text-blue-400" />
-                <span>Mobile Legends (MOBA)</span>
+                {data.competition?.mlbb?.logoImage ? (
+                  <img
+                    src={data.competition.mlbb.logoImage}
+                    alt="Logo Mobile Legends"
+                    className="max-h-12 max-w-full object-contain filter drop-shadow-md"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center py-1">
+                    <div className="flex items-center gap-1.5 text-blue-400">
+                      <ImageIcon className="w-4 h-4" />
+                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
+                        [ Image MLBB ]
+                      </span>
+                    </div>
+                    <span className="text-[9px] text-white/40 font-mono mt-0.5">
+                      Mobile Legends · MOBA
+                    </span>
+                  </div>
+                )}
               </button>
 
+              {/* Tab PUBGM */}
               <button
                 id="tab-pubgm"
                 onClick={() => setSelectedGame('pubgm')}
-                className={`flex-1 min-w-[180px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                title="PUBG Mobile (TPS)"
+                className={`min-h-[58px] flex items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
                   selectedGame === 'pubgm'
-                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-lg shadow-emerald-950/40'
-                    : 'text-white/50 hover:text-white hover:bg-white/[0.04]'
+                    ? 'bg-emerald-500/20 border-2 border-emerald-500/80 shadow-lg shadow-emerald-950/60 ring-2 ring-emerald-500/30'
+                    : 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/20'
                 }`}
               >
-                <Target className="w-4 h-4 text-emerald-400" />
-                <span>PUBG Mobile (TPS)</span>
+                {data.competition?.pubgm?.logoImage ? (
+                  <img
+                    src={data.competition.pubgm.logoImage}
+                    alt="Logo PUBG Mobile"
+                    className="max-h-12 max-w-full object-contain filter drop-shadow-md"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center py-1">
+                    <div className="flex items-center gap-1.5 text-emerald-400">
+                      <ImageIcon className="w-4 h-4" />
+                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
+                        [ Image PUBGM ]
+                      </span>
+                    </div>
+                    <span className="text-[9px] text-white/40 font-mono mt-0.5">
+                      PUBG Mobile · TPS
+                    </span>
+                  </div>
+                )}
               </button>
 
+              {/* Tab FF */}
               <button
                 id="tab-ff"
                 onClick={() => setSelectedGame('ff')}
-                className={`flex-1 min-w-[180px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                title="Free Fire (TPS)"
+                className={`min-h-[58px] flex items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
                   selectedGame === 'ff'
-                    ? 'bg-orange-500/20 text-orange-300 border border-orange-500/40 shadow-lg shadow-orange-950/40'
-                    : 'text-white/50 hover:text-white hover:bg-white/[0.04]'
+                    ? 'bg-orange-500/20 border-2 border-orange-500/80 shadow-lg shadow-orange-950/60 ring-2 ring-orange-500/30'
+                    : 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/20'
                 }`}
               >
-                <Crosshair className="w-4 h-4 text-orange-400" />
-                <span>Free Fire (TPS)</span>
+                {data.competition?.ff?.logoImage ? (
+                  <img
+                    src={data.competition.ff.logoImage}
+                    alt="Logo Free Fire"
+                    className="max-h-12 max-w-full object-contain filter drop-shadow-md"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center py-1">
+                    <div className="flex items-center gap-1.5 text-orange-400">
+                      <ImageIcon className="w-4 h-4" />
+                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
+                        [ Image FF ]
+                      </span>
+                    </div>
+                    <span className="text-[9px] text-white/40 font-mono mt-0.5">
+                      Free Fire · TPS
+                    </span>
+                  </div>
+                )}
               </button>
             </div>
 

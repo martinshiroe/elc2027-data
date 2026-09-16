@@ -171,6 +171,7 @@ export interface ELCBaremeMoba {
 export interface ELCMobaGame {
   nom: string;
   family: string;
+  logoImage?: string;
   calendrier: ELCCalendrierItem[];
   bareme: ELCBaremeMoba;
   manches: any[];
@@ -194,6 +195,7 @@ export interface ELCTpsPlayer {
 export interface ELCTpsGame {
   nom: string;
   family: string;
+  logoImage?: string;
   calendrier: ELCCalendrierItem[];
   bareme: ELCTpsBareme;
   manches: any[];
@@ -223,6 +225,32 @@ export interface ELCVideo {
   featured?: boolean;
 }
 
+export interface ELCPantheonDistinction {
+  key: string;
+  title: string;
+  subtitle: string;
+  desc: string;
+  nomineNom?: string;
+  nominePhoto?: string;
+  nomineDetails?: string;
+  nomineStatut?: string;
+}
+
+export interface ELCPantheonAttributionStep {
+  step: string;
+  title: string;
+  desc: string;
+}
+
+export interface ELCPantheonData {
+  titrePrincipal?: string;
+  sousTitre?: string;
+  titreAttribution?: string;
+  distinctions?: ELCPantheonDistinction[];
+  attributionSteps?: ELCPantheonAttributionStep[];
+  curated: any[];
+}
+
 export interface ELCData {
   meta: ELCMeta;
   visual1: ELCVisual1;
@@ -231,8 +259,6 @@ export interface ELCData {
   visual4: ELCVisual4;
   competition: ELCCompetition;
   joueurs: any[];
-  pantheon: {
-    curated: any[];
-  };
+  pantheon: ELCPantheonData;
   videos?: ELCVideo[];
 }
