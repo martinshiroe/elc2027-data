@@ -79,6 +79,23 @@ export function App() {
     };
   }, []);
 
+  // Synchronize document title and favicon with meta state
+  useEffect(() => {
+    if (data.meta) {
+      document.title = `${data.meta.competitionNom || 'ELC 2027'} — ${data.meta.organisateur || 'East League of Cameroon'}`;
+      if (data.meta.favicon) {
+        let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+        if (!link) {
+          link = document.createElement('link');
+          link.type = 'image/png';
+          link.rel = 'icon';
+          document.getElementsByTagName('head')[0].appendChild(link);
+        }
+        link.href = data.meta.favicon;
+      }
+    }
+  }, [data.meta]);
+
   const handleSelectGame = (gameId: 'hok' | 'mlbb' | 'pubgm' | 'ff') => {
     setSelectedGame(gameId);
     setActiveSection('classements');

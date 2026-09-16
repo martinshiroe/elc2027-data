@@ -603,6 +603,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Favicon du site (URL de l'icône)
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.meta.favicon || ''}
+                      onChange={(e) => updateMeta('favicon', e.target.value)}
+                      placeholder="/img/icon-192.png ou https://..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image du Héro d'accueil (Hero)
                     </label>
                     <input

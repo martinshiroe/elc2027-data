@@ -32,6 +32,7 @@ export interface ELCMeta {
   ctaImage: string;
   googleFormUrl?: string;
   startGgUrl?: string;
+  favicon?: string;
 }
 
 export interface ELCPantheonItem {
