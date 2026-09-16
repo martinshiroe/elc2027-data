@@ -626,6 +626,48 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
                     />
                   </div>
+
+                  {/* Le pied de page affiche déjà ces trois icônes, mais elles
+                      ne s'affichent que si le lien est rempli — et rien ne
+                      permettait de le remplir jusqu'ici. */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Lien TikTok Officiel
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.meta.reseaux.tiktok || ''}
+                      onChange={(e) => updateReseaux('tiktok', e.target.value)}
+                      placeholder="https://www.tiktok.com/@..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-slate-300"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Lien Instagram Officiel
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.meta.reseaux.instagram || ''}
+                      onChange={(e) => updateReseaux('instagram', e.target.value)}
+                      placeholder="https://www.instagram.com/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-pink-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Lien Discord Officiel
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.meta.reseaux.discord || ''}
+                      onChange={(e) => updateReseaux('discord', e.target.value)}
+                      placeholder="https://discord.gg/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500"
+                    />
+                  </div>
                 </div>
 
                 <div>
