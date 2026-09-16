@@ -14,7 +14,10 @@ export const Hero: React.FC<HeroProps> = ({ data, onSelectSection }) => {
     if (meta.googleFormUrl) {
       window.open(meta.googleFormUrl, '_blank');
     } else {
-      onSelectSection('joueurs');
+      // Sans formulaire configuré, on envoie vers la page Inscription, qui
+      // explique la démarche et donne les contacts — et non vers la liste des
+      // joueurs, qui ne répond pas à l'intention de s'inscrire.
+      onSelectSection('inscription');
     }
   };
 

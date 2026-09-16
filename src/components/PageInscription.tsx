@@ -24,8 +24,21 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
         
         {/* Top Hero Banner */}
         <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#161616] via-[#121212] to-[#0a0a0a] border border-white/[0.08] p-8 sm:p-12 shadow-2xl">
+          {/* Image de fond configurable depuis l'admin, comme l'accueil et le
+              Panthéon. Le dégradé par-dessus garde le texte lisible quelle que
+              soit l'image choisie ; sans image, le fond dégradé ci-dessus reste
+              seul. */}
+          {meta.inscriptionBannerImage && (
+            <div
+              className="absolute inset-0 bg-cover bg-center pointer-events-none"
+              style={{ backgroundImage: `url("${meta.inscriptionBannerImage}")` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0e0e0e]/95 via-[#0e0e0e]/85 to-[#0e0e0e]/55" />
+            </div>
+          )}
+
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-teal-500/15 via-rose-500/5 to-transparent rounded-full pointer-events-none blur-3xl" />
-          
+
           <div className="relative z-10 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-teal-500/10 text-teal-400 border border-teal-500/25 mb-4">
               <Sparkles className="w-3.5 h-3.5" />

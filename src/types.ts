@@ -32,6 +32,7 @@ export interface ELCMeta {
   ctaImage: string;
   videosBannerImage?: string;
   pantheonBannerImage?: string;
+  inscriptionBannerImage?: string;
   googleFormUrl?: string;
   startGgUrl?: string;
   favicon?: string;

@@ -155,7 +155,13 @@ export function App() {
             <MatchPreviewShowcase />
 
             {/* Competitive Format & Baremes */}
-            <CompetitiveFormatSection data={data} />
+            <CompetitiveFormatSection
+              data={data}
+              onOpenRegister={() => {
+                setActiveSection('inscription');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
 
             {/* Scale & Community Statistics */}
             <StatsSection />
@@ -230,7 +236,13 @@ export function App() {
             </div>
 
             {/* Competitive Format & Baremes */}
-            <CompetitiveFormatSection />
+            <CompetitiveFormatSection
+              data={data}
+              onOpenRegister={() => {
+                setActiveSection('inscription');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
 
             <DisciplinesSection
               data={data}

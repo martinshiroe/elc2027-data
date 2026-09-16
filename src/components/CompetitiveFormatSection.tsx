@@ -1,15 +1,17 @@
 import React from 'react';
 import { Trophy, Target, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 import { ELCData } from '../types';
-import { initialELCData } from '../data/initialData';
 
 interface CompetitiveFormatSectionProps {
-  data?: ELCData;
+  // Obligatoire : un repli sur les données embarquées afficherait en silence
+  // des barèmes figés au build, sans refléter l'admin. L'oubli doit échouer à
+  // la compilation, pas passer inaperçu à l'écran.
+  data: ELCData;
   onOpenRegister?: () => void;
 }
 
 export const CompetitiveFormatSection: React.FC<CompetitiveFormatSectionProps> = ({
-  data = initialELCData,
+  data,
   onOpenRegister,
 }) => {
   const mobaBareme = data.competition.hok.bareme;
