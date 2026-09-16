@@ -210,10 +210,34 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
       featured: newVideoFeatured,
     };
 
-    setFormData((prev: ELCData) => ({
-      ...prev,
-      videos: [item, ...(prev.videos || [])]
-    }));
+    const updatedVideos = [item, ...(formData.videos || [])];
+    const updatedFormData = {
+      ...formData,
+      videos: updatedVideos
+    };
+
+    setFormData(updatedFormData);
+    onUpdateData(updatedFormData);
+
+    // Also persist to backend automatically
+    fetch('/api/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-key': adminKey
+      },
+      body: JSON.stringify(updatedFormData)
+    }).then(res => res.json()).then(json => {
+      if (json.ok) {
+        setSaveStatus({
+          loading: false,
+          success: `Vidéo ajoutée et enregistrée avec succès !`
+        });
+        setTimeout(() => setSaveStatus({ loading: false }), 4000);
+      }
+    }).catch(err => {
+      console.warn('Auto-save error:', err);
+    });
 
     setNewVideoUrl('');
     setNewVideoTitle('');
@@ -224,17 +248,61 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
   };
 
   const handleRemoveVideo = (id: string) => {
-    setFormData((prev: ELCData) => ({
-      ...prev,
-      videos: (prev.videos || []).filter(v => v.id !== id)
-    }));
+    const updatedVideos = (formData.videos || []).filter(v => v.id !== id);
+    const updatedFormData = {
+      ...formData,
+      videos: updatedVideos
+    };
+    setFormData(updatedFormData);
+    onUpdateData(updatedFormData);
+
+    fetch('/api/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-key': adminKey
+      },
+      body: JSON.stringify(updatedFormData)
+    }).then(res => res.json()).then(json => {
+      if (json.ok) {
+        setSaveStatus({
+          loading: false,
+          success: `Vidéo supprimée avec succès !`
+        });
+        setTimeout(() => setSaveStatus({ loading: false }), 4000);
+      }
+    }).catch(err => {
+      console.warn('Auto-save error:', err);
+    });
   };
 
   const handleToggleFeatured = (id: string) => {
-    setFormData((prev: ELCData) => ({
-      ...prev,
-      videos: (prev.videos || []).map(v => v.id === id ? { ...v, featured: !v.featured } : v)
-    }));
+    const updatedVideos = (formData.videos || []).map(v => v.id === id ? { ...v, featured: !v.featured } : v);
+    const updatedFormData = {
+      ...formData,
+      videos: updatedVideos
+    };
+    setFormData(updatedFormData);
+    onUpdateData(updatedFormData);
+
+    fetch('/api/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-key': adminKey
+      },
+      body: JSON.stringify(updatedFormData)
+    }).then(res => res.json()).then(json => {
+      if (json.ok) {
+        setSaveStatus({
+          loading: false,
+          success: `Statut mis à jour avec succès !`
+        });
+        setTimeout(() => setSaveStatus({ loading: false }), 4000);
+      }
+    }).catch(err => {
+      console.warn('Auto-save error:', err);
+    });
   };
 
   // Login Screen

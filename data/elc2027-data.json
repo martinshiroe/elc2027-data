@@ -5,7 +5,7 @@
     "competitionNom": "East League of Cameroun",
     "saison": "2027",
     "badgeHaut": "100% Mobile & Online",
-    "derniereMaj": "2026-09-16T00:19:30.629Z",
+    "derniereMaj": "2026-09-16T15:21:58.777Z",
     "contact": {
       "telephone": "",
       "email": "ligue_regional_est@zohomail.com"
@@ -848,5 +848,19 @@
   "pantheon": {
     "curated": []
   },
-  "videos": []
+  "videos": [
+    {
+      "id": "vid-1789571828248",
+      "titre": "Diffusion en direct de Ligue de L'est Weekly Match",
+      "url": "https://youtube.com/live/FMBLl_riwl0",
+      "plateforme": "youtube",
+      "discipline": "general",
+      "categorie": "match",
+      "miniature": "https://i9.ytimg.com/vi/FMBLl_riwl0/mq1.jpg?sqp=CMjiqtUG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGCcgPCh_MA8=&rs=AOn4CLAyj8zEpPt0dAtBUKr2SxwFH6PTrg",
+      "duree": "Vidéo",
+      "date": "16 sept. 2026",
+      "description": "",
+      "featured": true
+    }
+  ]
 }
