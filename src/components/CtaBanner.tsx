@@ -47,7 +47,7 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ data, onOpenRegister }) =>
               position: 'absolute',
               inset: 0,
               background:
-                'linear-gradient(180deg, rgba(14,14,14,0.88) 0%, rgba(14,14,14,0.94) 50%, rgba(14,14,14,0.98) 100%)',
+                'linear-gradient(180deg, rgba(14,14,14,0.70) 0%, rgba(14,14,14,0.86) 50%, rgba(14,14,14,0.96) 100%)',
             }}
           />
         </div>

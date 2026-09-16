@@ -106,7 +106,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
               className="absolute inset-0 bg-cover bg-center pointer-events-none"
               style={{ backgroundImage: `url("${data.meta.videosBannerImage}")` }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/85 to-black/70" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/65" />
             </div>
           )}
 

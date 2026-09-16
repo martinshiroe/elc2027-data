@@ -32,7 +32,7 @@ export const Hero: React.FC<HeroProps> = ({ data, onSelectSection }) => {
           className="absolute inset-0 bg-cover bg-center pointer-events-none"
           style={{ backgroundImage: `url("${meta.heroImage}")` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0e0e0e]/65 via-[#0e0e0e]/85 to-[#0e0e0e]/98" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0e0e0e]/45 via-[#0e0e0e]/72 to-[#0e0e0e]/97" />
         </div>
       ) : (
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[#0e0e0e]/80 to-[#0e0e0e]" />

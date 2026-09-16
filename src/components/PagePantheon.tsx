@@ -224,37 +224,39 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
                   <div className="pt-4 border-t border-white/[0.08]">
                     {hasNominee ? (
                       <div className="p-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur-sm flex items-center gap-3">
-                        {/* Photo container */}
+                        {/* Photo, en portrait sur toute la hauteur du cadre —
+                            le format vertical met le visage en valeur bien
+                            mieux que l'ancienne vignette carrée de 48 px. */}
                         <div className="relative shrink-0">
                           {nomineePhoto ? (
                             <img
                               src={nomineePhoto}
                               alt={nomineeName || 'Nominé'}
                               referrerPolicy="no-referrer"
-                              className="w-12 h-12 rounded-xl object-cover border-2 shadow-lg"
+                              className="w-24 h-32 rounded-xl object-cover object-top border-2 shadow-lg"
                               style={{ borderColor: d.border }}
                             />
                           ) : (
                             <div
-                              className="w-12 h-12 rounded-xl flex items-center justify-center border font-audiowide font-bold text-base"
+                              className="w-24 h-32 rounded-xl flex items-center justify-center border-2 font-audiowide font-bold text-4xl"
                               style={{ borderColor: d.border, background: `${d.border}20`, color: d.text }}
                             >
                               {(nomineeName || 'N').charAt(0).toUpperCase()}
                             </div>
                           )}
                           <div
-                            className="absolute -bottom-1 -right-1 p-0.5 rounded-full bg-black border"
+                            className="absolute -bottom-1.5 -right-1.5 p-1 rounded-full bg-black border"
                             style={{ borderColor: d.border }}
                           >
-                            <Medal className="w-3 h-3" style={{ color: d.text }} />
+                            <Medal className="w-3.5 h-3.5" style={{ color: d.text }} />
                           </div>
                         </div>
 
-                        {/* Nominee details */}
+                        {/* Nom et détails, en face de la photo */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 mb-0.5">
+                          <div className="mb-1.5">
                             <span
-                              className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded border"
+                              className="inline-block text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded border"
                               style={{
                                 color: d.text,
                                 borderColor: `${d.border}40`,
@@ -264,10 +266,12 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
                               {nomineeStatut}
                             </span>
                           </div>
-                          <div className="text-sm font-bold text-white leading-tight truncate">
+                          {/* Pas de troncature : la place gagnée en hauteur
+                              permet aux noms longs de passer à la ligne. */}
+                          <div className="text-sm font-bold text-white leading-tight break-words">
                             {nomineeName}
                           </div>
-                          <div className="text-[11px] text-white/50 truncate font-light">
+                          <div className="text-[11px] text-white/50 font-light leading-snug mt-0.5 break-words">
                             {nomineeDetails}
                           </div>
                         </div>
@@ -275,20 +279,22 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
                     ) : (
                       /* Placeholder Frame for Nominee Photo */
                       <div className="p-3 rounded-xl bg-black/25 border border-dashed border-white/15 flex items-center gap-3">
+                        {/* Même gabarit que le cadre rempli, pour que la grille
+                            ne saute pas quand un nominé est renseigné. */}
                         <div
-                          className="w-12 h-12 rounded-xl border border-dashed flex flex-col items-center justify-center shrink-0 text-white/30"
+                          className="w-24 h-32 rounded-xl border border-dashed flex flex-col items-center justify-center shrink-0 text-white/30"
                           style={{ borderColor: `${d.border}50` }}
                         >
-                          <Camera className="w-5 h-5 text-white/40" />
-                          <span className="text-[7px] font-mono uppercase text-white/40 mt-0.5">Photo</span>
+                          <Camera className="w-7 h-7 text-white/40" />
+                          <span className="text-[8px] font-mono uppercase text-white/40 mt-1.5">Photo</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between text-xs text-white/50 font-mono mb-0.5">
+                          <div className="flex items-center justify-between text-xs text-white/50 font-mono mb-1">
                             <span className="font-semibold text-white/70 text-[11px]">Espace Nominé</span>
                             <span className="w-2 h-2 rounded-full bg-white/20 animate-pulse" />
                           </div>
-                          <p className="text-[10px] text-white/40 leading-tight">
-                            Photo & candidat en cours d'attribution officielle
+                          <p className="text-[10px] text-white/40 leading-snug">
+                            Photo &amp; candidat en cours d'attribution officielle
                           </p>
                         </div>
                       </div>
@@ -310,7 +316,7 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
                 className="absolute inset-0 bg-cover bg-center pointer-events-none"
                 style={{ backgroundImage: `url("${data.meta.pantheonBannerImage}")` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/90 to-black/85" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/88 to-black/78" />
               </div>
             )}
 
