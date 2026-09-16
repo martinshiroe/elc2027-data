@@ -19,6 +19,7 @@ interface DistinctionCard {
   nomineNom?: string;
   nominePhoto?: string;
   nomineHero?: string;
+  fondImage?: string;
   nomineClan?: string;
   nomineDetails?: string;
   nomineStatut?: string;
@@ -110,6 +111,7 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
       nomineNom: custom.nomineNom,
       nominePhoto: custom.nominePhoto,
       nomineHero: custom.nomineHero,
+      fondImage: custom.fondImage,
       nomineClan: custom.nomineClan,
       nomineDetails: custom.nomineDetails,
       nomineStatut: custom.nomineStatut,
@@ -204,6 +206,24 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
                         background: `radial-gradient(120% 90% at 70% 10%, ${d.border}22 0%, transparent 55%), linear-gradient(160deg, #141414 0%, #0a0a0a 100%)`,
                       }}
                     />
+                    {/* Fond personnalisé de l'affiche, choisi dans l'admin.
+                        Le voile par-dessus garde lisibles le titre, le nom et
+                        les mentions, quelle que soit l'image fournie. */}
+                    {d.fondImage && (
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url("${d.fondImage}")` }}
+                      >
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background:
+                              'linear-gradient(180deg, rgba(10,10,10,0.70) 0%, rgba(10,10,10,0.86) 100%)',
+                          }}
+                        />
+                      </div>
+                    )}
+
                     {/* Trame de points, comme sur les affiches de match */}
                     <div
                       className="absolute top-[8%] right-[8%] w-[22%] h-[14%] opacity-40"

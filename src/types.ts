@@ -234,6 +234,7 @@ export interface ELCPantheonDistinction {
   nomineNom?: string;
   nominePhoto?: string;
   nomineHero?: string;
+  fondImage?: string;
   nomineClan?: string;
   nomineDetails?: string;
   nomineStatut?: string;

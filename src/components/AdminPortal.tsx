@@ -1499,7 +1499,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       desc: card.defaultDesc,
                     };
 
-                    const updateDistinction = (field: 'title' | 'subtitle' | 'desc' | 'nomineNom' | 'nominePhoto' | 'nomineHero' | 'nomineClan' | 'nomineDetails' | 'nomineStatut', val: string) => {
+                    const updateDistinction = (field: 'title' | 'subtitle' | 'desc' | 'nomineNom' | 'nominePhoto' | 'nomineHero' | 'fondImage' | 'nomineClan' | 'nomineDetails' | 'nomineStatut', val: string) => {
                       const list = [...(formData.pantheon?.distinctions || [])];
                       const idx = list.findIndex(d => d.key === card.key);
                       if (idx >= 0) {
@@ -1520,6 +1520,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       reader.onload = () => {
                         if (typeof reader.result === 'string') {
                           updateDistinction('nominePhoto', reader.result);
+                        }
+                      };
+                      reader.readAsDataURL(file);
+                    };
+
+                    const handleFondUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        if (typeof reader.result === 'string') {
+                          updateDistinction('fondImage', reader.result);
                         }
                       };
                       reader.readAsDataURL(file);
@@ -1660,6 +1672,31 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                                       type="file"
                                       accept="image/*"
                                       onChange={handleHeroUpload}
+                                      className="hidden"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="block text-[10px] text-slate-400 mb-0.5">
+                                  Image de fond de l'affiche
+                                </label>
+                                <div className="flex gap-1.5">
+                                  <input
+                                    type="text"
+                                    value={current.fondImage || ''}
+                                    onChange={(e) => updateDistinction('fondImage', e.target.value)}
+                                    placeholder="https://... (laisser vide = fond sombre par défaut)"
+                                    className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder:text-slate-600"
+                                  />
+                                  <label className="px-2 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded text-slate-300 text-[10px] flex items-center gap-1 cursor-pointer shrink-0">
+                                    <Upload className="w-3 h-3" />
+                                    <span>Fichier</span>
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={handleFondUpload}
                                       className="hidden"
                                     />
                                   </label>
