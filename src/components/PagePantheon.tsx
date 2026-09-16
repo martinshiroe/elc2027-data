@@ -231,30 +231,41 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
       {/* "Comment sont-elles attribuées ?" Section */}
       <section className="py-12 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-8 sm:p-12">
-            <div className="flex items-center gap-2 mb-8">
-              <Trophy className="w-5 h-5 text-teal-400" />
-              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
-                Comment sont-elles attribuées ?
-              </h2>
-            </div>
+          <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-8 sm:p-12 relative overflow-hidden">
+            {data.meta.pantheonBannerImage && (
+              <div
+                className="absolute inset-0 bg-cover bg-center pointer-events-none"
+                style={{ backgroundImage: `url("${data.meta.pantheonBannerImage}")` }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/90 to-black/85" />
+              </div>
+            )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {attributionSteps.map((step, idx) => (
-                <div key={idx} className="flex gap-4 items-start">
-                  <span className="font-mono text-xs font-bold text-teal-400 shrink-0 mt-1 px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20">
-                    {step.step}
-                  </span>
-                  <div>
-                    <h3 className="text-sm font-bold text-white mb-2">
-                      {step.title}
-                    </h3>
-                    <p className="text-xs text-white/50 leading-relaxed font-light">
-                      {step.desc}
-                    </p>
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-8">
+                <Trophy className="w-5 h-5 text-teal-400" />
+                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+                  Comment sont-elles attribuées ?
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {attributionSteps.map((step, idx) => (
+                  <div key={idx} className="flex gap-4 items-start">
+                    <span className="font-mono text-xs font-bold text-teal-400 shrink-0 mt-1 px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20">
+                      {step.step}
+                    </span>
+                    <div>
+                      <h3 className="text-sm font-bold text-white mb-2">
+                        {step.title}
+                      </h3>
+                      <p className="text-xs text-white/50 leading-relaxed font-light">
+                        {step.desc}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>

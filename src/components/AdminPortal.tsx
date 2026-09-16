@@ -763,21 +763,38 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
-                      Image Bannière — Free Fire (FF)
+                      Image Bannière — Rejoignez l'ELC (CTA Banner)
                     </label>
                     <input
                       type="url"
-                      value={formData.competition.ff.heroImage || ''}
-                      onChange={(e) => {
-                        const url = e.target.value;
-                        setFormData(prev => ({
-                          ...prev,
-                          competition: {
-                            ...prev.competition,
-                            ff: { ...prev.competition.ff, heroImage: url }
-                          }
-                        }));
-                      }}
+                      value={formData.meta.ctaImage || ''}
+                      onChange={(e) => updateMeta('ctaImage', e.target.value)}
+                      placeholder="https://images.unsplash.com/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Image Bannière — Replays & Vidéos
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.meta.videosBannerImage || ''}
+                      onChange={(e) => updateMeta('videosBannerImage', e.target.value)}
+                      placeholder="https://images.unsplash.com/..."
+                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      Image Bannière — Panthéon / Attributions
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.meta.pantheonBannerImage || ''}
+                      onChange={(e) => updateMeta('pantheonBannerImage', e.target.value)}
                       placeholder="https://images.unsplash.com/..."
                       className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
                     />

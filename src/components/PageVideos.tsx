@@ -101,6 +101,15 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
       {/* Header Banner */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="p-8 sm:p-10 rounded-3xl bg-[#141414] border border-white/[0.08] shadow-2xl relative overflow-hidden">
+          {data.meta.videosBannerImage && (
+            <div
+              className="absolute inset-0 bg-cover bg-center pointer-events-none"
+              style={{ backgroundImage: `url("${data.meta.videosBannerImage}")` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/85 to-black/70" />
+            </div>
+          )}
+
           {/* Subtle glow */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-teal-500/10 via-rose-500/5 to-transparent rounded-full pointer-events-none blur-3xl" />
 

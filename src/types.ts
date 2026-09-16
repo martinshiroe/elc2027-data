@@ -30,6 +30,8 @@ export interface ELCMeta {
   liens: ELCLiens;
   heroImage: string;
   ctaImage: string;
+  videosBannerImage?: string;
+  pantheonBannerImage?: string;
   googleFormUrl?: string;
   startGgUrl?: string;
   favicon?: string;
