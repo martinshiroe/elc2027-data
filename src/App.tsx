@@ -266,31 +266,17 @@ export function App() {
                 id="tab-hok"
                 onClick={() => setSelectedGame('hok')}
                 title="Honor of Kings (MOBA)"
-                className={`min-h-[58px] flex items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
+                className={`min-h-[64px] flex items-center justify-center p-3 rounded-xl transition-all cursor-pointer ${
                   selectedGame === 'hok'
                     ? 'bg-amber-500/20 border-2 border-amber-500/80 shadow-lg shadow-amber-950/60 ring-2 ring-amber-500/30'
                     : 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/20'
                 }`}
               >
-                {data.competition?.hok?.logoImage ? (
-                  <img
-                    src={data.competition.hok.logoImage}
-                    alt="Logo Honor of Kings"
-                    className="max-h-12 max-w-full object-contain filter drop-shadow-md"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center text-center py-1">
-                    <div className="flex items-center gap-1.5 text-amber-400">
-                      <ImageIcon className="w-4 h-4" />
-                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
-                        [ Image HOK ]
-                      </span>
-                    </div>
-                    <span className="text-[9px] text-white/40 font-mono mt-0.5">
-                      Honor of Kings · MOBA
-                    </span>
-                  </div>
-                )}
+                <img
+                  src={data.competition?.hok?.logoImage || '/img/logo-hok.svg'}
+                  alt="Honor of Kings"
+                  className="h-8 sm:h-9 max-w-[150px] w-auto object-contain"
+                />
               </button>
 
               {/* Tab MLBB */}
@@ -298,31 +284,17 @@ export function App() {
                 id="tab-mlbb"
                 onClick={() => setSelectedGame('mlbb')}
                 title="Mobile Legends: Bang Bang (MOBA)"
-                className={`min-h-[58px] flex items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
+                className={`min-h-[64px] flex items-center justify-center p-3 rounded-xl transition-all cursor-pointer ${
                   selectedGame === 'mlbb'
                     ? 'bg-blue-500/20 border-2 border-blue-500/80 shadow-lg shadow-blue-950/60 ring-2 ring-blue-500/30'
                     : 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/20'
                 }`}
               >
-                {data.competition?.mlbb?.logoImage ? (
-                  <img
-                    src={data.competition.mlbb.logoImage}
-                    alt="Logo Mobile Legends"
-                    className="max-h-12 max-w-full object-contain filter drop-shadow-md"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center text-center py-1">
-                    <div className="flex items-center gap-1.5 text-blue-400">
-                      <ImageIcon className="w-4 h-4" />
-                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
-                        [ Image MLBB ]
-                      </span>
-                    </div>
-                    <span className="text-[9px] text-white/40 font-mono mt-0.5">
-                      Mobile Legends · MOBA
-                    </span>
-                  </div>
-                )}
+                <img
+                  src={data.competition?.mlbb?.logoImage || '/img/logo-mlbb.svg'}
+                  alt="Mobile Legends"
+                  className="h-8 sm:h-9 max-w-[150px] w-auto object-contain"
+                />
               </button>
 
               {/* Tab PUBGM */}
@@ -330,31 +302,17 @@ export function App() {
                 id="tab-pubgm"
                 onClick={() => setSelectedGame('pubgm')}
                 title="PUBG Mobile (TPS)"
-                className={`min-h-[58px] flex items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
+                className={`min-h-[64px] flex items-center justify-center p-3 rounded-xl transition-all cursor-pointer ${
                   selectedGame === 'pubgm'
                     ? 'bg-emerald-500/20 border-2 border-emerald-500/80 shadow-lg shadow-emerald-950/60 ring-2 ring-emerald-500/30'
                     : 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/20'
                 }`}
               >
-                {data.competition?.pubgm?.logoImage ? (
-                  <img
-                    src={data.competition.pubgm.logoImage}
-                    alt="Logo PUBG Mobile"
-                    className="max-h-12 max-w-full object-contain filter drop-shadow-md"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center text-center py-1">
-                    <div className="flex items-center gap-1.5 text-emerald-400">
-                      <ImageIcon className="w-4 h-4" />
-                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
-                        [ Image PUBGM ]
-                      </span>
-                    </div>
-                    <span className="text-[9px] text-white/40 font-mono mt-0.5">
-                      PUBG Mobile · TPS
-                    </span>
-                  </div>
-                )}
+                <img
+                  src={data.competition?.pubgm?.logoImage || '/img/logo-pubgm.svg'}
+                  alt="PUBG Mobile"
+                  className="h-8 sm:h-9 max-w-[150px] w-auto object-contain"
+                />
               </button>
 
               {/* Tab FF */}
@@ -362,31 +320,17 @@ export function App() {
                 id="tab-ff"
                 onClick={() => setSelectedGame('ff')}
                 title="Free Fire (TPS)"
-                className={`min-h-[58px] flex items-center justify-center p-2 rounded-xl transition-all cursor-pointer ${
+                className={`min-h-[64px] flex items-center justify-center p-3 rounded-xl transition-all cursor-pointer ${
                   selectedGame === 'ff'
                     ? 'bg-orange-500/20 border-2 border-orange-500/80 shadow-lg shadow-orange-950/60 ring-2 ring-orange-500/30'
                     : 'bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] hover:border-white/20'
                 }`}
               >
-                {data.competition?.ff?.logoImage ? (
-                  <img
-                    src={data.competition.ff.logoImage}
-                    alt="Logo Free Fire"
-                    className="max-h-12 max-w-full object-contain filter drop-shadow-md"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center text-center py-1">
-                    <div className="flex items-center gap-1.5 text-orange-400">
-                      <ImageIcon className="w-4 h-4" />
-                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
-                        [ Image FF ]
-                      </span>
-                    </div>
-                    <span className="text-[9px] text-white/40 font-mono mt-0.5">
-                      Free Fire · TPS
-                    </span>
-                  </div>
-                )}
+                <img
+                  src={data.competition?.ff?.logoImage || '/img/logo-ff.svg'}
+                  alt="Free Fire"
+                  className="h-8 sm:h-9 max-w-[150px] w-auto object-contain"
+                />
               </button>
             </div>
 

@@ -88,65 +88,65 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onSelectGame }) 
           <button
             onClick={() => setFilterGame('hok')}
             title="Honor of Kings"
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all cursor-pointer ${
               filterGame === 'hok'
-                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-950/40'
-                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
+                ? 'bg-amber-500/20 border-2 border-amber-500 shadow-md shadow-amber-950/40'
+                : 'bg-slate-800/80 border border-slate-700/70 hover:border-slate-500 hover:bg-slate-700/80'
             }`}
           >
-            {data.competition?.hok?.logoImage ? (
-              <img src={data.competition.hok.logoImage} alt="HOK" className="h-4 w-auto max-w-[80px] object-contain" />
-            ) : (
-              <span className="font-mono text-[11px]">[ Image HOK ]</span>
-            )}
+            <img
+              src={data.competition?.hok?.logoImage || '/img/logo-hok.svg'}
+              alt="Honor of Kings"
+              className="h-6 sm:h-7 w-auto object-contain"
+            />
           </button>
 
           <button
             onClick={() => setFilterGame('mlbb')}
-            title="Mobile Legends"
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            title="Mobile Legends: Bang Bang"
+            className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all cursor-pointer ${
               filterGame === 'mlbb'
-                ? 'bg-blue-500 text-slate-950 font-bold shadow-md shadow-blue-950/40'
-                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
+                ? 'bg-blue-500/20 border-2 border-blue-500 shadow-md shadow-blue-950/40'
+                : 'bg-slate-800/80 border border-slate-700/70 hover:border-slate-500 hover:bg-slate-700/80'
             }`}
           >
-            {data.competition?.mlbb?.logoImage ? (
-              <img src={data.competition.mlbb.logoImage} alt="MLBB" className="h-4 w-auto max-w-[80px] object-contain" />
-            ) : (
-              <span className="font-mono text-[11px]">[ Image MLBB ]</span>
-            )}
+            <img
+              src={data.competition?.mlbb?.logoImage || '/img/logo-mlbb.svg'}
+              alt="Mobile Legends: Bang Bang"
+              className="h-6 sm:h-7 w-auto object-contain"
+            />
           </button>
 
           <button
             onClick={() => setFilterGame('pubgm')}
             title="PUBG Mobile"
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all cursor-pointer ${
               filterGame === 'pubgm'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-950/40'
-                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
+                ? 'bg-emerald-500/20 border-2 border-emerald-500 shadow-md shadow-emerald-950/40'
+                : 'bg-slate-800/80 border border-slate-700/70 hover:border-slate-500 hover:bg-slate-700/80'
             }`}
           >
-            {data.competition?.pubgm?.logoImage ? (
-              <img src={data.competition.pubgm.logoImage} alt="PUBGM" className="h-4 w-auto max-w-[80px] object-contain" />
-            ) : (
-              <span className="font-mono text-[11px]">[ Image PUBGM ]</span>
-            )}
+            <img
+              src={data.competition?.pubgm?.logoImage || '/img/logo-pubgm.svg'}
+              alt="PUBG Mobile"
+              className="h-6 sm:h-7 w-auto object-contain"
+            />
           </button>
 
           <button
             onClick={() => setFilterGame('ff')}
             title="Free Fire"
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all cursor-pointer ${
               filterGame === 'ff'
-                ? 'bg-orange-500 text-slate-950 font-bold shadow-md shadow-orange-950/40'
-                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
+                ? 'bg-orange-500/20 border-2 border-orange-500 shadow-md shadow-orange-950/40'
+                : 'bg-slate-800/80 border border-slate-700/70 hover:border-slate-500 hover:bg-slate-700/80'
             }`}
           >
-            {data.competition?.ff?.logoImage ? (
-              <img src={data.competition.ff.logoImage} alt="FF" className="h-4 w-auto max-w-[80px] object-contain" />
-            ) : (
-              <span className="font-mono text-[11px]">[ Image FF ]</span>
-            )}
+            <img
+              src={data.competition?.ff?.logoImage || '/img/logo-ff.svg'}
+              alt="Free Fire"
+              className="h-6 sm:h-7 w-auto object-contain"
+            />
           </button>
         </div>
 
