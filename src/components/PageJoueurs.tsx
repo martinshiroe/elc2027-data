@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Search, Filter, ShieldCheck, Crosshair, Swords, Trophy, User } from 'lucide-react';
+import { Users, Search, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { ELCData, ELCJoueurProfil } from '../types';
 
 interface PageJoueursProps {
@@ -11,68 +11,10 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onSelectGame }) 
   const [search, setSearch] = useState('');
   const [filterGame, setFilterGame] = useState<string>('all');
 
-  // Extract all players across rosters and custom array
+  // Extract players strictly from explicit registered list (no mock/test players)
   const allPlayers: ELCJoueurProfil[] = React.useMemo(() => {
     const list: ELCJoueurProfil[] = [];
 
-    // PUBG Mobile players
-    data.competition.pubgm.roster.forEach((p, idx) => {
-      list.push({
-        id: p.id,
-        pseudo: p.nom,
-        discipline: 'PUBG Mobile',
-        statut: idx < 8 ? 'Qualifié Finales' : 'Phase Éliminatoire',
-        kills: p.kills || (idx === 0 ? 12 : idx === 1 ? 9 : 3),
-        points: p.scoreTotal || (idx === 0 ? 32 : idx === 1 ? 26 : 10),
-        role: 'Assault / Solo',
-        ville: 'Bertoua / Région Est',
-        photo: p.photo
-      });
-    });
-
-    // Free Fire players
-    data.competition.ff.roster.forEach((p, idx) => {
-      list.push({
-        id: p.id,
-        pseudo: p.nom,
-        discipline: 'Free Fire',
-        statut: idx < 8 ? 'Qualifié Finales' : 'Phase Éliminatoire',
-        kills: p.kills || (idx === 0 ? 15 : idx === 1 ? 8 : 2),
-        points: p.scoreTotal || (idx === 0 ? 35 : idx === 1 ? 24 : 8),
-        role: 'Rusher / Solo',
-        ville: 'Batouri / Abong-Mbang',
-        photo: p.photo
-      });
-    });
-
-    // MOBA teams as rosters
-    data.competition.hok.bracket.equipes.forEach((eq, idx) => {
-      list.push({
-        id: `hok_${eq.id}`,
-        pseudo: `Capitaine (${eq.nom})`,
-        discipline: 'Honor of Kings',
-        equipe: eq.nom,
-        statut: 'Équipe 5v5',
-        role: 'Capitaine / Shotcaller',
-        ville: 'Région Est',
-        points: idx === 0 ? 9 : 3
-      });
-    });
-
-    data.competition.mlbb.bracket.equipes.forEach((eq, idx) => {
-      list.push({
-        id: `mlbb_${eq.id}`,
-        pseudo: `Capitaine (${eq.nom})`,
-        discipline: 'Mobile Legends',
-        equipe: eq.nom,
-        statut: 'Équipe 5v5',
-        role: 'Capitaine / Support',
-        ville: 'Région Est',
-        points: idx === 0 ? 9 : 3
-      });
-    });
-
-    // Custom players if defined
     if (data.joueurs && data.joueurs.length > 0) {
       data.joueurs.forEach(j => {
         list.push({
@@ -124,7 +66,7 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onSelectGame }) 
           </h1>
         </div>
         <p className="text-xs sm:text-sm text-slate-400 max-w-md">
-          Retrouvez l'ensemble des joueurs et capitaines engagés dans les 4 disciplines officielles de la Ligue Esport Est Cameroun.
+          Retrouvez l'ensemble des joueurs et équipes officiellement engagés dans les 4 disciplines de la Ligue Esport Est Cameroun.
         </p>
       </div>
 
@@ -139,7 +81,7 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onSelectGame }) 
                 : 'bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
-            Tous les titres ({allPlayers.length})
+            Tous ({allPlayers.length})
           </button>
           <button
             onClick={() => setFilterGame('hok')}
@@ -195,12 +137,10 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onSelectGame }) 
         </div>
       </div>
 
-      {/* Players Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {filteredList.map((player) => {
-          const isMoba = player.discipline.includes('Kings') || player.discipline.includes('Legends');
-
-          return (
+      {/* Players Grid or Empty Professional State */}
+      {filteredList.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {filteredList.map((player) => (
             <div
               key={player.id}
               className="bg-slate-900/80 border border-slate-800 hover:border-emerald-500/40 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group"
@@ -272,14 +212,22 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onSelectGame }) 
                 <span className="font-mono text-[10px]">ID: {player.id.slice(0, 10)}</span>
               </div>
             </div>
-          );
-        })}
-      </div>
-
-      {filteredList.length === 0 && (
-        <div className="text-center py-16 bg-slate-900/50 rounded-2xl border border-dashed border-slate-800 text-slate-500">
-          <Users className="w-12 h-12 mx-auto mb-3 text-slate-600" />
-          <p className="text-sm">Aucun compétiteur ne correspond à votre recherche.</p>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-20 bg-slate-900/60 rounded-3xl border border-dashed border-slate-800 max-w-2xl mx-auto px-6">
+          <div className="w-16 h-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center mx-auto mb-4">
+            <Sparkles className="w-8 h-8" />
+          </div>
+          <h3 className="font-display text-xl font-bold text-white mb-2">
+            Aucun compétiteur enregistré pour l'instant
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6">
+            La saison 2027 n'a pas encore débuté et les listes officielles des rosters et joueurs s'afficheront ici au fur et à mesure des validations par le comité de la ligue et la FECASES.
+          </p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700">
+            <span>Statut : Inscriptions ouvertes</span>
+          </div>
         </div>
       )}
     </div>
