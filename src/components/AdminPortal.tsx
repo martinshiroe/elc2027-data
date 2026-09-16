@@ -1499,7 +1499,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       desc: card.defaultDesc,
                     };
 
-                    const updateDistinction = (field: 'title' | 'subtitle' | 'desc' | 'nomineNom' | 'nominePhoto' | 'nomineDetails' | 'nomineStatut', val: string) => {
+                    const updateDistinction = (field: 'title' | 'subtitle' | 'desc' | 'nomineNom' | 'nominePhoto' | 'nomineHero' | 'nomineClan' | 'nomineDetails' | 'nomineStatut', val: string) => {
                       const list = [...(formData.pantheon?.distinctions || [])];
                       const idx = list.findIndex(d => d.key === card.key);
                       if (idx >= 0) {
@@ -1520,6 +1520,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       reader.onload = () => {
                         if (typeof reader.result === 'string') {
                           updateDistinction('nominePhoto', reader.result);
+                        }
+                      };
+                      reader.readAsDataURL(file);
+                    };
+
+                    const handleHeroUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        if (typeof reader.result === 'string') {
+                          updateDistinction('nomineHero', reader.result);
                         }
                       };
                       reader.readAsDataURL(file);
@@ -1628,10 +1640,35 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                                   </label>
                                 </div>
                               </div>
+
+                              <div>
+                                <label className="block text-[10px] text-slate-400 mb-0.5">
+                                  Image du héros / personnage du jeu
+                                </label>
+                                <div className="flex gap-1.5">
+                                  <input
+                                    type="text"
+                                    value={current.nomineHero || ''}
+                                    onChange={(e) => updateDistinction('nomineHero', e.target.value)}
+                                    placeholder="https://... (PNG détouré de préférence)"
+                                    className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder:text-slate-600"
+                                  />
+                                  <label className="px-2 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded text-slate-300 text-[10px] flex items-center gap-1 cursor-pointer shrink-0">
+                                    <Upload className="w-3 h-3" />
+                                    <span>Fichier</span>
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={handleHeroUpload}
+                                      className="hidden"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1">
                             <div>
                               <label className="block text-[10px] text-slate-400 mb-0.5">Nom / Pseudo</label>
                               <input
@@ -1643,12 +1680,22 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] text-slate-400 mb-0.5">Équipe / Discipline</label>
+                              <label className="block text-[10px] text-slate-400 mb-0.5">Clan / Équipe</label>
+                              <input
+                                type="text"
+                                value={current.nomineClan || ''}
+                                onChange={(e) => updateDistinction('nomineClan', e.target.value)}
+                                placeholder="ex: Vortex Esport"
+                                className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] text-slate-400 mb-0.5">Discipline / Stats</label>
                               <input
                                 type="text"
                                 value={current.nomineDetails || ''}
                                 onChange={(e) => updateDistinction('nomineDetails', e.target.value)}
-                                placeholder="ex: Vortex · Honor of Kings"
+                                placeholder="ex: Honor of Kings · 19/0/12"
                                 className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
                               />
                             </div>

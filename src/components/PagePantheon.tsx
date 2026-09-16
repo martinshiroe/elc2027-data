@@ -18,9 +18,23 @@ interface DistinctionCard {
   icon: React.ReactNode;
   nomineNom?: string;
   nominePhoto?: string;
+  nomineHero?: string;
+  nomineClan?: string;
   nomineDetails?: string;
   nomineStatut?: string;
 }
+
+// Couleur de texte lisible sur un aplat donné. Le bandeau du nom prend la
+// couleur de la distinction : blanc sur le bleu ou le rouge, mais il faut
+// passer au noir sur l'or du G.O.A.T, sinon le nom disparaît.
+const readableOn = (hex: string): string => {
+  const c = hex.replace('#', '');
+  if (c.length !== 6) return '#ffffff';
+  const r = parseInt(c.slice(0, 2), 16);
+  const g = parseInt(c.slice(2, 4), 16);
+  const b = parseInt(c.slice(4, 6), 16);
+  return 0.299 * r + 0.587 * g + 0.114 * b > 150 ? '#111111' : '#ffffff';
+};
 
 export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
   const curated = data.pantheon?.curated || [];
@@ -95,6 +109,8 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
       desc: custom.desc || def.desc,
       nomineNom: custom.nomineNom,
       nominePhoto: custom.nominePhoto,
+      nomineHero: custom.nomineHero,
+      nomineClan: custom.nomineClan,
       nomineDetails: custom.nomineDetails,
       nomineStatut: custom.nomineStatut,
     };
@@ -154,151 +170,180 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
       {/* 4 Iconic Distinction Frames */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Deux colonnes, pas quatre : une affiche a besoin de largeur.
+              À quatre de front, la photo du joueur et le héros seraient
+              réduits à des vignettes — exactement ce qu'on cherche à éviter. */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             {distinctions.map(d => {
               const laureat = getLaureat(d.key);
               const nomineeName = d.nomineNom || laureat?.nom;
               const nomineePhoto = d.nominePhoto || laureat?.image;
-              const nomineeDetails = d.nomineDetails || laureat?.discipline || laureat?.titre || 'Candidat officiel';
+              const nomineeHero = d.nomineHero;
+              const nomineeClan = d.nomineClan || laureat?.equipe;
+              const nomineeDetails = d.nomineDetails || laureat?.discipline || laureat?.titre || '';
               const nomineeStatut = d.nomineStatut || (laureat ? 'Lauréat Homologué' : 'Nominé Officiel');
               const hasNominee = !!(nomineeName || nomineePhoto);
+              const onAccent = readableOn(d.border);
 
               return (
                 <div
                   key={d.key}
                   id={`distinction-${d.key}`}
-                  className="rounded-2xl p-6 relative overflow-hidden transition-all duration-300 flex flex-col justify-between"
+                  className="rounded-2xl overflow-hidden transition-all duration-300"
                   style={{
-                    background: `linear-gradient(180deg, ${d.gradient} 0%, rgba(17,17,17,0.95) 100%)`,
                     border: `1px solid ${d.border}55`,
                     boxShadow: `0 8px 30px ${d.glow}`,
                   }}
                 >
-                  {/* Top glowing flare */}
-                  <div
-                    className="absolute -top-16 -right-16 w-36 h-36 rounded-full blur-3xl pointer-events-none"
-                    style={{ background: d.border }}
-                  />
+                  {/* ---------- L'affiche ---------- */}
+                  <div className="relative aspect-square bg-[#0d0d0d] overflow-hidden">
+                    {/* Fond : texture sombre + halo de la couleur du cadre */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background: `radial-gradient(120% 90% at 70% 10%, ${d.border}22 0%, transparent 55%), linear-gradient(160deg, #141414 0%, #0a0a0a 100%)`,
+                      }}
+                    />
+                    {/* Trame de points, comme sur les affiches de match */}
+                    <div
+                      className="absolute top-[8%] right-[8%] w-[22%] h-[14%] opacity-40"
+                      style={{
+                        backgroundImage: 'radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1px)',
+                        backgroundSize: '9px 9px',
+                      }}
+                    />
 
-                  <div>
-                    {/* Header with icon and badge */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div
-                        className="p-2.5 rounded-xl border"
+                    {/* Bloc de couleur en pointe, derrière le joueur */}
+                    <div
+                      className="absolute left-[13%] top-[9%] w-[54%] h-[78%]"
+                      style={{
+                        background: `linear-gradient(165deg, ${d.border} 0%, ${d.border}aa 100%)`,
+                        clipPath: 'polygon(0 0, 100% 0, 100% 64%, 50% 100%, 0 64%)',
+                      }}
+                    />
+
+                    {/* Héros / personnage du jeu, en retrait à droite */}
+                    {nomineeHero && (
+                      <img
+                        src={nomineeHero}
+                        alt=""
+                        aria-hidden="true"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
+                        className="absolute right-0 top-[6%] w-[40%] h-[56%] object-cover object-top opacity-85"
                         style={{
-                          background: `${d.border}15`,
-                          borderColor: `${d.border}40`,
+                          // Fondu sur les bords : l'image se dissout dans
+                          // l'affiche au lieu de poser un rectangle net, que
+                          // l'illustration soit détourée ou non.
+                          maskImage:
+                            'linear-gradient(to left, black 55%, transparent 100%), linear-gradient(to top, transparent 0%, black 35%)',
+                          maskComposite: 'intersect',
+                          WebkitMaskImage:
+                            'linear-gradient(to left, black 55%, transparent 100%), linear-gradient(to top, transparent 0%, black 35%)',
+                          WebkitMaskComposite: 'source-in',
                         }}
-                      >
-                        {d.icon}
+                      />
+                    )}
+
+                    {/* Photo du joueur, au premier plan */}
+                    {nomineePhoto ? (
+                      <img
+                        src={nomineePhoto}
+                        alt={nomineeName || 'Nominé'}
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
+                        // Cadre portrait fixe et recadrage sur le haut : une
+                        // photo carrée ou paysage donne quand même un portrait
+                        // correct, centré sur le visage.
+                        className="absolute left-[40%] -translate-x-1/2 bottom-[15%] w-[42%] h-[64%] object-cover object-top"
+                        style={{
+                          maskImage: 'linear-gradient(to top, transparent 0%, black 18%)',
+                          WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 18%)',
+                          filter: 'drop-shadow(0 16px 30px rgba(0,0,0,0.75))',
+                        }}
+                      />
+                    ) : (
+                      <div className="absolute left-[40%] -translate-x-1/2 bottom-[15%] w-[42%] h-[64%] flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-black/30 bg-black/25 text-white/70">
+                        <Camera className="w-10 h-10" />
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-center px-2">
+                          Photo du joueur
+                        </span>
                       </div>
+                    )}
 
-                      <span
-                        className="font-mono text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
-                        style={{
-                          color: d.text,
-                          borderColor: `${d.border}40`,
-                          backgroundColor: `${d.border}10`,
-                        }}
-                      >
-                        ELC 2027
+                    {/* Intitulé de la distinction, à la verticale sur le flanc */}
+                    <div
+                      className="absolute left-[4%] bottom-[10%] top-[14%] flex items-end"
+                      style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                    >
+                      <span className="font-audiowide text-white text-2xl sm:text-4xl lg:text-5xl leading-none uppercase drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]">
+                        {d.title}
                       </span>
                     </div>
 
-                    <h2
-                      className="font-audiowide text-2xl font-bold tracking-tight mb-1"
-                      style={{ color: d.text }}
-                    >
-                      {d.title}
-                    </h2>
-                    <p className="text-xs font-semibold text-white/75 mb-4">
-                      {d.subtitle}
-                    </p>
+                    {/* Sous-titre à l'horizontale, en haut à gauche. À la
+                        verticale il entrait en collision avec le titre et se
+                        faisait couper au milieu d'un mot. */}
+                    <div className="absolute top-[5%] left-[4%] right-[38%]">
+                      <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-white/60 block truncate">
+                        {d.subtitle}
+                      </span>
+                    </div>
 
-                    <p className="text-xs text-white/55 leading-relaxed mb-6 font-light">
-                      {d.desc}
-                    </p>
-                  </div>
+                    {/* Repère de saison, en haut à droite */}
+                    <div className="absolute top-[6%] right-[6%] flex items-center gap-2">
+                      <span
+                        className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest"
+                        style={{ color: d.text }}
+                      >
+                        ELC {data.meta.saison}
+                      </span>
+                      <span className="opacity-90">{d.icon}</span>
+                    </div>
 
-                  {/* Dedicated Nominee Photo & Profile Showcase Frame */}
-                  <div className="pt-4 border-t border-white/[0.08]">
-                    {hasNominee ? (
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur-sm flex items-center gap-3">
-                        {/* Photo, en portrait sur toute la hauteur du cadre —
-                            le format vertical met le visage en valeur bien
-                            mieux que l'ancienne vignette carrée de 48 px. */}
-                        <div className="relative shrink-0">
-                          {nomineePhoto ? (
-                            <img
-                              src={nomineePhoto}
-                              alt={nomineeName || 'Nominé'}
-                              referrerPolicy="no-referrer"
-                              className="w-24 h-32 rounded-xl object-cover object-top border-2 shadow-lg"
-                              style={{ borderColor: d.border }}
-                            />
-                          ) : (
-                            <div
-                              className="w-24 h-32 rounded-xl flex items-center justify-center border-2 font-audiowide font-bold text-4xl"
-                              style={{ borderColor: d.border, background: `${d.border}20`, color: d.text }}
-                            >
-                              {(nomineeName || 'N').charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                          <div
-                            className="absolute -bottom-1.5 -right-1.5 p-1 rounded-full bg-black border"
-                            style={{ borderColor: d.border }}
-                          >
-                            <Medal className="w-3.5 h-3.5" style={{ color: d.text }} />
+                    {/* Bandeau du nom */}
+                    <div className="absolute left-[30%] right-0 bottom-[16%]">
+                      <div
+                        className="px-4 sm:px-6 py-2.5 sm:py-3.5"
+                        style={{
+                          background: `linear-gradient(90deg, ${d.border} 0%, ${d.border}cc 100%)`,
+                        }}
+                      >
+                        <span
+                          className="font-audiowide text-lg sm:text-2xl lg:text-3xl uppercase leading-none block truncate"
+                          style={{ color: onAccent }}
+                        >
+                          {nomineeName || 'À attribuer'}
+                        </span>
+                      </div>
+                      {/* Clan, puis statistiques ou discipline */}
+                      <div className="px-4 sm:px-6 pt-2 sm:pt-3">
+                        {nomineeClan && (
+                          <div className="font-audiowide text-lg sm:text-2xl text-white leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                            {nomineeClan}
                           </div>
-                        </div>
-
-                        {/* Nom et détails, en face de la photo */}
-                        <div className="flex-1 min-w-0">
-                          <div className="mb-1.5">
-                            <span
-                              className="inline-block text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded border"
-                              style={{
-                                color: d.text,
-                                borderColor: `${d.border}40`,
-                                backgroundColor: `${d.border}15`
-                              }}
-                            >
-                              {nomineeStatut}
-                            </span>
-                          </div>
-                          {/* Pas de troncature : la place gagnée en hauteur
-                              permet aux noms longs de passer à la ligne. */}
-                          <div className="text-sm font-bold text-white leading-tight break-words">
-                            {nomineeName}
-                          </div>
-                          <div className="text-[11px] text-white/50 font-light leading-snug mt-0.5 break-words">
+                        )}
+                        {nomineeDetails && (
+                          <div className="font-mono text-[10px] sm:text-xs text-white/70 mt-1 truncate">
                             {nomineeDetails}
                           </div>
-                        </div>
+                        )}
                       </div>
-                    ) : (
-                      /* Placeholder Frame for Nominee Photo */
-                      <div className="p-3 rounded-xl bg-black/25 border border-dashed border-white/15 flex items-center gap-3">
-                        {/* Même gabarit que le cadre rempli, pour que la grille
-                            ne saute pas quand un nominé est renseigné. */}
-                        <div
-                          className="w-24 h-32 rounded-xl border border-dashed flex flex-col items-center justify-center shrink-0 text-white/30"
-                          style={{ borderColor: `${d.border}50` }}
-                        >
-                          <Camera className="w-7 h-7 text-white/40" />
-                          <span className="text-[8px] font-mono uppercase text-white/40 mt-1.5">Photo</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between text-xs text-white/50 font-mono mb-1">
-                            <span className="font-semibold text-white/70 text-[11px]">Espace Nominé</span>
-                            <span className="w-2 h-2 rounded-full bg-white/20 animate-pulse" />
-                          </div>
-                          <p className="text-[10px] text-white/40 leading-snug">
-                            Photo &amp; candidat en cours d'attribution officielle
-                          </p>
-                        </div>
-                      </div>
-                    )}
+                    </div>
+
+                    {/* Pied d'affiche */}
+                    <div className="absolute bottom-[4%] left-0 right-0 text-center">
+                      <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-white/45">
+                        {hasNominee ? nomineeStatut : 'Nomination à venir'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* ---------- Ce que récompense la distinction ---------- */}
+                  <div className="p-5 bg-[#111111] border-t border-white/[0.07]">
+                    <p className="text-xs text-white/55 leading-relaxed font-light">
+                      {d.desc}
+                    </p>
                   </div>
                 </div>
               );
