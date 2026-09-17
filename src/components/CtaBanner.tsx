@@ -76,7 +76,9 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ data, onOpenRegister }) =>
               textTransform: 'uppercase',
             }}
           >
-            Inscriptions bientôt disponibles · Saison 2027
+            {registerUrl
+              ? 'Inscriptions ouvertes · Saison 2027'
+              : 'Inscriptions bientôt disponibles · Saison 2027'}
           </span>
         </div>
 
@@ -126,7 +128,12 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ data, onOpenRegister }) =>
           onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
         >
-          S'inscrire — c'est gratuit
+          {/* Le bandeau annonçait « inscriptions bientôt disponibles » pendant
+              que le bouton promettait de s'inscrire. Les deux libellés suivent
+              désormais l'état réel du formulaire. */}
+          {registerUrl
+            ? "S'inscrire — c'est gratuit"
+            : "Voir les conditions d'inscription"}
         </button>
       </div>
     </section>

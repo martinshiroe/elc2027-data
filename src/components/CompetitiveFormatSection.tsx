@@ -134,11 +134,11 @@ export const CompetitiveFormatSection: React.FC<CompetitiveFormatSectionProps> =
                       key={idx}
                       className="bg-black/40 border border-white/[0.06] rounded-lg p-2 text-center"
                     >
-                      <div className="text-[10px] text-white/55 uppercase font-mono">
+                      <div className="text-[11px] text-white/70 uppercase font-mono">
                         {idx === 0 ? 'Top 1' : `Top ${idx + 1}`}
                       </div>
                       <div className="text-sm font-mono font-bold text-amber-400">
-                        {pts} pts
+                        {pts} pt{pts > 1 ? 's' : ''}
                       </div>
                     </div>
                   ))}

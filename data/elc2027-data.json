@@ -2,7 +2,7 @@
   "meta": {
     "organisateur": "Ligue Esport Est Cameroun",
     "competitionCode": "ELC",
-    "competitionNom": "East League of Cameroun",
+    "competitionNom": "East League of Cameroon",
     "saison": "2027",
     "badgeHaut": "100% Mobile & Online",
     "derniereMaj": "2026-09-16T15:21:58.777Z",
@@ -851,7 +851,7 @@
   "videos": [
     {
       "id": "vid-1789571828248",
-      "titre": "Diffusion en direct de Ligue de L'est Weekly Match",
+      "titre": "Diffusion en direct de Ligue de l'Est Weekly Match",
       "url": "https://youtube.com/live/FMBLl_riwl0",
       "plateforme": "youtube",
       "discipline": "general",

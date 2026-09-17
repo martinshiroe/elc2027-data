@@ -34,7 +34,7 @@ export const HomeVideosTeaser: React.FC<HomeVideosTeaserProps> = ({
 
           <button
             onClick={onNavigateToVideos}
-            className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-teal-400 hover:text-teal-300 transition-colors cursor-pointer bg-transparent border-0 p-0"
+            className="inline-flex items-center gap-2 min-h-[44px] text-xs font-mono font-semibold text-teal-400 hover:text-teal-300 transition-colors cursor-pointer bg-transparent border-0 px-0 py-2"
           >
             <span>Explorer toute la vitrine</span>
             <ChevronRight className="w-4 h-4" />

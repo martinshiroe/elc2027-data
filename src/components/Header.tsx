@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { remonter } from '../lib/scroll';
 import { Menu, X } from 'lucide-react';
 import { ELCData } from '../types';
+import { Section } from '../lib/routes';
+import { LienSection } from './LienSection';
 
 interface HeaderProps {
   data: ELCData;
   activeSection: string;
-  setActiveSection: (sec: string) => void;
+  setActiveSection: (sec: Section) => void;
   onOpenRegister?: () => void;
   onOpenRegulations?: () => void;
   onOpenDataModal?: () => void;
@@ -21,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
+  const navItems: { label: string; id: Section }[] = [
     { label: 'Compétition', id: 'competition' },
     { label: 'Classements', id: 'classements' },
     { label: 'Joueurs', id: 'joueurs' },
@@ -41,17 +43,18 @@ export const Header: React.FC<HeaderProps> = ({
     return () => document.removeEventListener('keydown', auClavier);
   }, [mobileMenuOpen]);
 
-  const handleNavClick = (id: string) => {
+  const handleNavClick = (id: Section) => {
     setActiveSection(id);
     setMobileMenuOpen(false);
     remonter();
   };
 
-  const handleRegister = () => {
+  const handleRegister = (id: Section) => {
     if (onOpenRegister) {
       onOpenRegister();
+      setMobileMenuOpen(false);
     } else {
-      handleNavClick('inscription');
+      handleNavClick(id);
     }
   };
 
@@ -63,13 +66,19 @@ export const Header: React.FC<HeaderProps> = ({
     >
       <div className="max-w-[1280px] mx-auto px-7 h-[60px] flex items-center justify-between gap-2">
         {/* Brand: Wordmark + 2027 */}
-        <button
-          onClick={() => handleNavClick('accueil')}
-          className="flex items-center gap-2 cursor-pointer bg-transparent border-0 p-0 mr-4 focus:outline-none"
+        <LienSection
+          section="accueil"
+          onNaviguer={handleNavClick}
+          className="flex items-center gap-2 cursor-pointer mr-4"
         >
           <img
             src="/img/logo-elc-wordmark.png"
             alt="ELC"
+            /* `w-auto` laissait la largeur inconnue jusqu'au chargement : la
+               barre de navigation sautait. Les dimensions intrinsèques
+               donnent le ratio au navigateur, la classe garde la taille. */
+            width={480}
+            height={264}
             className="h-[22px] w-auto shrink-0"
           />
           <span
@@ -78,18 +87,19 @@ export const Header: React.FC<HeaderProps> = ({
           >
             {data.meta.saison || '2027'}
           </span>
-        </button>
+        </LienSection>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-0.5 flex-1 overflow-x-auto">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
             return (
-              <button
+              <LienSection
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                section={item.id}
+                onNaviguer={handleNavClick}
                 aria-current={isActive ? 'page' : undefined}
-                className={`px-3.5 py-1.5 rounded-md text-[14px] whitespace-nowrap transition-colors cursor-pointer border-0 ${
+                className={`px-3.5 py-1.5 rounded-md text-[14px] whitespace-nowrap transition-colors cursor-pointer ${
                   isActive
                     ? 'text-white bg-white/[0.07]'
                     : 'text-white/55 hover:text-white hover:bg-white/[0.03]'
@@ -97,20 +107,24 @@ export const Header: React.FC<HeaderProps> = ({
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 {item.label}
-              </button>
+              </LienSection>
             );
           })}
         </div>
 
         {/* Right Button: S'inscrire */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleRegister}
-            className="bg-[#14b8a6] hover:opacity-85 text-[#0e0e0e] px-4.5 py-1.5 rounded-md text-[13px] font-medium transition-opacity cursor-pointer border-0 whitespace-nowrap"
+          {/* L'appel à l'action principal mène à une page du site : c'est un
+              lien, pas un bouton. Il devient partageable et ouvrable dans un
+              nouvel onglet, sans changer d'apparence. */}
+          <LienSection
+            section="inscription"
+            onNaviguer={handleRegister}
+            className="bg-[#14b8a6] hover:opacity-85 text-[#0e0e0e] px-4.5 py-1.5 rounded-md text-[13px] font-medium transition-opacity cursor-pointer whitespace-nowrap"
             style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 500 }}
           >
             S'inscrire
-          </button>
+          </LienSection>
 
           {/* Mobile menu toggle */}
           <button
@@ -128,9 +142,11 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
         <div id="menu-mobile" className="md:hidden bg-[#0e0e0e] border-b border-white/[0.08] px-6 py-4 space-y-2">
-          <button
-            onClick={() => handleNavClick('accueil')}
-            className={`w-full text-left px-3 py-2 rounded-md text-sm cursor-pointer border-0 ${
+          <LienSection
+            section="accueil"
+            onNaviguer={handleNavClick}
+            aria-current={activeSection === 'accueil' ? 'page' : undefined}
+            className={`block w-full text-left px-3 py-2.5 rounded-md text-sm cursor-pointer ${
               activeSection === 'accueil'
                 ? 'text-white bg-white/[0.07]'
                 : 'text-white/60 hover:text-white'
@@ -138,13 +154,14 @@ export const Header: React.FC<HeaderProps> = ({
             style={{ fontFamily: "'Manrope', sans-serif" }}
           >
             Accueil
-          </button>
+          </LienSection>
           {navItems.map((item) => (
-            <button
+            <LienSection
               key={item.id}
-              onClick={() => handleNavClick(item.id)}
+              section={item.id}
+              onNaviguer={handleNavClick}
               aria-current={activeSection === item.id ? 'page' : undefined}
-              className={`w-full text-left px-3 py-2 rounded-md text-sm cursor-pointer border-0 ${
+              className={`block w-full text-left px-3 py-2.5 rounded-md text-sm cursor-pointer ${
                 activeSection === item.id
                   ? 'text-white bg-white/[0.07]'
                   : 'text-white/60 hover:text-white'
@@ -152,7 +169,7 @@ export const Header: React.FC<HeaderProps> = ({
               style={{ fontFamily: "'Manrope', sans-serif" }}
             >
               {item.label}
-            </button>
+            </LienSection>
           ))}
         </div>
       )}

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { remonter } from './lib/scroll';
+import { ROUTES, Section } from './lib/routes';
+import { useRoute, jeuDepuisUrl } from './lib/useRoute';
 import { initialELCData } from './data/initialData';
 import { ELCData } from './types';
 import { Header } from './components/Header';
@@ -27,8 +29,21 @@ import { Trophy, Swords, Target, Crosshair, Users, ChevronRight, FileCheck, Exte
 
 export function App() {
   const [data, setData] = useState<ELCData>(initialELCData);
-  const [activeSection, setActiveSection] = useState<string>('accueil');
-  const [selectedGame, setSelectedGame] = useState<'hok' | 'mlbb' | 'pubgm' | 'ff'>('hok');
+
+  // La vue affichée vient désormais de l'URL, et non d'un état local : le
+  // bouton Retour, le partage de lien et l'indexation en dépendent.
+  const { section: activeSection, jeu: jeuUrl, naviguer } = useRoute();
+  const setActiveSection = naviguer;
+
+  const [selectedGame, setSelectedGame] = useState<'hok' | 'mlbb' | 'pubgm' | 'ff'>(
+    () => jeuDepuisUrl() ?? 'hok'
+  );
+
+  // Un Retour vers `/classements?jeu=pubgm` doit rouvrir l'onglet PUBG Mobile,
+  // pas laisser celui qui était affiché avant.
+  useEffect(() => {
+    if (jeuUrl) setSelectedGame(jeuUrl);
+  }, [jeuUrl]);
   const [isRegulationsOpen, setIsRegulationsOpen] = useState<boolean>(false);
   const [isDataModalOpen, setIsDataModalOpen] = useState<boolean>(false);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
@@ -85,7 +100,19 @@ export function App() {
   // Synchronize document title and favicon with meta state
   useEffect(() => {
     if (data.meta) {
-      document.title = `${data.meta.competitionNom || 'ELC 2027'} — ${data.meta.organisateur || 'East League of Cameroon'}`;
+      // Un titre par vue : les sept pages partageaient le même, ce qui les
+      // rendait indistinguables dans un onglet, un favori ou un résultat de
+      // recherche.
+      const nom = data.meta.competitionNom || 'ELC 2027';
+      const route = ROUTES[activeSection];
+      document.title =
+        activeSection === 'accueil'
+          ? `${nom} — ${data.meta.organisateur || 'East League of Cameroon'}`
+          : `${route.titre} — ${nom}`;
+
+      const meta = document.querySelector<HTMLMetaElement>("meta[name='description']");
+      if (meta) meta.content = route.description;
+
       if (data.meta.favicon) {
         let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
         if (!link) {
@@ -97,11 +124,29 @@ export function App() {
         link.href = data.meta.favicon;
       }
     }
-  }, [data.meta]);
+  }, [data.meta, activeSection]);
+
+  // Annonce du changement de vue.
+  //
+  // Sans routage de page, rien ne signalait à un lecteur d'écran que le
+  // contenu avait changé : le focus restait sur le lien cliqué et la nouvelle
+  // vue passait inaperçue. On déplace donc le focus sur le contenu principal
+  // et on annonce le nom de la vue dans une région live.
+  const [annonce, setAnnonce] = useState<string>('');
+  const premierRendu = useRef(true);
+
+  useEffect(() => {
+    if (premierRendu.current) {
+      premierRendu.current = false;
+      return;
+    }
+    setAnnonce(ROUTES[activeSection].titre);
+    document.getElementById('contenu-principal')?.focus({ preventScroll: true });
+  }, [activeSection]);
 
   const handleSelectGame = (gameId: 'hok' | 'mlbb' | 'pubgm' | 'ff') => {
     setSelectedGame(gameId);
-    setActiveSection('classements');
+    naviguer('classements', gameId);
     remonter();
   };
 
@@ -122,6 +167,21 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#0e0e0e] text-white flex flex-col selection:bg-teal-500 selection:text-black font-sans">
+      {/* Lien d'évitement. Sans lui, un utilisateur au clavier retraverse les
+          sept entrées de navigation à chaque changement de vue. Invisible
+          jusqu'au premier Tab, où il devient le premier élément atteint. */}
+      <a
+        href="#contenu-principal"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2.5 focus:rounded-md focus:bg-[#14b8a6] focus:text-[#0e0e0e] focus:text-sm focus:font-medium"
+      >
+        Aller au contenu principal
+      </a>
+
+      {/* Région live : annonce la vue atteinte après une navigation. */}
+      <div aria-live="polite" role="status" className="sr-only">
+        {annonce}
+      </div>
+
       {/* Global Header */}
       <Header
         data={data}
@@ -135,7 +195,7 @@ export function App() {
         }}
       />
 
-      <main className="flex-1">
+      <main id="contenu-principal" tabIndex={-1} className="flex-1 focus:outline-none">
         {/* PAGE 1: ACCUEIL */}
         {activeSection === 'accueil' && (
           <div>
@@ -143,10 +203,7 @@ export function App() {
             <Hero
               data={data}
               onSelectSection={(sec) => {
-                if (sec === 'disciplines') setActiveSection('competition');
-                else if (sec === 'calendar') setActiveSection('competition');
-                else if (sec === 'tournaments') setActiveSection('classements');
-                else setActiveSection(sec);
+                setActiveSection(sec);
                 remonter();
               }}
               onOpenRegulations={() => setIsRegulationsOpen(true)}
@@ -263,9 +320,11 @@ export function App() {
                   <Trophy className="w-4 h-4" />
                   <span>ESPACE COMPÉTITIONS OFFICIELLES</span>
                 </div>
-                <h2 className="font-audiowide text-3xl sm:text-4xl font-normal text-white tracking-wide">
+                {/* h1 et non h2 : c'est le titre de la vue. Les six autres
+                    vues en ont un, celle-ci démarrait au niveau 2. */}
+                <h1 className="font-audiowide text-3xl sm:text-4xl font-normal text-white tracking-wide">
                   Tableaux des Rencontres & Classements
-                </h2>
+                </h1>
               </div>
               <p className="text-xs sm:text-sm text-white/50 max-w-md font-light">
                 Consultez l'avancement des arbres BO3 (Honor of Kings & Mobile Legends) ou le classement par manche des 32 joueurs de Battle Royale (PUBG Mobile & Free Fire).

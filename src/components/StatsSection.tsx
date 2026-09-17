@@ -7,7 +7,7 @@ export const StatsSection: React.FC = () => {
     { val: 2, label: 'Formats compétitifs', color: '#22c55e' },
     { val: 16, label: 'Équipes par discipline MOBA', color: '#3b82f6' },
     { val: 32, label: 'Joueurs par discipline TPS', color: '#f59e0b' },
-    { val: 2027, label: 'Saison en cours', color: '#a78bfa' },
+    { val: 2027, label: 'Saison en cours', color: '#a78bfa', brut: true },
   ];
 
   return (
@@ -40,7 +40,7 @@ export const StatsSection: React.FC = () => {
                 className="font-mono text-4xl sm:text-5xl font-bold tracking-tight mb-3"
                 style={{ color: s.color }}
               >
-                <NumberTicker value={s.val} />
+                <NumberTicker value={s.val} brut={s.brut} />
               </div>
 
               <div className="text-sm text-white/60 font-medium">

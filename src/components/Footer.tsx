@@ -2,6 +2,8 @@ import React from 'react';
 import { remonter } from '../lib/scroll';
 import { ELCData } from '../types';
 import { urlSure } from '../lib/urls';
+import { Section } from '../lib/routes';
+import { LienSection } from './LienSection';
 import {
   FacebookIcon,
   YoutubeIcon,
@@ -17,7 +19,7 @@ interface FooterProps {
   onOpenRegulations: () => void;
   onOpenDataModal?: () => void;
   onOpenAdmin?: () => void;
-  onSelectSection?: (sec: string) => void;
+  onSelectSection?: (sec: Section) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -29,7 +31,7 @@ export const Footer: React.FC<FooterProps> = ({
   const reseaux = meta.reseaux || {};
   const contact = meta.contact || {};
 
-  const handleNav = (sec: string) => {
+  const handleNav = (sec: Section) => {
     if (onSelectSection) {
       onSelectSection(sec);
       remonter();
@@ -150,41 +152,46 @@ export const Footer: React.FC<FooterProps> = ({
               Compétition
             </div>
             <div className="flex flex-col gap-2">
-              <button
-                onClick={() => handleNav('competition')}
-                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+              <LienSection
+                section="competition"
+                onNaviguer={handleNav}
+                className="block text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer px-0 py-1"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Calendrier
-              </button>
-              <button
-                onClick={() => handleNav('classements')}
-                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+              </LienSection>
+              <LienSection
+                section="classements"
+                onNaviguer={handleNav}
+                className="block text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer px-0 py-1"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Classements
-              </button>
-              <button
-                onClick={() => handleNav('joueurs')}
-                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+              </LienSection>
+              <LienSection
+                section="joueurs"
+                onNaviguer={handleNav}
+                className="block text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer px-0 py-1"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Joueurs
-              </button>
-              <button
-                onClick={() => handleNav('pantheon')}
-                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+              </LienSection>
+              <LienSection
+                section="pantheon"
+                onNaviguer={handleNav}
+                className="block text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer px-0 py-1"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Panthéon
-              </button>
-              <button
-                onClick={() => handleNav('videos')}
-                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+              </LienSection>
+              <LienSection
+                section="videos"
+                onNaviguer={handleNav}
+                className="block text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer px-0 py-1"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Vidéos & Médias
-              </button>
+              </LienSection>
             </div>
           </div>
 
@@ -198,14 +205,15 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
             <div className="flex flex-col gap-2">
               {['Honor of Kings', 'Mobile Legends', 'PUBG Mobile', 'Free Fire'].map((d) => (
-                <button
+                <LienSection
                   key={d}
-                  onClick={() => handleNav('competition')}
-                  className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                  section="competition"
+                  onNaviguer={handleNav}
+                  className="block text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer px-0 py-1"
                   style={{ fontFamily: "'Manrope', sans-serif" }}
                 >
                   {d}
-                </button>
+                </LienSection>
               ))}
             </div>
           </div>
@@ -222,7 +230,7 @@ export const Footer: React.FC<FooterProps> = ({
               {contact.email && (
                 <a
                   href={`mailto:${contact.email}`}
-                  className="text-[13px] text-white/55 hover:text-white/85 transition-colors"
+                  className="inline-block py-1 text-[13px] text-white/55 hover:text-white/85 transition-colors"
                   style={{ fontFamily: "'Manrope', sans-serif" }}
                 >
                   {contact.email}
@@ -231,7 +239,7 @@ export const Footer: React.FC<FooterProps> = ({
               {contact.telephone && (
                 <a
                   href={`tel:${contact.telephone.replace(/\s/g, '')}`}
-                  className="text-[13px] text-white/55 hover:text-white/85 transition-colors"
+                  className="inline-block py-1 text-[13px] text-white/55 hover:text-white/85 transition-colors"
                   style={{ fontFamily: "'Manrope', sans-serif" }}
                 >
                   {contact.telephone}
@@ -239,7 +247,7 @@ export const Footer: React.FC<FooterProps> = ({
               )}
               <button
                 onClick={onOpenRegulations}
-                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 px-0 py-1"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Mentions légales

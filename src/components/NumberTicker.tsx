@@ -7,6 +7,8 @@ interface NumberTickerProps {
   className?: string;
   prefix?: string;
   suffix?: string;
+  /** Une année n'est pas une quantité : `toLocaleString()` affichait « 2 027 ». */
+  brut?: boolean;
 }
 
 export const NumberTicker: React.FC<NumberTickerProps> = ({
@@ -16,6 +18,7 @@ export const NumberTicker: React.FC<NumberTickerProps> = ({
   className = '',
   prefix = '',
   suffix = '',
+  brut = false,
 }) => {
   const [displayValue, setDisplayValue] = useState<number>(direction === 'down' ? value : 0);
   const ref = useRef<HTMLSpanElement>(null);
@@ -29,6 +32,21 @@ export const NumberTicker: React.FC<NumberTickerProps> = ({
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimated.current) {
           hasAnimated.current = true;
+
+          // La règle CSS `prefers-reduced-motion` du projet neutralise les
+          // transitions et les animations, mais pas un compteur piloté par
+          // requestAnimationFrame : il faut l'interroger ici aussi. Sans ça,
+          // cinq nombres défilent pendant 1,6 s chez quelqu'un qui a
+          // précisément demandé que rien ne bouge.
+          const mouvementReduit =
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+          if (mouvementReduit) {
+            setDisplayValue(direction === 'down' ? 0 : value);
+            return;
+          }
+
           setTimeout(() => {
             const duration = 1600; // ms
             const startTime = performance.now();
@@ -68,7 +86,7 @@ export const NumberTicker: React.FC<NumberTickerProps> = ({
   return (
     <span ref={ref} className={`font-mono inline-block tabular-nums ${className}`}>
       {prefix}
-      {displayValue.toLocaleString()}
+      {brut ? displayValue : displayValue.toLocaleString()}
       {suffix}
     </span>
   );

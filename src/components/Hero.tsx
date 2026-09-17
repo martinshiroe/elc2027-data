@@ -1,10 +1,11 @@
 import React from 'react';
 import { ELCData } from '../types';
-import { urlSure, urlCss } from '../lib/urls';
+import { urlCss } from '../lib/urls';
+import { Section } from '../lib/routes';
 
 interface HeroProps {
   data: ELCData;
-  onSelectSection: (sec: string) => void;
+  onSelectSection: (sec: Section) => void;
   onOpenRegulations?: () => void;
 }
 
@@ -33,7 +34,18 @@ export const Hero: React.FC<HeroProps> = ({ data, onSelectSection }) => {
           className="absolute inset-0 bg-cover bg-center pointer-events-none"
           style={{ backgroundImage: `url("${urlCss(meta.heroImage)}")` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0e0e0e]/45 via-[#0e0e0e]/72 to-[#0e0e0e]/97" />
+          {/* Le voile montait à 45 % en haut : au-dessus des écrans et de la
+              foule d'une photo d'arène, le sous-titre en blanc/70 passait
+              sous le seuil lisible. Il finit désormais à 100 %, ce qui règle
+              du même coup l'arête franche visible en bas du hero sur mobile,
+              là où la photo s'arrêtait net. */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(to bottom, rgba(14,14,14,0.70) 0%, rgba(14,14,14,0.88) 55%, rgba(14,14,14,1) 88%, rgba(14,14,14,1) 100%)',
+            }}
+          />
         </div>
       ) : (
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[#0e0e0e]/80 to-[#0e0e0e]" />
@@ -63,12 +75,12 @@ export const Hero: React.FC<HeroProps> = ({ data, onSelectSection }) => {
           className="font-audiowide text-[clamp(28px,4.6vw,58px)] leading-[1.35] text-white tracking-[0.005em] mx-auto mb-6 max-w-[980px]"
           style={{ textWrap: 'balance' }}
         >
-          Compétis avec les meilleurs — sans compromis
+          Affronte les meilleurs — sans compromis
         </h1>
 
         {/* Subtitle */}
         <p
-          className="text-[18px] text-white/60 leading-[1.9] max-w-[640px] mx-auto mb-10"
+          className="text-[18px] text-white/75 leading-[1.9] max-w-[640px] mx-auto mb-10"
           style={{ fontFamily: "'Manrope', sans-serif" }}
         >
           Honor of Kings, Mobile Legends, PUBG Mobile, Free Fire — quatre disciplines, des dizaines d'équipes, une saison qui décide tout.
