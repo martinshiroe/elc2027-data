@@ -190,7 +190,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
                     <div className="text-xs font-semibold text-white group-hover:text-red-300 transition-colors">
                       Chaîne YouTube Officielle
                     </div>
-                    <div className="text-[11px] text-white/40 mt-1">
+                    <div className="text-[11px] text-white/55 mt-1">
                       Matchs complets, vods et trailers HD
                     </div>
                     <div className="inline-flex items-center gap-1 text-[11px] text-red-400 font-mono mt-2">
@@ -214,7 +214,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
                     <div className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
                       Compte TikTok Officiel
                     </div>
-                    <div className="text-[11px] text-white/40 mt-1">
+                    <div className="text-[11px] text-white/55 mt-1">
                       Clips courts, coulisses et best-of
                     </div>
                     <div className="inline-flex items-center gap-1 text-[11px] text-cyan-400 font-mono mt-2">
@@ -306,7 +306,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
                     </div>
 
                     <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-xs text-white/40 font-mono">
+                      <div className="flex items-center gap-4 text-xs text-white/55 font-mono">
                         <span>{featuredVideo.date || 'Saison 2027'}</span>
                       </div>
 
@@ -372,7 +372,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
 
               {/* Search Bar */}
               <div className="relative w-full lg:w-72">
-                <Search className="w-4 h-4 text-white/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-white/55 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Rechercher une vidéo..."
@@ -383,7 +383,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/55 hover:text-white"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -393,7 +393,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
 
             {/* Sub-Filters: Disciplines */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-              <span className="text-white/40 font-mono text-[11px] uppercase mr-1 shrink-0 flex items-center gap-1">
+              <span className="text-white/55 font-mono text-[11px] uppercase mr-1 shrink-0 flex items-center gap-1">
                 <Filter className="w-3 h-3" />
                 Discipline :
               </span>
@@ -428,7 +428,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
                 <h3 className="text-sm font-semibold text-white/80 mb-1">
                   Aucune vidéo ne correspond à vos filtres
                 </h3>
-                <p className="text-xs text-white/40 mb-4">
+                <p className="text-xs text-white/55 mb-4">
                   Essayez de réinitialiser la recherche ou de changer de plateforme.
                 </p>
                 <button
@@ -519,7 +519,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
                         )}
                       </div>
 
-                      <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/40 font-mono">
+                      <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/55 font-mono">
                         <span>{video.date || 'Saison 2027'}</span>
                         <span className="text-teal-400 font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
                           Visionner

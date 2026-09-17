@@ -31,3 +31,38 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #14b8a6;
 }
+
+/* ------------------------------------------------------------------
+   Accessibilité — règles globales
+   ------------------------------------------------------------------ */
+
+/* Anneau de focus clavier.
+   Une trentaine de `focus:outline-none` traînaient dans les composants :
+   la navigation au clavier se faisait à l'aveugle. Cette règle n'est
+   volontairement dans aucune couche CSS — en Tailwind v4 les utilitaires
+   vivent dans `@layer utilities`, et du CSS hors couche l'emporte sur
+   n'importe quelle couche. Un seul endroit répare donc les trente. */
+:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* L'en-tête est collant sur 60px : sans cette marge, un élément rejoint
+   au clavier ou par ancre se retrouve caché dessous (WCAG 2.2 — Focus
+   Not Obscured). */
+html {
+  scroll-padding-top: 76px;
+}
+
+/* Respect du réglage système « réduire les animations ». */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

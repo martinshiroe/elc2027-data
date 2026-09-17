@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { remonter } from './lib/scroll';
 import { initialELCData } from './data/initialData';
 import { ELCData } from './types';
 import { Header } from './components/Header';
@@ -101,7 +102,7 @@ export function App() {
   const handleSelectGame = (gameId: 'hok' | 'mlbb' | 'pubgm' | 'ff') => {
     setSelectedGame(gameId);
     setActiveSection('classements');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    remonter();
   };
 
   const handleResetData = () => {
@@ -130,7 +131,7 @@ export function App() {
         activeSection={activeSection}
         setActiveSection={(sec) => {
           setActiveSection(sec);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          remonter();
         }}
       />
 
@@ -146,7 +147,7 @@ export function App() {
                 else if (sec === 'calendar') setActiveSection('competition');
                 else if (sec === 'tournaments') setActiveSection('classements');
                 else setActiveSection(sec);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                remonter();
               }}
               onOpenRegulations={() => setIsRegulationsOpen(true)}
             />
@@ -159,7 +160,7 @@ export function App() {
               data={data}
               onOpenRegister={() => {
                 setActiveSection('inscription');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                remonter();
               }}
             />
 
@@ -180,7 +181,7 @@ export function App() {
               data={data}
               onNavigateToVideos={() => {
                 setActiveSection('videos');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                remonter();
               }}
             />
 
@@ -189,7 +190,7 @@ export function App() {
               data={data}
               onOpenRegister={() => {
                 setActiveSection('inscription');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                remonter();
               }}
             />
           </div>
@@ -240,7 +241,7 @@ export function App() {
               data={data}
               onOpenRegister={() => {
                 setActiveSection('inscription');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                remonter();
               }}
             />
 
@@ -422,7 +423,7 @@ export function App() {
         onOpenAdmin={() => setIsAdminOpen(true)}
         onSelectSection={(sec) => {
           setActiveSection(sec);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          remonter();
         }}
       />
 

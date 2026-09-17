@@ -189,24 +189,24 @@ export const DisciplinesSection: React.FC<DisciplinesSectionProps> = ({ data, on
 
                   <div className="space-y-2.5 py-3 border-t border-white/[0.06] text-xs">
                     <div className="flex items-center justify-between text-white/60 font-mono">
-                      <span className="text-white/40 flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-white/40" />
+                      <span className="text-white/55 flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-white/55" />
                         Lancement :
                       </span>
                       <span className="font-semibold text-white">{titre.lancement}</span>
                     </div>
 
                     <div className="flex items-center justify-between text-white/60 font-mono">
-                      <span className="text-white/40 flex items-center gap-1.5">
-                        <Smartphone className="w-3.5 h-3.5 text-white/40" />
+                      <span className="text-white/55 flex items-center gap-1.5">
+                        <Smartphone className="w-3.5 h-3.5 text-white/55" />
                         Plateforme :
                       </span>
                       <span className="font-semibold text-teal-400">{titre.plateforme}</span>
                     </div>
 
                     <div className="flex items-center justify-between text-white/60 font-mono">
-                      <span className="text-white/40 flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-white/40" />
+                      <span className="text-white/55 flex items-center gap-1.5">
+                        <Users className="w-3.5 h-3.5 text-white/55" />
                         Format :
                       </span>
                       <span className="text-white/80">

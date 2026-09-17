@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useModale } from '../lib/useModale';
 import { X, Copy, Download, Check, Database, RefreshCw, Code2 } from 'lucide-react';
 import { ELCData } from '../types';
 
@@ -16,6 +17,8 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
   onResetData
 }) => {
   const [copied, setCopied] = useState(false);
+
+  const conteneur = useModale(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -44,8 +47,19 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-750 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-750 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+        ref={conteneur}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titre-donnees"
+        tabIndex={-1}
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-850 bg-slate-950/60">
           <div className="flex items-center gap-3">
@@ -53,7 +67,7 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
               <Database className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-display font-bold text-lg text-white">
+              <h3 id="titre-donnees" className="font-display font-bold text-lg text-white">
                 Données Brutes & Structure ELC 2027
               </h3>
               <p className="text-xs text-slate-400">
@@ -91,6 +105,7 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
             <button
               onClick={onClose}
               className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer ml-1"
+            aria-label="Fermer"
             >
               <X className="w-5 h-5" />
             </button>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { remonter } from '../lib/scroll';
 import { Menu, X } from 'lucide-react';
 import { ELCData } from '../types';
 
@@ -29,10 +30,21 @@ export const Header: React.FC<HeaderProps> = ({
     { label: 'Inscription', id: 'inscription' },
   ];
 
+  // Échap ferme le menu mobile : il couvre l'écran, il faut pouvoir en
+  // sortir sans viser la croix.
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const auClavier = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    document.addEventListener('keydown', auClavier);
+    return () => document.removeEventListener('keydown', auClavier);
+  }, [mobileMenuOpen]);
+
   const handleNavClick = (id: string) => {
     setActiveSection(id);
     setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    remonter();
   };
 
   const handleRegister = () => {
@@ -76,6 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
+                aria-current={isActive ? 'page' : undefined}
                 className={`px-3.5 py-1.5 rounded-md text-[14px] whitespace-nowrap transition-colors cursor-pointer border-0 ${
                   isActive
                     ? 'text-white bg-white/[0.07]'
@@ -103,7 +116,9 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-md text-white/70 hover:text-white hover:bg-white/[0.05] border-0 cursor-pointer"
-            aria-label="Menu"
+            aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="menu-mobile"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -112,7 +127,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#0e0e0e] border-b border-white/[0.08] px-6 py-4 space-y-2">
+        <div id="menu-mobile" className="md:hidden bg-[#0e0e0e] border-b border-white/[0.08] px-6 py-4 space-y-2">
           <button
             onClick={() => handleNavClick('accueil')}
             className={`w-full text-left px-3 py-2 rounded-md text-sm cursor-pointer border-0 ${
@@ -128,6 +143,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               key={item.id}
               onClick={() => handleNavClick(item.id)}
+              aria-current={activeSection === item.id ? 'page' : undefined}
               className={`w-full text-left px-3 py-2 rounded-md text-sm cursor-pointer border-0 ${
                 activeSection === item.id
                   ? 'text-white bg-white/[0.07]'

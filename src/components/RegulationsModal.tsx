@@ -1,4 +1,5 @@
 import React from 'react';
+import { useModale } from '../lib/useModale';
 import { X, ShieldCheck, FileText, CheckCircle, Smartphone, AlertTriangle } from 'lucide-react';
 import { ELCData } from '../types';
 
@@ -13,13 +14,26 @@ export const RegulationsModal: React.FC<RegulationsModalProps> = ({
   onClose,
   data
 }) => {
+  const conteneur = useModale(isOpen, onClose);
+
   if (!isOpen) return null;
 
   const { meta, visual2, visual3 } = data;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-      <div className="relative w-full max-w-3xl max-h-[90vh] bg-slate-900 border border-slate-750 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="relative w-full max-w-3xl max-h-[90vh] bg-slate-900 border border-slate-750 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+        ref={conteneur}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titre-reglement"
+        tabIndex={-1}
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/60">
           <div className="flex items-center gap-3">
@@ -27,7 +41,7 @@ export const RegulationsModal: React.FC<RegulationsModalProps> = ({
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-display font-bold text-lg text-white">
+              <h3 id="titre-reglement" className="font-display font-bold text-lg text-white">
                 Règlement Intérieur & Statuts FECASES
               </h3>
               <p className="text-xs text-slate-400">
@@ -38,6 +52,7 @@ export const RegulationsModal: React.FC<RegulationsModalProps> = ({
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            aria-label="Fermer"
           >
             <X className="w-5 h-5" />
           </button>

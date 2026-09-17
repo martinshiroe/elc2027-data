@@ -32,7 +32,7 @@ export const MatchPreviewShowcase: React.FC = () => {
               Aperçu — East League of Cameroon
             </span>
           </div>
-          <div className="flex items-center gap-4 text-xs text-white/40 font-mono">
+          <div className="flex items-center gap-4 text-xs text-white/55 font-mono">
             <span className="flex items-center gap-1.5 text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               Serveur Officiel Régional
@@ -69,7 +69,7 @@ export const MatchPreviewShowcase: React.FC = () => {
                 <span className="font-mono text-base sm:text-lg text-teal-400 font-bold tracking-wider">
                   VS
                 </span>
-                <span className="font-mono text-[10px] text-white/40 flex items-center gap-1">
+                <span className="font-mono text-[10px] text-white/55 flex items-center gap-1">
                   <Timer className="w-3 h-3 text-teal-400/70" />
                   {matchTime}
                 </span>

@@ -103,7 +103,7 @@ export const HomeVideosTeaser: React.FC<HomeVideosTeaserProps> = ({
                   )}
                 </div>
 
-                <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/40 font-mono">
+                <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/55 font-mono">
                   <span>{video.date || 'Saison 2027'}</span>
                   <span className="text-teal-400 font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
                     Visionner

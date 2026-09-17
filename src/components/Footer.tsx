@@ -1,4 +1,5 @@
 import React from 'react';
+import { remonter } from '../lib/scroll';
 import { ELCData } from '../types';
 import { urlSure } from '../lib/urls';
 import {
@@ -31,7 +32,7 @@ export const Footer: React.FC<FooterProps> = ({
   const handleNav = (sec: string) => {
     if (onSelectSection) {
       onSelectSection(sec);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      remonter();
     }
   };
 
@@ -58,13 +59,13 @@ export const Footer: React.FC<FooterProps> = ({
               </span>
             </div>
             <p
-              className="text-[12.5px] text-white/40 leading-[1.7] mb-[22px]"
+              className="text-[12.5px] text-white/55 leading-[1.7] mb-[22px]"
               style={{ fontFamily: "'Manrope', sans-serif" }}
             >
               Ligue Esport Est Cameroun — la compétition esport qui fait vibrer le Cameroun.
             </p>
             {/* Social icons */}
-            <div className="flex gap-[7px] flex-wrap">
+            <div className="flex gap-2 flex-wrap">
               {reseaux.facebook && (
                 <a
                   href={urlSure(reseaux.facebook)}
@@ -72,7 +73,7 @@ export const Footer: React.FC<FooterProps> = ({
                   rel="noopener noreferrer"
                   title="Facebook Officiel"
                   aria-label="Facebook Officiel ELC"
-                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/40 hover:text-[#1877F2] hover:border-[#1877F2]/40 flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/55 hover:text-[#1877F2] hover:border-[#1877F2]/40 flex items-center justify-center transition-colors cursor-pointer"
                 >
                   <FacebookIcon className="w-4 h-4" />
                 </a>
@@ -84,7 +85,7 @@ export const Footer: React.FC<FooterProps> = ({
                   rel="noopener noreferrer"
                   title="YouTube Officiel"
                   aria-label="Chaîne YouTube Officielle ELC"
-                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/40 hover:text-[#FF0000] hover:border-[#FF0000]/40 flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/55 hover:text-[#FF0000] hover:border-[#FF0000]/40 flex items-center justify-center transition-colors cursor-pointer"
                 >
                   <YoutubeIcon className="w-4 h-4" />
                 </a>
@@ -96,7 +97,7 @@ export const Footer: React.FC<FooterProps> = ({
                   rel="noopener noreferrer"
                   title="TikTok Officiel"
                   aria-label="Compte TikTok Officiel ELC"
-                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/40 hover:text-white hover:border-cyan-400/40 flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/55 hover:text-white hover:border-cyan-400/40 flex items-center justify-center transition-colors cursor-pointer"
                 >
                   <TikTokIcon className="w-3.5 h-3.5" />
                 </a>
@@ -108,7 +109,7 @@ export const Footer: React.FC<FooterProps> = ({
                   rel="noopener noreferrer"
                   title="WhatsApp Officiel"
                   aria-label="Groupe WhatsApp Officiel ELC"
-                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/40 hover:text-[#25D366] hover:border-[#25D366]/40 flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/55 hover:text-[#25D366] hover:border-[#25D366]/40 flex items-center justify-center transition-colors cursor-pointer"
                 >
                   <WhatsAppIcon className="w-4 h-4" />
                 </a>
@@ -120,7 +121,7 @@ export const Footer: React.FC<FooterProps> = ({
                   rel="noopener noreferrer"
                   title="Instagram Officiel"
                   aria-label="Compte Instagram Officiel ELC"
-                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/40 hover:text-[#E4405F] hover:border-[#E4405F]/40 flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/55 hover:text-[#E4405F] hover:border-[#E4405F]/40 flex items-center justify-center transition-colors cursor-pointer"
                 >
                   <InstagramIcon className="w-4 h-4" />
                 </a>
@@ -132,7 +133,7 @@ export const Footer: React.FC<FooterProps> = ({
                   rel="noopener noreferrer"
                   title="Discord Officiel"
                   aria-label="Serveur Discord Officiel ELC"
-                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/40 hover:text-[#5865F2] hover:border-[#5865F2]/40 flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-[33px] h-[33px] rounded-lg bg-[#161616] border border-white/[0.08] text-white/55 hover:text-[#5865F2] hover:border-[#5865F2]/40 flex items-center justify-center transition-colors cursor-pointer"
                 >
                   <DiscordIcon className="w-4 h-4" />
                 </a>
@@ -151,35 +152,35 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => handleNav('competition')}
-                className="text-left text-[13px] text-white/40 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Calendrier
               </button>
               <button
                 onClick={() => handleNav('classements')}
-                className="text-left text-[13px] text-white/40 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Classements
               </button>
               <button
                 onClick={() => handleNav('joueurs')}
-                className="text-left text-[13px] text-white/40 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Joueurs
               </button>
               <button
                 onClick={() => handleNav('pantheon')}
-                className="text-left text-[13px] text-white/40 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Panthéon
               </button>
               <button
                 onClick={() => handleNav('videos')}
-                className="text-left text-[13px] text-white/40 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Vidéos & Médias
@@ -200,7 +201,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <button
                   key={d}
                   onClick={() => handleNav('competition')}
-                  className="text-left text-[13px] text-white/40 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                  className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
                   style={{ fontFamily: "'Manrope', sans-serif" }}
                 >
                   {d}
@@ -221,7 +222,7 @@ export const Footer: React.FC<FooterProps> = ({
               {contact.email && (
                 <a
                   href={`mailto:${contact.email}`}
-                  className="text-[13px] text-white/40 hover:text-white/85 transition-colors"
+                  className="text-[13px] text-white/55 hover:text-white/85 transition-colors"
                   style={{ fontFamily: "'Manrope', sans-serif" }}
                 >
                   {contact.email}
@@ -230,7 +231,7 @@ export const Footer: React.FC<FooterProps> = ({
               {contact.telephone && (
                 <a
                   href={`tel:${contact.telephone.replace(/\s/g, '')}`}
-                  className="text-[13px] text-white/40 hover:text-white/85 transition-colors"
+                  className="text-[13px] text-white/55 hover:text-white/85 transition-colors"
                   style={{ fontFamily: "'Manrope', sans-serif" }}
                 >
                   {contact.telephone}
@@ -238,7 +239,7 @@ export const Footer: React.FC<FooterProps> = ({
               )}
               <button
                 onClick={onOpenRegulations}
-                className="text-left text-[13px] text-white/40 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                className="text-left text-[13px] text-white/55 hover:text-white/85 transition-colors cursor-pointer bg-transparent border-0 p-0"
                 style={{ fontFamily: "'Manrope', sans-serif" }}
               >
                 Mentions légales
@@ -250,7 +251,7 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Bottom Bar */}
         <div className="border-t border-white/[0.06] pt-[22px] flex justify-between items-center flex-wrap gap-2.5">
           <span
-            className="text-[12px] text-white/[0.28]"
+            className="text-[12px] text-white/50"
             style={{ fontFamily: "'Manrope', sans-serif" }}
           >
             © 2027 Ligue Esport Est Cameroun · Tous droits réservés
