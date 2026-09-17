@@ -24,6 +24,41 @@ interface Req {
   query: Record<string, string | string[] | undefined>;
 }
 
+// Même limitation de débit que sur l'écriture : c'est ici qu'on testerait un
+// code en boucle, puisque cette route dit si un code est bon. Le compteur vit
+// dans la mémoire de l'instance serverless — remis à zéro à chaque démarrage à
+// froid, non partagé entre instances — donc il ralentit fortement une attaque
+// depuis une même adresse sans la rendre impossible. La vraie protection reste
+// un ADMIN_KEY long et unique.
+const FENETRE_MS = 10 * 60 * 1000;
+const MAX_ECHECS = 10;
+const tentatives = new Map<string, { echecs: number; debut: number }>();
+
+function clientIp(req: Req): string {
+  const brut = req.headers['x-forwarded-for'];
+  const valeur = Array.isArray(brut) ? brut[0] : brut;
+  return (valeur || 'inconnue').split(',')[0].trim();
+}
+
+function estBloque(ip: string): boolean {
+  const maintenant = Date.now();
+  for (const [cle, suivi] of tentatives) {
+    if (maintenant - suivi.debut > FENETRE_MS) tentatives.delete(cle);
+  }
+  const suivi = tentatives.get(ip);
+  return Boolean(suivi && suivi.echecs >= MAX_ECHECS);
+}
+
+function noterEchec(ip: string): void {
+  const maintenant = Date.now();
+  const suivi = tentatives.get(ip);
+  if (!suivi || maintenant - suivi.debut > FENETRE_MS) {
+    tentatives.set(ip, { echecs: 1, debut: maintenant });
+  } else {
+    suivi.echecs += 1;
+  }
+}
+
 interface Res {
   status(code: number): Res;
   json(body: unknown): void;
@@ -44,13 +79,25 @@ export default function handler(req: Req, res: Res): void {
     return;
   }
 
+  const ip = clientIp(req);
+  if (estBloque(ip)) {
+    res.setHeader('Retry-After', String(FENETRE_MS / 1000));
+    res.status(429).json({
+      error: 'Trop de tentatives échouées. Réessayez dans quelques minutes.',
+      code: 'rate_limited',
+    });
+    return;
+  }
+
   const raw = req.headers['x-admin-key'];
   const provided = (Array.isArray(raw) ? raw[0] : raw) || (req.query.key as string | undefined);
 
   if (verifyAdminKey(provided)) {
+    tentatives.delete(ip);
     res.setHeader('Cache-Control', 'no-store');
     res.status(200).json({ ok: true, storage: 'supabase' });
   } else {
+    noterEchec(ip);
     res.status(401).json({ error: 'Code administrateur invalide ou manquant.', code: 'unauthorized' });
   }
 }

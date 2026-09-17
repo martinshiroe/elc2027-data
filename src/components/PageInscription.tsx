@@ -1,6 +1,7 @@
 import React from 'react';
 import { ELCData } from '../types';
 import { FileText, ExternalLink, CheckCircle, HelpCircle, MessageSquare, Mail, ShieldCheck, Sparkles } from 'lucide-react';
+import { urlSure, urlCss } from '../lib/urls';
 
 interface PageInscriptionProps {
   data: ELCData;
@@ -31,7 +32,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
           {meta.inscriptionBannerImage && (
             <div
               className="absolute inset-0 bg-cover bg-center pointer-events-none"
-              style={{ backgroundImage: `url("${meta.inscriptionBannerImage}")` }}
+              style={{ backgroundImage: `url("${urlCss(meta.inscriptionBannerImage)}")` }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-[#0e0e0e]/95 via-[#0e0e0e]/85 to-[#0e0e0e]/55" />
             </div>
@@ -56,7 +57,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
             <div className="flex flex-wrap items-center gap-4">
               {googleFormUrl && (
                 <a
-                  href={googleFormUrl}
+                  href={urlSure(googleFormUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-black font-semibold text-xs sm:text-sm transition-all shadow-lg cursor-pointer"
@@ -67,7 +68,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
               )}
 
               <a
-                href={meta.reseaux.whatsapp}
+                href={urlSure(meta.reseaux.whatsapp)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-white/90 border border-white/[0.12] text-xs sm:text-sm font-medium transition-all cursor-pointer"
@@ -155,7 +156,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
             {googleFormUrl ? (
               <div className="w-full h-[750px] rounded-2xl overflow-hidden bg-white shadow-inner">
                 <iframe
-                  src={getEmbedUrl(googleFormUrl)}
+                  src={urlSure(getEmbedUrl(googleFormUrl))}
                   title="Formulaire d'inscription ELC 2027"
                   className="w-full h-full border-0"
                 >
@@ -178,7 +179,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   <a
-                    href={meta.reseaux.whatsapp}
+                    href={urlSure(meta.reseaux.whatsapp)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#25D366] text-black font-bold text-xs shadow-lg hover:opacity-90 transition-opacity"

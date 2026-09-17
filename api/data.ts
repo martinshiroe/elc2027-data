@@ -48,6 +48,95 @@ function verifyAdminKey(provided: string | undefined | null): boolean {
   return diff === 0;
 }
 
+// --- Limitation de débit sur les tentatives d'écriture ------------------
+//
+// Le code admin est un secret partagé : sans frein, on peut le tester en
+// boucle. Le compteur vit dans la mémoire de l'instance serverless, donc il
+// est remis à zéro à chaque démarrage à froid et n'est pas partagé entre
+// instances : ce n'est pas un rempart absolu, mais il rend une attaque par
+// force brute très lente depuis une même adresse. Le vrai rempart reste un
+// ADMIN_KEY long et unique.
+const FENETRE_MS = 10 * 60 * 1000;
+const MAX_ECHECS = 10;
+const tentatives = new Map<string, { echecs: number; debut: number }>();
+
+function clientIp(req: Req): string {
+  const brut = req.headers['x-forwarded-for'];
+  const valeur = Array.isArray(brut) ? brut[0] : brut;
+  return (valeur || 'inconnue').split(',')[0].trim();
+}
+
+// Purge les fenêtres expirées pour que la Map ne grossisse pas indéfiniment.
+function purger(maintenant: number): void {
+  for (const [ip, suivi] of tentatives) {
+    if (maintenant - suivi.debut > FENETRE_MS) tentatives.delete(ip);
+  }
+}
+
+function estBloque(ip: string): boolean {
+  const maintenant = Date.now();
+  purger(maintenant);
+  const suivi = tentatives.get(ip);
+  if (!suivi) return false;
+  if (maintenant - suivi.debut > FENETRE_MS) {
+    tentatives.delete(ip);
+    return false;
+  }
+  return suivi.echecs >= MAX_ECHECS;
+}
+
+function noterEchec(ip: string): void {
+  const maintenant = Date.now();
+  const suivi = tentatives.get(ip);
+  if (!suivi || maintenant - suivi.debut > FENETRE_MS) {
+    tentatives.set(ip, { echecs: 1, debut: maintenant });
+  } else {
+    suivi.echecs += 1;
+  }
+}
+
+function noterSucces(ip: string): void {
+  tentatives.delete(ip);
+}
+
+// --- Validation du document reçu ---------------------------------------
+//
+// Le corps d'un POST remplace l'intégralité du contenu du site. Une erreur de
+// forme ne doit pas pouvoir laisser la vitrine dans un état incohérent.
+const TAILLE_MAX_OCTETS = 2 * 1024 * 1024;
+
+function estObjet(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v);
+}
+
+function valider(corps: unknown): string | null {
+  if (!estObjet(corps)) return 'Données invalides : un objet JSON est attendu.';
+  if (!estObjet(corps.meta)) return 'Données incomplètes : la section « meta » est obligatoire.';
+  if (!estObjet(corps.competition)) return 'Données incomplètes : la section « competition » est obligatoire.';
+
+  const disciplines = ['hok', 'mlbb', 'pubgm', 'ff'];
+  const manquantes = disciplines.filter(d => !estObjet((corps.competition as Record<string, unknown>)[d]));
+  if (manquantes.length) {
+    return `Données incomplètes : discipline(s) manquante(s) — ${manquantes.join(', ')}.`;
+  }
+
+  if (corps.joueurs !== undefined && !Array.isArray(corps.joueurs)) {
+    return 'Données invalides : « joueurs » doit être une liste.';
+  }
+  if (corps.videos !== undefined && !Array.isArray(corps.videos)) {
+    return 'Données invalides : « videos » doit être une liste.';
+  }
+  if (corps.pantheon !== undefined && !estObjet(corps.pantheon)) {
+    return 'Données invalides : « pantheon » doit être un objet.';
+  }
+
+  const taille = Buffer.byteLength(JSON.stringify(corps), 'utf8');
+  if (taille > TAILLE_MAX_OCTETS) {
+    return `Document trop volumineux (${Math.round(taille / 1024)} Ko pour un maximum de ${TAILLE_MAX_OCTETS / 1024} Ko). Utilisez des URL d'images plutôt que des fichiers intégrés.`;
+  }
+  return null;
+}
+
 interface Req {
   method?: string;
   headers: Record<string, string | string[] | undefined>;
@@ -104,23 +193,30 @@ export default async function handler(req: Req, res: Res): Promise<void> {
       });
       return;
     }
-    const provided = header(req, 'x-admin-key') || (req.query.key as string | undefined);
-    if (!verifyAdminKey(provided)) {
-      res.status(401).json({ error: 'Code administrateur invalide ou manquant.', code: 'unauthorized' });
+    const ip = clientIp(req);
+    if (estBloque(ip)) {
+      res.setHeader('Retry-After', String(FENETRE_MS / 1000));
+      res.status(429).json({
+        error: 'Trop de tentatives échouées. Réessayez dans quelques minutes.',
+        code: 'rate_limited',
+      });
       return;
     }
 
-    const incoming = req.body as Record<string, any> | undefined;
-    if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) {
-      res.status(400).json({ error: 'Données invalides.' });
+    const provided = header(req, 'x-admin-key') || (req.query.key as string | undefined);
+    if (!verifyAdminKey(provided)) {
+      noterEchec(ip);
+      res.status(401).json({ error: 'Code administrateur invalide ou manquant.', code: 'unauthorized' });
       return;
     }
-    // Garde-fou : un corps sans meta ni competition n'est pas un document du
-    // site, et l'écrire écraserait tout le contenu par une coquille vide.
-    if (!incoming.meta || !incoming.competition) {
-      res.status(400).json({ error: 'Données incomplètes : les sections « meta » et « competition » sont obligatoires.' });
+    noterSucces(ip);
+
+    const erreur = valider(req.body);
+    if (erreur) {
+      res.status(400).json({ error: erreur });
       return;
     }
+    const incoming = req.body as Record<string, any>;
 
     try {
       incoming.meta.derniereMaj = new Date().toISOString();

@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { ELCData, ELCVideo } from '../types';
 import { YoutubeIcon, TikTokIcon } from './SocialIcons';
+import { urlSure, urlCss } from '../lib/urls';
 
 interface PageVideosProps {
   data: ELCData;
@@ -104,7 +105,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
           {data.meta.videosBannerImage && (
             <div
               className="absolute inset-0 bg-cover bg-center pointer-events-none"
-              style={{ backgroundImage: `url("${data.meta.videosBannerImage}")` }}
+              style={{ backgroundImage: `url("${urlCss(data.meta.videosBannerImage)}")` }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/65" />
             </div>
@@ -561,7 +562,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
 
               <div className="flex items-center gap-2 shrink-0">
                 <a
-                  href={playingVideo.url}
+                  href={urlSure(playingVideo.url)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-white/70 hover:text-white transition-colors"
@@ -598,7 +599,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
                     <div className="p-8 text-center text-white/60 text-xs">
                       <p className="mb-4">Impossible de charger le lecteur intégré pour ce lien.</p>
                       <a
-                        href={playingVideo.url}
+                        href={urlSure(playingVideo.url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 text-white font-medium"
@@ -622,7 +623,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
                     Les vidéos TikTok officielles de la ligue se visionnent directement sur l'application ou le site officiel @east_ligue.
                   </p>
                   <a
-                    href={playingVideo.url}
+                    href={urlSure(playingVideo.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-pink-500 text-black font-bold text-xs shadow-lg hover:opacity-90 transition-opacity"
@@ -652,7 +653,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data }) => {
               </div>
 
               <a
-                href={playingVideo.url}
+                href={urlSure(playingVideo.url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-white text-xs font-medium border border-white/[0.1] transition-colors"

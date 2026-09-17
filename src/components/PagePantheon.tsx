@@ -1,6 +1,7 @@
 import React from 'react';
 import { Crown, Swords, Flame, Shield, Trophy, User, Sparkles, Camera, Medal } from 'lucide-react';
 import { ELCData, ELCPantheonItem } from '../types';
+import { urlSure, urlCss } from '../lib/urls';
 
 interface PagePantheonProps {
   data: ELCData;
@@ -212,7 +213,7 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
                     {d.fondImage && (
                       <div
                         className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url("${d.fondImage}")` }}
+                        style={{ backgroundImage: `url("${urlCss(d.fondImage)}")` }}
                       >
                         <div
                           className="absolute inset-0"
@@ -379,7 +380,7 @@ export const PagePantheon: React.FC<PagePantheonProps> = ({ data }) => {
             {data.meta.pantheonBannerImage && (
               <div
                 className="absolute inset-0 bg-cover bg-center pointer-events-none"
-                style={{ backgroundImage: `url("${data.meta.pantheonBannerImage}")` }}
+                style={{ backgroundImage: `url("${urlCss(data.meta.pantheonBannerImage)}")` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/88 to-black/78" />
               </div>

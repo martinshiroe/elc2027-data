@@ -1,5 +1,6 @@
 import React from 'react';
 import { ELCData } from '../types';
+import { urlSure } from '../lib/urls';
 import {
   FacebookIcon,
   YoutubeIcon,
@@ -66,7 +67,7 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="flex gap-[7px] flex-wrap">
               {reseaux.facebook && (
                 <a
-                  href={reseaux.facebook}
+                  href={urlSure(reseaux.facebook)}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Facebook Officiel"
@@ -78,7 +79,7 @@ export const Footer: React.FC<FooterProps> = ({
               )}
               {reseaux.youtube && (
                 <a
-                  href={reseaux.youtube}
+                  href={urlSure(reseaux.youtube)}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="YouTube Officiel"
@@ -90,7 +91,7 @@ export const Footer: React.FC<FooterProps> = ({
               )}
               {reseaux.tiktok && (
                 <a
-                  href={reseaux.tiktok}
+                  href={urlSure(reseaux.tiktok)}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="TikTok Officiel"
@@ -102,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({
               )}
               {reseaux.whatsapp && (
                 <a
-                  href={reseaux.whatsapp}
+                  href={urlSure(reseaux.whatsapp)}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="WhatsApp Officiel"
@@ -114,7 +115,7 @@ export const Footer: React.FC<FooterProps> = ({
               )}
               {reseaux.instagram && (
                 <a
-                  href={reseaux.instagram}
+                  href={urlSure(reseaux.instagram)}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Instagram Officiel"
@@ -126,7 +127,7 @@ export const Footer: React.FC<FooterProps> = ({
               )}
               {reseaux.discord && (
                 <a
-                  href={reseaux.discord}
+                  href={urlSure(reseaux.discord)}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Discord Officiel"

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ELCData } from '../types';
+import { urlSure, urlCss } from '../lib/urls';
 
 interface CtaBannerProps {
   data: ELCData;
@@ -36,7 +37,7 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ data, onOpenRegister }) =>
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: `url("${ctaImage}")`,
+            backgroundImage: `url("${urlCss(ctaImage)}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             pointerEvents: 'none',

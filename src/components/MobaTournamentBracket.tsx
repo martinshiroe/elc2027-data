@@ -1,6 +1,7 @@
 import React from 'react';
 import { Trophy, Calendar, Swords, ExternalLink, ShieldCheck } from 'lucide-react';
 import { ELCMobaGame } from '../types';
+import { urlSure } from '../lib/urls';
 
 interface MobaTournamentBracketProps {
   gameKey: 'hok' | 'mlbb';
@@ -46,7 +47,7 @@ export const MobaTournamentBracket: React.FC<MobaTournamentBracketProps> = ({
         <div className="flex items-center gap-2">
           {startGgUrl && (
             <a
-              href={startGgUrl}
+              href={urlSure(startGgUrl)}
               target="_blank"
               rel="noreferrer"
               id={`link-startgg-${gameKey}`}

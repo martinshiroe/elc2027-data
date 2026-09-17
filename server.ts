@@ -13,13 +13,20 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-// Retrieve or generate ADMIN_KEY
+// Code administrateur du serveur de développement local.
+//
+// Il était figé à « 2027ELC », écrit en clair dans un dépôt public : lisible
+// par n'importe qui. Sans conséquence tant que ce fichier ne tourne que sur une
+// machine personnelle — Vercel ne le déploie pas — mais c'est le genre de
+// valeur par défaut qui finit par se retrouver ailleurs. À défaut de variable
+// d'environnement, on tire donc un code au hasard, conservé dans
+// data/admin-code.txt, que git ignore.
 let ADMIN_KEY = process.env.ADMIN_KEY;
 if (!ADMIN_KEY) {
   if (fs.existsSync(ADMIN_KEY_FILE)) {
     ADMIN_KEY = fs.readFileSync(ADMIN_KEY_FILE, 'utf-8').trim();
   } else {
-    ADMIN_KEY = '2027ELC'; // Default clean admin key
+    ADMIN_KEY = crypto.randomBytes(9).toString('base64url');
     try {
       fs.writeFileSync(ADMIN_KEY_FILE, ADMIN_KEY, 'utf-8');
     } catch (e) {

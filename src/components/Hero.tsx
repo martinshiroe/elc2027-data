@@ -1,5 +1,6 @@
 import React from 'react';
 import { ELCData } from '../types';
+import { urlSure, urlCss } from '../lib/urls';
 
 interface HeroProps {
   data: ELCData;
@@ -30,7 +31,7 @@ export const Hero: React.FC<HeroProps> = ({ data, onSelectSection }) => {
       {meta.heroImage ? (
         <div
           className="absolute inset-0 bg-cover bg-center pointer-events-none"
-          style={{ backgroundImage: `url("${meta.heroImage}")` }}
+          style={{ backgroundImage: `url("${urlCss(meta.heroImage)}")` }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-[#0e0e0e]/45 via-[#0e0e0e]/72 to-[#0e0e0e]/97" />
         </div>

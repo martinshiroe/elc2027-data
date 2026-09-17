@@ -1,6 +1,7 @@
 import React from 'react';
 import { Trophy, Target, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 import { ELCData } from '../types';
+import { urlSure } from '../lib/urls';
 
 interface CompetitiveFormatSectionProps {
   // Obligatoire : un repli sur les données embarquées afficherait en silence
@@ -71,7 +72,7 @@ export const CompetitiveFormatSection: React.FC<CompetitiveFormatSectionProps> =
 
             {data.meta.googleFormUrl ? (
               <a
-                href={data.meta.googleFormUrl}
+                href={urlSure(data.meta.googleFormUrl)}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-black font-bold text-sm transition-all shadow-lg shadow-teal-950/40"
