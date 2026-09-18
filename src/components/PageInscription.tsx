@@ -133,7 +133,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
               </div>
               <div>
                 <h2 className="font-audiowide text-lg text-white">Formulaire d'Inscription Officiel</h2>
-                <p className="text-xs text-white/50 font-mono">Google Forms Intégré — Saisie sécurisée</p>
+                <p className="text-xs text-white/50 font-mono">Google Forms — Saisie sécurisée</p>
               </div>
             </div>
 
@@ -154,14 +154,52 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onOpenRe
 
           <div className="p-4 sm:p-8 bg-black/40 min-h-[600px] flex flex-col items-center justify-center">
             {googleFormUrl ? (
-              <div className="w-full h-[750px] rounded-2xl overflow-hidden bg-white shadow-inner">
-                <iframe
-                  src={urlSure(getEmbedUrl(googleFormUrl))}
-                  title="Formulaire d'inscription ELC 2027"
-                  className="w-full h-full border-0"
+              /* Pas d'iframe : le formulaire collecte des fichiers (CNI,
+                 captures de compte), ce qui oblige Google à demander une
+                 connexion. La page de connexion répond X-Frame-Options: DENY
+                 et ne s'affiche donc jamais dans un cadre — l'intégration
+                 donnait un rectangle gris. On ouvre dans un nouvel onglet. */
+              <div className="max-w-2xl mx-auto text-center py-10 px-6">
+                {/* Bandeau du formulaire. Reprend le visuel posé en en-tête du
+                    Google Form, pour que le passage du site au formulaire soit
+                    continu. Ratio 4:1, comme l'image fournie. */}
+                <div className="rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl mb-8">
+                  <img
+                    src={urlSure(meta.formBannerImage || '/img/bandeau-inscription.png')}
+                    alt="ELC 2027 — Inscriptions ouvertes"
+                    width={1600}
+                    height={400}
+                    className="w-full h-auto block"
+                  />
+                </div>
+
+                <h3 className="font-audiowide text-xl text-white mb-3">
+                  Le formulaire d'inscription est ouvert
+                </h3>
+
+                <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-light mb-2">
+                  Équipes MOBA et joueurs Battle Royale : renseignez vos informations,
+                  votre pièce d'identité et la capture de votre compte de jeu.
+                </p>
+
+                <p className="text-xs text-white/50 leading-relaxed font-light mb-8">
+                  Prévoyez un compte Google : il est exigé par le formulaire pour
+                  l'envoi des pièces justificatives.
+                </p>
+
+                <a
+                  href={urlSure(googleFormUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-[#14b8a6] hover:opacity-85 text-[#0e0e0e] font-medium text-sm shadow-lg transition-opacity"
                 >
-                  Chargement du formulaire...
-                </iframe>
+                  <span>Je m'inscris</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+
+                <p className="text-[11px] text-white/45 mt-6 font-mono">
+                  Le formulaire s'ouvre dans un nouvel onglet
+                </p>
               </div>
             ) : (
               <div className="max-w-xl mx-auto text-center py-12 px-6">

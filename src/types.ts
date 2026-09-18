@@ -33,6 +33,8 @@ export interface ELCMeta {
   videosBannerImage?: string;
   pantheonBannerImage?: string;
   inscriptionBannerImage?: string;
+  /** Bandeau affiché au-dessus du bouton « Je m'inscris ». Vide = /img/bandeau-inscription.png. */
+  formBannerImage?: string;
   googleFormUrl?: string;
   startGgUrl?: string;
   favicon?: string;
