@@ -341,6 +341,124 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
     );
   }
 
+
+  // --- Rankings : bilan des équipes MOBA et points Battle Royale ----------
+  // Ces chiffres alimentent les tableaux « Ranking » du site public.
+  const majEquipe = (jeu: 'hok' | 'mlbb', index: number, champ: string, valeur: string | number) => {
+    const equipes = formData.competition[jeu].bracket.equipes.map((eq, i) =>
+      i === index ? { ...eq, [champ]: valeur } : eq
+    );
+    setFormData({
+      ...formData,
+      competition: {
+        ...formData.competition,
+        [jeu]: { ...formData.competition[jeu], bracket: { ...formData.competition[jeu].bracket, equipes } },
+      },
+    });
+  };
+
+  const majJoueur = (jeu: 'pubgm' | 'ff', index: number, champ: string, valeur: string | number) => {
+    const roster = formData.competition[jeu].roster.map((p, i) => (i === index ? { ...p, [champ]: valeur } : p));
+    setFormData({
+      ...formData,
+      competition: { ...formData.competition, [jeu]: { ...formData.competition[jeu], roster } },
+    });
+  };
+
+  const nombre = (v: string) => Math.max(0, Math.floor(Number(v) || 0));
+
+  const CHAMPS_MOBA: { cle: 'victoires' | 'nuls' | 'defaites' | 'manchesGagnees' | 'manchesPerdues'; court: string; long: string }[] = [
+    { cle: 'victoires', court: 'V', long: 'Séries gagnées' },
+    { cle: 'nuls', court: 'N', long: 'Séries nulles' },
+    { cle: 'defaites', court: 'D', long: 'Séries perdues' },
+    { cle: 'manchesGagnees', court: 'M+', long: 'Manches gagnées' },
+    { cle: 'manchesPerdues', court: 'M−', long: 'Manches perdues' },
+  ];
+
+  const renderEquipesMoba = (jeu: 'hok' | 'mlbb') => (
+    <>
+      <div className="grid grid-cols-[1.5rem_1fr_repeat(5,2.75rem)] gap-1.5 text-[10px] font-mono text-slate-500 px-0.5">
+        <span />
+        <span>Nom de l'équipe</span>
+        {CHAMPS_MOBA.map((c) => (
+          <span key={c.cle} title={c.long} className="text-center">{c.court}</span>
+        ))}
+      </div>
+      {formData.competition[jeu].bracket.equipes.map((eq, i) => (
+        <div key={eq.id} className="grid grid-cols-[1.5rem_1fr_repeat(5,2.75rem)] gap-1.5 items-center">
+          <span className="text-[10px] font-mono text-slate-500">#{i + 1}</span>
+          <input
+            type="text"
+            value={eq.nom}
+            aria-label={`Nom de l'équipe ${i + 1}`}
+            onChange={(e) => majEquipe(jeu, i, 'nom', e.target.value)}
+            className="min-w-0 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+          />
+          {CHAMPS_MOBA.map((c) => (
+            <input
+              key={c.cle}
+              type="number"
+              min={0}
+              inputMode="numeric"
+              value={eq[c.cle] ?? 0}
+              aria-label={`${c.long} — équipe ${i + 1}`}
+              title={c.long}
+              onChange={(e) => majEquipe(jeu, i, c.cle, nombre(e.target.value))}
+              className="w-full bg-slate-800 border border-slate-700 rounded px-1 py-1 text-xs text-white text-center"
+            />
+          ))}
+        </div>
+      ))}
+      <p className="text-[10px] text-slate-500 pt-1">
+        Les points se calculent seuls à partir du barème. Un nom laissé à « Équipe N » n'apparaît pas au classement.
+      </p>
+    </>
+  );
+
+  const renderRosterTps = (jeu: 'pubgm' | 'ff') => (
+    <>
+      <div className="grid grid-cols-[1.5rem_1fr_3.5rem_3rem] gap-1.5 text-[10px] font-mono text-slate-500 px-0.5">
+        <span />
+        <span>Nom du joueur</span>
+        <span className="text-center" title="Points cumulés">Pts</span>
+        <span className="text-center" title="Éliminations">Kills</span>
+      </div>
+      {formData.competition[jeu].roster.map((p, i) => (
+        <div key={p.id} className="grid grid-cols-[1.5rem_1fr_3.5rem_3rem] gap-1.5 items-center">
+          <span className="text-[10px] font-mono text-slate-500">#{i + 1}</span>
+          <input
+            type="text"
+            value={p.nom}
+            aria-label={`Nom du joueur ${i + 1}`}
+            onChange={(e) => majJoueur(jeu, i, 'nom', e.target.value)}
+            className="min-w-0 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+          />
+          <input
+            type="number"
+            min={0}
+            inputMode="numeric"
+            value={p.scoreTotal ?? 0}
+            aria-label={`Points cumulés — joueur ${i + 1}`}
+            onChange={(e) => majJoueur(jeu, i, 'scoreTotal', nombre(e.target.value))}
+            className="w-full bg-slate-800 border border-slate-700 rounded px-1 py-1 text-xs text-white text-center"
+          />
+          <input
+            type="number"
+            min={0}
+            inputMode="numeric"
+            value={p.kills ?? 0}
+            aria-label={`Éliminations — joueur ${i + 1}`}
+            onChange={(e) => majJoueur(jeu, i, 'kills', nombre(e.target.value))}
+            className="w-full bg-slate-800 border border-slate-700 rounded px-1 py-1 text-xs text-white text-center"
+          />
+        </div>
+      ))}
+      <p className="text-[10px] text-slate-500 pt-1">
+        Un nom laissé à « Joueur N » n'apparaît pas au classement.
+      </p>
+    </>
+  );
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-md">
       <div className="relative w-full max-w-6xl max-h-[95vh] bg-slate-900 border border-slate-750 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
@@ -1311,40 +1429,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
           {activeTab === 'moba' && (
             <div className="space-y-6">
               <p className="text-xs text-slate-400">
-                Édition des 16 équipes engagées dans Honor of Kings et Mobile Legends.
+                Équipes engagées et bilan de saison (V = séries gagnées, N = nulles, D = perdues, M+ / M− = manches gagnées / perdues). Ces chiffres remplissent les tableaux « Ranking ».
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 {/* HOK Teams */}
                 <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
                   <h4 className="font-display font-bold text-amber-400 text-sm">
                     Honor of Kings (16 Équipes)
                   </h4>
                   <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                    {formData.competition.hok.bracket.equipes.map((eq, i) => (
-                      <div key={eq.id} className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-slate-500 w-6">#{i + 1}</span>
-                        <input
-                          type="text"
-                          value={eq.nom}
-                          onChange={(e) => {
-                            const next = [...formData.competition.hok.bracket.equipes];
-                            next[i].nom = e.target.value;
-                            setFormData({
-                              ...formData,
-                              competition: {
-                                ...formData.competition,
-                                hok: {
-                                  ...formData.competition.hok,
-                                  bracket: { ...formData.competition.hok.bracket, equipes: next }
-                                }
-                              }
-                            });
-                          }}
-                          className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
-                        />
-                      </div>
-                    ))}
+                    {renderEquipesMoba('hok')}
                   </div>
                 </div>
 
@@ -1354,30 +1449,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     Mobile Legends (16 Équipes)
                   </h4>
                   <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                    {formData.competition.mlbb.bracket.equipes.map((eq, i) => (
-                      <div key={eq.id} className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-slate-500 w-6">#{i + 1}</span>
-                        <input
-                          type="text"
-                          value={eq.nom}
-                          onChange={(e) => {
-                            const next = [...formData.competition.mlbb.bracket.equipes];
-                            next[i].nom = e.target.value;
-                            setFormData({
-                              ...formData,
-                              competition: {
-                                ...formData.competition,
-                                mlbb: {
-                                  ...formData.competition.mlbb,
-                                  bracket: { ...formData.competition.mlbb.bracket, equipes: next }
-                                }
-                              }
-                            });
-                          }}
-                          className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
-                        />
-                      </div>
-                    ))}
+                    {renderEquipesMoba('mlbb')}
                   </div>
                 </div>
               </div>
@@ -1388,7 +1460,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
           {activeTab === 'tps' && (
             <div className="space-y-6">
               <p className="text-xs text-slate-400">
-                Édition des 32 compétiteurs en Battle Royale pour PUBG Mobile et Free Fire.
+                Les 32 compétiteurs Battle Royale de PUBG Mobile et Free Fire, avec leurs points cumulés et leurs éliminations.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -1398,27 +1470,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     PUBG Mobile (32 Compétiteurs)
                   </h4>
                   <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                    {formData.competition.pubgm.roster.slice(0, 16).map((p, i) => (
-                      <div key={p.id} className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-slate-500 w-6">#{i + 1}</span>
-                        <input
-                          type="text"
-                          value={p.nom}
-                          onChange={(e) => {
-                            const next = [...formData.competition.pubgm.roster];
-                            next[i].nom = e.target.value;
-                            setFormData({
-                              ...formData,
-                              competition: {
-                                ...formData.competition,
-                                pubgm: { ...formData.competition.pubgm, roster: next }
-                              }
-                            });
-                          }}
-                          className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
-                        />
-                      </div>
-                    ))}
+                    {renderRosterTps('pubgm')}
                   </div>
                 </div>
 
@@ -1428,27 +1480,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     Free Fire (32 Compétiteurs)
                   </h4>
                   <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                    {formData.competition.ff.roster.slice(0, 16).map((p, i) => (
-                      <div key={p.id} className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-slate-500 w-6">#{i + 1}</span>
-                        <input
-                          type="text"
-                          value={p.nom}
-                          onChange={(e) => {
-                            const next = [...formData.competition.ff.roster];
-                            next[i].nom = e.target.value;
-                            setFormData({
-                              ...formData,
-                              competition: {
-                                ...formData.competition,
-                                ff: { ...formData.competition.ff, roster: next }
-                              }
-                            });
-                          }}
-                          className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
-                        />
-                      </div>
-                    ))}
+                    {renderRosterTps('ff')}
                   </div>
                 </div>
               </div>

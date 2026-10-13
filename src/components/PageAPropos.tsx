@@ -1,0 +1,260 @@
+import React from 'react';
+import { ELCData } from '../types';
+import { Section } from '../lib/routes';
+import { urlSure } from '../lib/urls';
+import { contenuDe } from '../data/contenu';
+import {
+  Conteneur,
+  EnTetePage,
+  BandePlanete,
+  Carte,
+  TitreCarte,
+  TitreSection,
+  LienPage,
+  initiales,
+} from './ui';
+import { reseauxRenseignes } from './ReseauxSociaux';
+import { CarteFaitMarquant } from './CarteFaitMarquant';
+
+interface PageAProposProps {
+  data: ELCData;
+  onNaviguer: (section: Section, jeu?: string) => void;
+}
+
+export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) => {
+  const { apropos, faitMarquant } = contenuDe(data);
+  const email = data.meta.contact?.email;
+  const reseaux = reseauxRenseignes(data.meta.reseaux);
+
+  return (
+    <>
+      <EnTetePage>
+        <Conteneur>
+          <h1 className="titre max-w-3xl text-[2.1rem] sm:text-5xl lg:text-[3.4rem]">
+            Ligue régionale d'esport de l'Est Cameroun
+            <span className="mt-2 block">ELC — East League of Cameroun</span>
+          </h1>
+          <p className="mt-6 text-lg font-semibold italic text-white sm:text-xl">
+            Délégation Régionale de l'Est, FECASES
+          </p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <LienPage section="classements" onNaviguer={onNaviguer} bouton="plein" className="uppercase tracking-[0.12em]">
+              Voir les classements
+            </LienPage>
+            <LienPage section="contact" onNaviguer={onNaviguer} bouton="contour" className="uppercase tracking-[0.12em]">
+              Nous contacter
+            </LienPage>
+          </div>
+        </Conteneur>
+      </EnTetePage>
+
+      {/* ---------- Qui nous sommes ---------- */}
+      <BandePlanete className="py-14 sm:py-16">
+        <Conteneur>
+          <TitreSection surtitre="Qui nous sommes" titre={apropos.accroche} className="mb-8">
+            {apropos.presentation}
+          </TitreSection>
+          <ul className="grid gap-5 md:grid-cols-3">
+            {apropos.piliers.map((p) => (
+              <li key={p.titre}>
+                <Carte className="h-full p-6">
+                  <TitreCarte className="mb-4">{p.titre}</TitreCarte>
+                  <p className="leading-relaxed text-texte">{p.texte}</p>
+                </Carte>
+              </li>
+            ))}
+          </ul>
+        </Conteneur>
+      </BandePlanete>
+
+      {/* ---------- Ce que nous faisons ---------- */}
+      <section className="py-14 sm:py-16">
+        <Conteneur>
+          <TitreSection surtitre="Ce que nous faisons" titre="Compétitions, diffusion et suivi des résultats." className="mb-8" />
+          <ul className="grid gap-5 md:grid-cols-3">
+            {apropos.activites.map((a) => (
+              <li key={a.titre}>
+                <Carte className="h-full p-6">
+                  <TitreCarte className="mb-4">{a.titre}</TitreCarte>
+                  <p className="leading-relaxed text-texte">{a.texte}</p>
+                </Carte>
+              </li>
+            ))}
+          </ul>
+          <Carte className="mt-5 p-6">
+            <TitreCarte className="mb-4">{apropos.competition.titre}</TitreCarte>
+            <p className="leading-relaxed text-texte">{apropos.competition.texte}</p>
+            {apropos.competition.projet && <p className="mt-4 text-sm leading-relaxed text-doux">{apropos.competition.projet}</p>}
+          </Carte>
+        </Conteneur>
+      </section>
+
+      {/* ---------- Bureau exécutif ---------- */}
+      <section className="py-14 sm:py-16" aria-labelledby="titre-bureau">
+        <Conteneur>
+          <TitreSection
+            id="titre-bureau"
+            surtitre="L'équipe / bureau exécutif"
+            titre="Des noms, des rôles, une même ambition."
+            className="mb-8"
+          >
+            Le bureau exécutif, selon la liste du {apropos.dateBureau}.
+          </TitreSection>
+          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {apropos.bureau.map((m) => (
+              <li key={m.nom}>
+                <Carte className="flex h-full flex-col p-5">
+                  {m.photo ? (
+                    <img
+                      src={urlSure(m.photo)}
+                      alt={`Portrait de ${m.nom}`}
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      className="mb-5 aspect-[4/3] w-full border border-bord object-cover object-top"
+                    />
+                  ) : (
+                    <div className="mb-5 flex items-center gap-4">
+                      <span
+                        aria-hidden="true"
+                        className="titre flex h-16 w-16 items-center justify-center border border-bord-fort bg-carte-haute text-2xl text-doux"
+                       
+                      >
+                        {initiales(m.nom)}
+                      </span>
+                      <span className="text-xs text-doux">Portrait non disponible</span>
+                    </div>
+                  )}
+                  <TitreCarte className="mb-auto">{m.nom}</TitreCarte>
+                  <p className="mt-5 font-extrabold italic uppercase text-magenta">{m.role}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-doux">
+                    {m.biographie || 'Biographie non disponible pour le moment.'}
+                  </p>
+                </Carte>
+              </li>
+            ))}
+          </ul>
+          <Carte className="mt-5 p-6">
+            <TitreCarte className="mb-4">{apropos.production.titre}</TitreCarte>
+            <p className="leading-relaxed text-texte">{apropos.production.texte}</p>
+          </Carte>
+        </Conteneur>
+      </section>
+
+      {/* ---------- Communauté et joueurs ---------- */}
+      <section className="py-14 sm:py-16">
+        <Conteneur>
+          <TitreSection
+            surtitre="Communauté et joueurs"
+            titre="Des équipes et des joueurs qui font vivre la compétition."
+            className="mb-8"
+          />
+          {apropos.equipes.length > 0 ? (
+            <>
+              <ul className="grid gap-5 md:grid-cols-3">
+                {apropos.equipes.map((e) => (
+                  <li key={e}>
+                    <Carte className="px-6 py-5">
+                      <p className="titre text-xl sm:text-2xl">{e}</p>
+                    </Carte>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-5">
+                <CarteFaitMarquant fait={faitMarquant} compact />
+              </div>
+            </>
+          ) : (
+            <Carte className="px-6 py-12 text-center sm:px-16">
+              <p className="mb-5 flex items-center justify-center gap-3 text-2xl font-extrabold italic text-magenta">
+                <span aria-hidden="true" className="h-0.5 w-10 bg-magenta" />
+                ELC
+                <span aria-hidden="true" className="h-0.5 w-10 bg-magenta" />
+              </p>
+              <TitreCarte className="mb-5 text-2xl sm:text-[1.7rem]">Aucune présentation disponible pour le moment.</TitreCarte>
+              <p className="mx-auto mb-7 max-w-2xl leading-relaxed text-texte">
+                Les présentations de la communauté et des partenaires locaux ne sont pas encore disponibles à la
+                publication. Pour échanger avec la ligue, contactez-nous.
+              </p>
+              <LienPage section="contact" onNaviguer={onNaviguer} bouton="plein">
+                Nous contacter
+              </LienPage>
+            </Carte>
+          )}
+        </Conteneur>
+      </section>
+
+      {/* ---------- Partenaires ---------- */}
+      <section className="py-14 sm:py-16">
+        <Conteneur>
+          <TitreSection
+            surtitre="Partenaires et soutiens"
+            titre="Affiliation institutionnelle et partenaires locaux."
+            className="mb-8"
+          />
+          <ul className="grid gap-5 md:grid-cols-3">
+            {apropos.partenaires.map((p, i) => (
+              <li key={p.titre}>
+                <Carte haute={i === apropos.partenaires.length - 1} className="h-full p-6">
+                  <TitreCarte className="mb-4">{p.titre}</TitreCarte>
+                  <p className="leading-relaxed text-texte">{p.texte}</p>
+                </Carte>
+              </li>
+            ))}
+          </ul>
+        </Conteneur>
+      </section>
+
+      {/* ---------- Contact et réseaux ---------- */}
+      <section className="pb-20 pt-14 sm:pt-16">
+        <Conteneur>
+          <TitreSection surtitre="Contact et réseaux" titre="Bertoua, Est Cameroun." className="mb-8" />
+          <div className="grid gap-5 md:grid-cols-2">
+            <Carte className="p-6">
+              <p className="mb-2 font-extrabold italic uppercase text-magenta">Email officiel</p>
+              {email ? (
+                <a href={`mailto:${email}`} className="inline-block break-all py-1.5 text-white underline decoration-magenta/60 underline-offset-4 hover:decoration-magenta">
+                  {email}
+                </a>
+              ) : (
+                <p className="text-texte">À fournir</p>
+              )}
+            </Carte>
+            <Carte className="p-6">
+              <p className="mb-2 font-extrabold italic uppercase text-magenta">Réseaux</p>
+              {reseaux.length > 0 ? (
+                <ul className="flex flex-wrap gap-x-4 gap-y-1">
+                  {reseaux.map((r) => (
+                    <li key={r.cle}>
+                      <a
+                        href={urlSure(data.meta.reseaux[r.cle] ?? '')}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block py-1.5 text-white underline decoration-magenta/60 underline-offset-4 hover:decoration-magenta"
+                      >
+                        {r.nom}
+                        <span className="sr-only"> (nouvel onglet)</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-texte">YouTube, TikTok, Facebook, WhatsApp : liens à fournir</p>
+              )}
+            </Carte>
+          </div>
+          <Carte haute className="mt-5 flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <TitreCarte className="mb-2">Formulaire de contact</TitreCarte>
+              <p className="text-texte">Une question ou une envie de collaboration ? Écrivez-nous.</p>
+            </div>
+            <LienPage section="contact" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">
+              Formulaire de contact
+            </LienPage>
+          </Carte>
+        </Conteneur>
+      </section>
+    </>
+  );
+};
+
+export default PageAPropos;

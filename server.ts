@@ -93,6 +93,27 @@ async function startServer() {
     }
   });
 
+  // Formulaire de contact. En production, api/contact.ts enregistre dans
+  // Supabase ; ici, les messages s'ajoutent à data/messages-contact.json,
+  // ignoré par git. `?echec=1` dans l'URL de la page simule une panne.
+  app.post('/api/contact', (req, res) => {
+    const { nom, email, message, site } = req.body || {};
+    if (typeof site === 'string' && site.trim()) return res.json({ ok: true });
+    const valide = (v: unknown, max: number) => typeof v === 'string' && v.trim().length > 0 && v.trim().length <= max;
+    if (!valide(nom, 120) || !valide(email, 200) || !valide(message, 4000) || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+      return res.status(400).json({ error: 'Nom, email valide et message sont requis.' });
+    }
+    if (String(req.get('referer') || '').includes('echec=1')) {
+      return res.status(502).json({ error: 'Échec simulé.' });
+    }
+    const fichier = path.join(DATA_DIR, 'messages-contact.json');
+    const messages = fs.existsSync(fichier) ? JSON.parse(fs.readFileSync(fichier, 'utf-8')) : [];
+    messages.push({ cree_le: new Date().toISOString(), nom: nom.trim(), email: email.trim(), message: message.trim() });
+    fs.writeFileSync(fichier, JSON.stringify(messages, null, 2), 'utf-8');
+    // Laisse le temps de voir l'état « envoi en cours » en local.
+    setTimeout(() => res.status(201).json({ ok: true }), 900);
+  });
+
   // Photo upload
   const PHOTOS_DIR = path.join(DATA_DIR, 'photos');
   if (!fs.existsSync(PHOTOS_DIR)) {

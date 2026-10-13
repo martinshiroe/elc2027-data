@@ -1,176 +1,188 @@
-import React, { useState, useEffect } from 'react';
-import { remonter } from '../lib/scroll';
-import { Menu, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { X } from 'lucide-react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
-import { LienSection } from './LienSection';
+import { LienPage } from './ui';
+import { ReseauxSociaux } from './ReseauxSociaux';
 
 interface HeaderProps {
   data: ELCData;
-  activeSection: string;
-  setActiveSection: (sec: Section) => void;
-  onOpenRegister?: () => void;
-  onOpenRegulations?: () => void;
-  onOpenDataModal?: () => void;
-  onOpenAdmin?: () => void;
+  activeSection: Section;
+  onNaviguer: (section: Section, jeu?: string) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  data,
-  activeSection,
-  setActiveSection,
-  onOpenRegister,
-}) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+// Les quatre entrées de la maquette. « Saison news » couvre aussi les rankings
+// et le Hall of Fame, qui sont ses onglets.
+const PRINCIPALES: { label: string; id: Section; actifSur: Section[] }[] = [
+  { label: 'Home', id: 'accueil', actifSur: ['accueil'] },
+  { label: 'About us', id: 'apropos', actifSur: ['apropos', 'contact'] },
+  { label: 'Saison news', id: 'saison', actifSur: ['saison', 'classements', 'pantheon'] },
+  { label: 'Calendrier', id: 'competition', actifSur: ['competition'] },
+];
 
-  const navItems: { label: string; id: Section }[] = [
-    { label: 'Compétition', id: 'competition' },
-    { label: 'Classements', id: 'classements' },
-    { label: 'Joueurs', id: 'joueurs' },
-    { label: 'Panthéon', id: 'pantheon' },
-    { label: 'Vidéos', id: 'videos' },
-    { label: 'Inscription', id: 'inscription' },
-  ];
+// Le menu complet, derrière le bouton rose : toutes les pages du site, y
+// compris celles que la maquette ne place pas dans la barre.
+const MENU: { label: string; id: Section }[] = [
+  { label: 'Accueil', id: 'accueil' },
+  { label: 'À propos', id: 'apropos' },
+  { label: 'Saison news', id: 'saison' },
+  { label: 'Calendrier', id: 'competition' },
+  { label: 'Rankings', id: 'classements' },
+  { label: 'Hall of Fame', id: 'pantheon' },
+  { label: 'Joueurs', id: 'joueurs' },
+  { label: 'Vidéos', id: 'videos' },
+  { label: 'Inscription', id: 'inscription' },
+  { label: 'Contact', id: 'contact' },
+];
 
-  // Échap ferme le menu mobile : il couvre l'écran, il faut pouvoir en
-  // sortir sans viser la croix.
+export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer }) => {
+  const [menuOuvert, setMenuOuvert] = useState(false);
+  const boutonMenu = useRef<HTMLButtonElement>(null);
+  const panneau = useRef<HTMLDivElement>(null);
+
+  // Menu plein écran : Échap le ferme, le focus y entre à l'ouverture et
+  // revient au bouton à la fermeture, la page derrière ne défile plus.
   useEffect(() => {
-    if (!mobileMenuOpen) return;
+    if (!menuOuvert) return;
     const auClavier = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMobileMenuOpen(false);
+      if (e.key === 'Escape') setMenuOuvert(false);
+      if (e.key === 'Tab' && panneau.current) {
+        const focusables = panneau.current.querySelectorAll<HTMLElement>('a, button');
+        const premier = focusables[0];
+        const dernier = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === premier) {
+          e.preventDefault();
+          dernier.focus();
+        } else if (!e.shiftKey && document.activeElement === dernier) {
+          e.preventDefault();
+          premier.focus();
+        }
+      }
     };
     document.addEventListener('keydown', auClavier);
-    return () => document.removeEventListener('keydown', auClavier);
-  }, [mobileMenuOpen]);
+    const debordement = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    panneau.current?.querySelector<HTMLElement>('a')?.focus();
+    const bouton = boutonMenu.current;
+    return () => {
+      document.removeEventListener('keydown', auClavier);
+      document.body.style.overflow = debordement;
+      bouton?.focus();
+    };
+  }, [menuOuvert]);
 
-  const handleNavClick = (id: Section) => {
-    setActiveSection(id);
-    setMobileMenuOpen(false);
-    remonter();
-  };
-
-  const handleRegister = (id: Section) => {
-    if (onOpenRegister) {
-      onOpenRegister();
-      setMobileMenuOpen(false);
-    } else {
-      handleNavClick(id);
-    }
+  const aller = (section: Section, jeu?: string) => {
+    setMenuOuvert(false);
+    onNaviguer(section, jeu);
   };
 
   return (
-    <header
-      id="elc-header"
-      className="sticky top-0 z-50 bg-[#0e0e0e] border-b border-white/[0.08]"
-      style={{ transition: 'background 0.2s' }}
-    >
-      <div className="max-w-[1280px] mx-auto px-7 h-[60px] flex items-center justify-between gap-2">
-        {/* Brand: Wordmark + 2027 */}
-        <LienSection
-          section="accueil"
-          onNaviguer={handleNavClick}
-          className="flex items-center gap-2 cursor-pointer mr-4"
-        >
+    <header id="elc-header" className="absolute inset-x-0 top-0 z-40">
+      <div className="mx-auto flex h-28 max-w-[1440px] items-start justify-between px-4 pt-4 sm:h-36 sm:px-8 sm:pt-6 lg:px-[6%]">
+        <LienPage section="accueil" onNaviguer={aller} aria-label="Ligue Esport Est Cameroun — accueil" className="shrink-0">
           <img
-            src="/img/logo-elc-wordmark.png"
-            alt="ELC"
-            /* `w-auto` laissait la largeur inconnue jusqu'au chargement : la
-               barre de navigation sautait. Les dimensions intrinsèques
-               donnent le ratio au navigateur, la classe garde la taille. */
-            width={480}
-            height={264}
-            className="h-[22px] w-auto shrink-0"
+            src="/img/logo-ligue-est.webp"
+            alt=""
+            width={282}
+            height={400}
+            className="h-20 w-auto drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)] sm:h-28"
           />
-          <span
-            className="font-medium text-[15px] text-[#14b8a6] tracking-[-0.2px] whitespace-nowrap"
-            style={{ fontFamily: "'Manrope', sans-serif" }}
-          >
-            {data.meta.saison || '2027'}
-          </span>
-        </LienSection>
+        </LienPage>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-0.5 flex-1 overflow-x-auto">
-          {navItems.map((item) => {
-            const isActive = activeSection === item.id;
-            return (
-              <LienSection
-                key={item.id}
-                section={item.id}
-                onNaviguer={handleNavClick}
-                aria-current={isActive ? 'page' : undefined}
-                className={`px-3.5 py-1.5 rounded-md text-[14px] whitespace-nowrap transition-colors cursor-pointer ${
-                  isActive
-                    ? 'text-white bg-white/[0.07]'
-                    : 'text-white/55 hover:text-white hover:bg-white/[0.03]'
-                }`}
-                style={{ fontFamily: "'Manrope', sans-serif" }}
-              >
-                {item.label}
-              </LienSection>
-            );
-          })}
-        </div>
+        <nav aria-label="Navigation principale" className="hidden flex-1 items-center pt-5 lg:flex">
+          <span aria-hidden="true" className="mx-6 h-0.5 flex-1 bg-rose/90" />
+          <ul className="flex items-center gap-2">
+            {PRINCIPALES.map((item) => {
+              const actif = item.actifSur.includes(activeSection);
+              return (
+                <li key={item.id}>
+                  <LienPage
+                    section={item.id}
+                    onNaviguer={aller}
+                    aria-current={activeSection === item.id ? 'page' : undefined}
+                    className={`relative isolate block px-7 py-2.5 text-[0.95rem] font-extrabold italic uppercase tracking-[0.2em] text-white transition-colors ${
+                      actif ? '' : 'hover:text-magenta'
+                    }`}
+                  >
+                    {actif && <span aria-hidden="true" className="biseau absolute inset-0 -z-10 bg-magenta-plein" />}
+                    {item.label}
+                  </LienPage>
+                </li>
+              );
+            })}
+          </ul>
+          <span aria-hidden="true" className="mx-6 h-0.5 flex-1 bg-rose/90" />
+        </nav>
 
-        {/* Right Button: S'inscrire */}
-        <div className="flex items-center gap-2">
-          {/* L'appel à l'action principal mène à une page du site : c'est un
-              lien, pas un bouton. Il devient partageable et ouvrable dans un
-              nouvel onglet, sans changer d'apparence. */}
-          <LienSection
-            section="inscription"
-            onNaviguer={handleRegister}
-            className="bg-[#14b8a6] hover:opacity-85 text-[#0e0e0e] px-4.5 py-1.5 rounded-md text-[13px] font-medium transition-opacity cursor-pointer whitespace-nowrap"
-            style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 500 }}
-          >
-            S'inscrire
-          </LienSection>
-
-          {/* Mobile menu toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-md text-white/70 hover:text-white hover:bg-white/[0.05] border-0 cursor-pointer"
-            aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="menu-mobile"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
+        <button
+          ref={boutonMenu}
+          type="button"
+          onClick={() => setMenuOuvert(true)}
+          aria-label="Ouvrir le menu"
+          aria-expanded={menuOuvert}
+          aria-controls="menu-complet"
+          className="mt-3 flex h-12 w-12 shrink-0 cursor-pointer flex-col items-end justify-center gap-[5px] bg-fuchsia px-3 transition-transform hover:scale-105 sm:mt-4 sm:h-[52px] sm:w-[52px]"
+        >
+          <span className="block h-[3px] w-6 bg-white" />
+          <span className="block h-[3px] w-4 bg-white" />
+          <span className="block h-[3px] w-6 bg-white" />
+        </button>
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div id="menu-mobile" className="md:hidden bg-[#0e0e0e] border-b border-white/[0.08] px-6 py-4 space-y-2">
-          <LienSection
-            section="accueil"
-            onNaviguer={handleNavClick}
-            aria-current={activeSection === 'accueil' ? 'page' : undefined}
-            className={`block w-full text-left px-3 py-2.5 rounded-md text-sm cursor-pointer ${
-              activeSection === 'accueil'
-                ? 'text-white bg-white/[0.07]'
-                : 'text-white/60 hover:text-white'
-            }`}
-            style={{ fontFamily: "'Manrope', sans-serif" }}
-          >
-            Accueil
-          </LienSection>
-          {navItems.map((item) => (
-            <LienSection
-              key={item.id}
-              section={item.id}
-              onNaviguer={handleNavClick}
-              aria-current={activeSection === item.id ? 'page' : undefined}
-              className={`block w-full text-left px-3 py-2.5 rounded-md text-sm cursor-pointer ${
-                activeSection === item.id
-                  ? 'text-white bg-white/[0.07]'
-                  : 'text-white/60 hover:text-white'
-              }`}
-              style={{ fontFamily: "'Manrope', sans-serif" }}
-            >
-              {item.label}
-            </LienSection>
-          ))}
+      {menuOuvert && (
+        <div
+          ref={panneau}
+          id="menu-complet"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu du site"
+          className="fixed inset-0 z-50 overflow-y-auto bg-nuit/97 backdrop-blur-sm"
+        >
+          <div className="mx-auto flex min-h-full max-w-[1120px] flex-col px-5 py-6 sm:px-8">
+            <div className="flex items-center justify-between">
+              <img src="/img/logo-ligue-est.webp" alt="" width={282} height={400} className="h-16 w-auto" />
+              <button
+                type="button"
+                onClick={() => setMenuOuvert(false)}
+                aria-label="Fermer le menu"
+                className="flex h-12 w-12 cursor-pointer items-center justify-center bg-fuchsia text-white"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <nav aria-label="Toutes les pages" className="flex-1 py-10">
+              <ul className="grid gap-1 sm:grid-cols-2 sm:gap-x-10">
+                {MENU.map((item, i) => {
+                  const actif = activeSection === item.id;
+                  return (
+                    <li key={item.id}>
+                      <LienPage
+                        section={item.id}
+                        onNaviguer={aller}
+                        aria-current={actif ? 'page' : undefined}
+                        className={`group flex items-baseline gap-4 border-b border-bord py-4 transition-colors ${
+                          actif ? 'text-magenta' : 'text-white hover:text-magenta'
+                        }`}
+                      >
+                        <span className="w-8 text-sm font-bold italic text-doux">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="titre text-2xl text-inherit sm:text-3xl">
+                          {item.label}
+                        </span>
+                      </LienPage>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+
+            <div className="flex flex-col gap-6 border-t border-bord pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm font-extrabold italic uppercase tracking-[0.15em] text-white">
+                Ligue régionale d'esport de l'Est Cameroun
+              </p>
+              <ReseauxSociaux reseaux={data.meta.reseaux} />
+            </div>
+          </div>
         </div>
       )}
     </header>

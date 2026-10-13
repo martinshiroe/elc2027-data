@@ -1,22 +1,77 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Palette de la maquette « Ligue de l'Est » (Figma, octobre 2026).
+   Relevée dans l'export PDF : fonds violet nuit, bordures prune,
+   texte lavande, magenta pour l'action, rose pour les filets.
+   ------------------------------------------------------------------ */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --color-nuit: #0f0c1f;        /* fond de page */
+  --color-carte: #18152a;       /* cartes */
+  --color-carte-haute: #21182f; /* cartes mises en avant, formulaires */
+  --color-encre: #120f22;       /* champs de saisie */
+  --color-bord: #3d2f4b;        /* bordure des cartes */
+  --color-bord-fort: #563f5e;   /* bordure appuyée, séparateurs */
+  --color-bord-champ: #86689a;  /* contour des champs de saisie : 4:1, lisible */
+  --color-texte: #d8d1e2;       /* texte courant */
+  --color-doux: #aaa1bd;        /* texte secondaire */
+  --color-magenta: #e900fe;     /* accent : titres, liserés, filets */
+  /* Fond des boutons pleins. Le magenta de la maquette ne donne que 3,6:1
+     avec du texte blanc ; celui-ci atteint 4,7:1 (WCAG AA). */
+  --color-magenta-plein: #c800db;
+  --color-rose: #fb1b7a;        /* filets décoratifs */
+  --color-fuchsia: #fb1bbf;     /* bouton menu */
+  --color-alerte: #ff95b8;      /* erreurs */
+  --color-avis: #2f1338;        /* fond des bandeaux d'information */
+}
+
 @layer base {
   body {
-    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
-    background-color: #0e0e0e;
-    color: #ffffff;
-  }
-  
-  .font-audiowide {
-    font-family: 'Audiowide', system-ui, sans-serif;
+    font-family: var(--font-sans);
+    background-color: var(--color-nuit);
+    color: var(--color-texte);
+    -webkit-font-smoothing: antialiased;
   }
 
-  .font-mono {
-    font-family: 'Roboto Mono', monospace;
+  /* Blanc par défaut, dans la couche de base : une classe de couleur
+     (`text-magenta`, `text-doux`) posée à côté de `titre` l'emporte. */
+  .titre {
+    color: #ffffff;
   }
 }
 
-/* Custom scrollbar matching official ELC 2027 specs */
+/* Titres de la maquette : capitales grasses en italique, serrées. */
+@utility titre {
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+}
+
+/* Surtitre magenta au-dessus des titres de section. */
+@utility surtitre {
+  font-size: 0.75rem;
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-magenta);
+}
+
+/* Onglet actif du menu et bouton « S'inscrire » : un parallélogramme. */
+@utility biseau {
+  clip-path: polygon(14% 0, 100% 0, 86% 100%, 0 100%);
+}
+
+/* Cadre de la carte 404, coins coupés. */
+@utility coins-coupes {
+  clip-path: polygon(12% 0, 100% 0, 100% 86%, 88% 100%, 0 100%, 0 14%);
+}
+
+/* Barre de défilement discrète, aux couleurs du site. */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -25,11 +80,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: var(--color-bord-fort);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #14b8a6;
+  background: var(--color-magenta);
 }
 
 /* ------------------------------------------------------------------
@@ -37,22 +92,19 @@
    ------------------------------------------------------------------ */
 
 /* Anneau de focus clavier.
-   Une trentaine de `focus:outline-none` traînaient dans les composants :
-   la navigation au clavier se faisait à l'aveugle. Cette règle n'est
-   volontairement dans aucune couche CSS — en Tailwind v4 les utilitaires
+   Volontairement hors de toute couche CSS : en Tailwind v4 les utilitaires
    vivent dans `@layer utilities`, et du CSS hors couche l'emporte sur
-   n'importe quelle couche. Un seul endroit répare donc les trente. */
+   n'importe quelle couche. Un seul endroit couvre tous les `outline-none`. */
 :focus-visible {
-  outline: 2px solid #14b8a6;
+  outline: 2px solid var(--color-magenta);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* L'en-tête est collant sur 60px : sans cette marge, un élément rejoint
-   au clavier ou par ancre se retrouve caché dessous (WCAG 2.2 — Focus
-   Not Obscured). */
+/* Marge d'ancrage : un élément atteint au clavier ou par ancre ne doit pas
+   se retrouver collé au bord supérieur (WCAG 2.2 — Focus Not Obscured). */
 html {
-  scroll-padding-top: 76px;
+  scroll-padding-top: 24px;
 }
 
 /* Respect du réglage système « réduire les animations ». */

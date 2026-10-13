@@ -48,12 +48,12 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-nuit/85 backdrop-blur-md"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-750 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+      <div className="relative w-full max-w-4xl max-h-[90vh] bg-carte-haute border border-bord-fort shadow-2xl flex flex-col overflow-hidden"
         ref={conteneur}
         role="dialog"
         aria-modal="true"
@@ -61,16 +61,16 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
         tabIndex={-1}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-850 bg-slate-950/60">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-bord-fort bg-encre">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <div className="w-9 h-9 rounded-xl bg-avis border border-bord-fort flex items-center justify-center text-magenta">
               <Database className="w-5 h-5" />
             </div>
             <div>
-              <h3 id="titre-donnees" className="font-display font-bold text-lg text-white">
+              <h3 id="titre-donnees" className="titre font-bold text-lg text-white">
                 Données Brutes & Structure ELC 2027
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-doux">
                 Fichier source : /data/elc2027-data.json
               </p>
             </div>
@@ -79,12 +79,12 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopy}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-carte hover:bg-avis text-texte text-xs font-semibold border border-bord-fort transition-colors cursor-pointer"
             >
               {copied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-400">Copié !</span>
+                  <Check className="w-3.5 h-3.5 text-magenta" />
+                  <span className="text-magenta">Copié !</span>
                 </>
               ) : (
                 <>
@@ -96,7 +96,7 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
 
             <button
               onClick={handleDownload}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-magenta-plein hover:bg-[#b000c2] text-white italic text-xs font-bold transition-colors cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Télécharger .json</span>
@@ -104,7 +104,7 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer ml-1"
+              className="p-1.5 rounded-lg text-doux hover:text-white hover:bg-carte transition-colors cursor-pointer ml-1"
             aria-label="Fermer"
             >
               <X className="w-5 h-5" />
@@ -113,22 +113,22 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
         </div>
 
         {/* Content - JSON Viewer */}
-        <div className="p-6 overflow-y-auto flex-1 bg-slate-950 font-mono text-xs">
-          <pre className="text-emerald-400/90 whitespace-pre-wrap leading-relaxed select-all">
+        <div className="p-6 overflow-y-auto flex-1 bg-nuit font-mono text-xs">
+          <pre className="text-magenta whitespace-pre-wrap leading-relaxed select-all">
             {jsonString}
           </pre>
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-slate-800 bg-slate-900 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2 text-slate-400">
-            <Code2 className="w-4 h-4 text-amber-400" />
+        <div className="px-6 py-3 border-t border-bord-fort bg-carte-haute flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2 text-doux">
+            <Code2 className="w-4 h-4 text-magenta" />
             <span>Format JSON standardisé · Compatible export et synchronisation</span>
           </div>
 
           <button
             onClick={onResetData}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs text-doux hover:text-white hover:bg-carte transition-colors cursor-pointer"
           >
             <RefreshCw className="w-3 h-3" />
             <span>Réinitialiser les données d'origine</span>

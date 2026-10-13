@@ -1,0 +1,150 @@
+import React from 'react';
+import { ELCData } from '../types';
+import { Section } from '../lib/routes';
+import { contenuDe } from '../data/contenu';
+import { Conteneur, Carte, TitreCarte, TitreSection, LienPage } from './ui';
+import { ReseauxSociaux } from './ReseauxSociaux';
+import { BlocDisciplines, BlocPhases, BlocVideos, BlocInscription, JEUX } from './Blocs';
+
+interface PageAccueilProps {
+  data: ELCData;
+  onNaviguer: (section: Section, jeu?: string) => void;
+}
+
+export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) => {
+  const { saison } = contenuDe(data);
+  const inscriptionOuverte = Boolean(data.meta.googleFormUrl);
+
+  return (
+    <>
+      {/* ---------- Héros plein écran (cadre « LIGUE DE L'EST SITE WEB ») ---------- */}
+      <section className="relative isolate flex min-h-[640px] flex-col overflow-hidden md:min-h-[100svh]" aria-labelledby="titre-accueil">
+        <div aria-hidden="true" className="absolute inset-0 -z-10">
+          <img
+            src="/img/hero-joueur.webp"
+            srcSet="/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w"
+            sizes="100vw"
+            alt=""
+            // React 18 ne connaît pas encore `fetchPriority` : attribut HTML brut.
+            {...{ fetchpriority: 'high' }}
+            className="h-full w-full object-cover object-[62%_center]"
+          />
+          {/* Voile léger : l'illustration reste vive, le texte reste lisible. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-nuit/70 via-nuit/20 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-nuit to-transparent" />
+        </div>
+
+        {/* Filets roses verticaux de la maquette */}
+        <span aria-hidden="true" className="pointer-events-none absolute left-[6.5%] top-36 bottom-[22%] hidden w-0.5 bg-rose/90 md:block" />
+        <span aria-hidden="true" className="pointer-events-none absolute right-[6.5%] top-36 bottom-[22%] hidden w-0.5 bg-rose/90 md:block" />
+
+        <div className="flex flex-1 items-center px-5 pt-32 pb-40 sm:px-[11.5%] md:pt-40">
+          <div className="max-w-md border border-white/10 bg-white/[0.07] px-8 py-9 text-center shadow-2xl backdrop-blur-md sm:px-12">
+            <h1 id="titre-accueil" className="titre text-[1.75rem] leading-[1.18] tracking-[0.04em] sm:text-[2rem]">
+              Affronte les meilleurs — sans compromis
+            </h1>
+            <p className="mx-auto mt-5 max-w-xs text-left text-lg font-medium italic leading-snug tracking-wide text-white">
+              Pour que l'esport rayonne dans toute la région de l'Est.
+            </p>
+            <p className="sr-only">
+              Ligue Régionale d'Esport de l'Est Cameroun — ELC, East League of Cameroon. Délégation régionale de la FECASES.
+            </p>
+          </div>
+        </div>
+
+        {/* Réseaux, à la verticale en bas à gauche */}
+        <ReseauxSociaux
+          reseaux={data.meta.reseaux}
+          vertical
+          className="absolute bottom-28 left-[5.2%] hidden md:flex"
+        />
+
+        {/* Disciplines, en bas à droite (logos s'ils sont fournis dans l'admin) */}
+        <ul className="absolute bottom-28 right-[5.5%] hidden flex-col items-end gap-2 md:flex" aria-label="Disciplines">
+          {JEUX.map((j) => {
+            const logo = data.competition?.[j.id]?.logoImage;
+            return (
+              <li key={j.id}>
+                {logo ? (
+                  <img src={logo} alt={j.nom} className="h-9 w-auto max-w-[140px] object-contain" />
+                ) : (
+                  <span className="text-sm font-extrabold italic uppercase tracking-wider text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                    {j.nom.replace(': Bang Bang', '')}
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* « S'inscrire » en biseau, entre deux filets */}
+        <div className="absolute inset-x-0 bottom-8 flex items-center px-5 sm:px-[13%]">
+          <span aria-hidden="true" className="h-0.5 flex-1 bg-magenta/90" />
+          <LienPage
+            section={inscriptionOuverte ? 'inscription' : 'contact'}
+            onNaviguer={onNaviguer}
+            className="relative isolate mx-2 px-14 py-4 text-lg font-extrabold italic uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03] sm:px-20"
+          >
+            <span aria-hidden="true" className="biseau absolute inset-0 -z-10 bg-magenta-plein" />
+            {inscriptionOuverte ? "S'inscrire" : 'Nous rejoindre'}
+          </LienPage>
+          <span aria-hidden="true" className="h-0.5 flex-1 bg-magenta/90" />
+        </div>
+      </section>
+
+      {/* ---------- Disciplines ---------- */}
+      <section className="py-16 sm:py-20">
+        <Conteneur>
+          <BlocDisciplines data={data} onNaviguer={onNaviguer} />
+        </Conteneur>
+      </section>
+
+      {/* ---------- Les nouvelles de la ligue ---------- */}
+      <section className="pb-16 sm:pb-20">
+        <Conteneur>
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <TitreSection surtitre="La vie de l'ELC" titre="Les nouvelles de la ligue." />
+            <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">
+              Saison news
+            </LienPage>
+          </div>
+          <ul className="grid gap-5 md:grid-cols-2">
+            {saison.actualites.slice(0, 2).map((a, i) => (
+              <li key={i}>
+                <Carte as="article" className="flex h-full flex-col p-7">
+                  <p className="surtitre mb-4 text-[0.7rem]">{a.rubrique}</p>
+                  <TitreCarte className="mb-4 text-xl sm:text-2xl">{a.titre}</TitreCarte>
+                  <p className="leading-relaxed text-texte">{a.texte}</p>
+                  {a.note && <p className="mt-6 border-t border-bord-fort pt-4 text-sm text-doux">{a.note}</p>}
+                </Carte>
+              </li>
+            ))}
+          </ul>
+        </Conteneur>
+      </section>
+
+      {/* ---------- Calendrier ---------- */}
+      <section className="pb-16 sm:pb-20">
+        <Conteneur>
+          <BlocPhases data={data} />
+          <div className="mt-8">
+            <LienPage section="competition" onNaviguer={onNaviguer} bouton="contour">
+              Tout le calendrier
+            </LienPage>
+          </div>
+        </Conteneur>
+      </section>
+
+      {/* ---------- Vidéos ---------- */}
+      <section className="pb-16 sm:pb-20">
+        <Conteneur>
+          <BlocVideos data={data} onNaviguer={onNaviguer} />
+        </Conteneur>
+      </section>
+
+      <BlocInscription data={data} onNaviguer={onNaviguer} />
+    </>
+  );
+};
+
+export default PageAccueil;
