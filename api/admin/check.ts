@@ -10,7 +10,15 @@ const ADMIN_KEY = process.env.ADMIN_KEY;
 // sans ADMIN_KEY côté serveur, aucun code n'est accepté.
 function verifyAdminKey(provided: string | undefined | null): boolean {
   if (!ADMIN_KEY || !provided) return false;
-  const a = Buffer.from(String(provided));
+  // Le portail envoie le code encodé (encodeURIComponent) ; un ancien
+  // onglet resté ouvert l'envoie brut. On décode quand c'est possible.
+  let cle = String(provided);
+  try {
+    cle = decodeURIComponent(cle);
+  } catch {
+    /* code brut */
+  }
+  const a = Buffer.from(cle);
   const b = Buffer.from(ADMIN_KEY);
   if (a.length !== b.length) return false;
   let diff = 0;
