@@ -9,3 +9,8 @@ vercel_data.json
 vercel_style.css
 data/admin-code.txt
 .DS_Store
+data/messages-contact.json
+data/photos/
+maquette/
+dev-dist/
+.claude/

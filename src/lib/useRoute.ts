@@ -18,6 +18,18 @@ export function useRoute(): {
   const [section, setSection] = useState<Section>(() =>
     typeof window === 'undefined' ? 'accueil' : sectionDepuisChemin(window.location.pathname)
   );
+
+  // Une ancienne adresse (`/pantheon`, `/competition`) affiche la bonne page :
+  // on remplace l'URL par l'adresse actuelle pour que le prochain partage
+  // diffuse la bonne. Rien à faire sur une page 404 : l'URL fautive reste
+  // visible, c'est elle que le visiteur doit pouvoir corriger.
+  useEffect(() => {
+    if (section === 'introuvable') return;
+    const canonique = cheminDe(section);
+    if (window.location.pathname.replace(/\/+$/, '') !== canonique.replace(/\/+$/, '')) {
+      window.history.replaceState({}, '', canonique + window.location.search + window.location.hash);
+    }
+  }, [section]);
   // Suivi séparément de la section : un Retour vers `/classements?jeu=pubgm`
   // doit restaurer l'onglet du jeu, pas seulement la vue.
   const [jeu, setJeu] = useState<Jeu | null>(() => jeuDepuisUrl());

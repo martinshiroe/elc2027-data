@@ -156,6 +156,12 @@ export interface ELCBracketTeam {
   nom: string;
   logo: string;
   score?: number;
+  /** Bilan de saison, saisi dans l'admin. Sert au tableau « Ranking ». */
+  victoires?: number;
+  defaites?: number;
+  nuls?: number;
+  manchesGagnees?: number;
+  manchesPerdues?: number;
 }
 
 export interface ELCMobaBracket {
@@ -257,7 +263,65 @@ export interface ELCPantheonData {
   curated: any[];
 }
 
+// --- Contenu éditorial des pages « À propos » et « Saison news » ----------
+//
+// Tout est facultatif : une valeur absente reprend le texte de la maquette
+// (src/data/contenu.ts). L'admin peut donc compléter page par page sans
+// devoir tout ressaisir.
+
+export interface ELCBlocTexte {
+  titre: string;
+  texte: string;
+}
+
+export interface ELCMembreBureau {
+  nom: string;
+  role: string;
+  photo?: string;
+  biographie?: string;
+}
+
+export interface ELCFaitMarquant {
+  /** Faux tant que l'accord de publication n'est pas obtenu. */
+  publie?: boolean;
+  nom: string;
+  surnom?: string;
+  distinction: string;
+  description: string;
+  photo?: string;
+  stats?: { valeur: string; legende: string }[];
+  source?: string;
+}
+
+export interface ELCActualite {
+  rubrique: string;
+  titre: string;
+  texte: string;
+  note?: string;
+}
+
+export interface ELCContenu {
+  apropos?: {
+    accroche?: string;
+    presentation?: string;
+    piliers?: ELCBlocTexte[];
+    activites?: ELCBlocTexte[];
+    competition?: { titre: string; texte: string; projet?: string };
+    dateBureau?: string;
+    bureau?: ELCMembreBureau[];
+    equipes?: string[];
+    production?: ELCBlocTexte;
+    partenaires?: ELCBlocTexte[];
+  };
+  saison?: {
+    chapitre?: { annee: string; statut: string; texte: string };
+    actualites?: ELCActualite[];
+  };
+  faitMarquant?: ELCFaitMarquant;
+}
+
 export interface ELCData {
+  contenu?: ELCContenu;
   meta: ELCMeta;
   visual1: ELCVisual1;
   visual2: ELCVisual2;

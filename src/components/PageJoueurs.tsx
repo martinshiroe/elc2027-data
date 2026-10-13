@@ -1,261 +1,185 @@
-import React, { useState } from 'react';
-import { Users, Search, ShieldCheck, User, Sparkles } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Search } from 'lucide-react';
 import { ELCData, ELCJoueurProfil } from '../types';
-import { GameBadgeLogo } from './GameLogos';
+import { Section } from '../lib/routes';
+import { urlSure } from '../lib/urls';
+import { Conteneur, EnTetePage, Carte, TitreCarte, LienPage, Pastille, initiales } from './ui';
 
 interface PageJoueursProps {
   data: ELCData;
-  onSelectGame?: (gameId: 'hok' | 'mlbb' | 'pubgm' | 'ff') => void;
+  onNaviguer: (section: Section, jeu?: string) => void;
 }
 
-export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onSelectGame }) => {
-  const [search, setSearch] = useState('');
-  const [filterGame, setFilterGame] = useState<string>('all');
+// Le champ `discipline` des fiches joueur est un libellé libre saisi dans
+// l'admin : on rapproche les variantes courantes du bon filtre.
+const FILTRES: { id: string; label: string; motifs: RegExp }[] = [
+  { id: 'tous', label: 'Tous', motifs: /.*/ },
+  { id: 'hok', label: 'Honor of Kings', motifs: /honor|hok/i },
+  { id: 'mlbb', label: 'Mobile Legends', motifs: /mobile legends|mlbb/i },
+  { id: 'pubgm', label: 'PUBG Mobile', motifs: /pubg/i },
+  { id: 'ff', label: 'Free Fire', motifs: /free ?fire|\bff\b/i },
+];
 
-  // Extract players strictly from explicit registered list (no mock/test players)
-  const allPlayers: ELCJoueurProfil[] = React.useMemo(() => {
-    const list: ELCJoueurProfil[] = [];
+export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) => {
+  const [recherche, setRecherche] = useState('');
+  const [filtre, setFiltre] = useState('tous');
 
-    if (data.joueurs && data.joueurs.length > 0) {
-      data.joueurs.forEach(j => {
-        list.push({
-          id: j.id || String(Math.random()),
-          pseudo: j.pseudo || j.nom || 'Joueur',
-          nomReel: j.nomReel,
-          discipline: j.discipline || 'Esport',
-          equipe: j.equipe,
-          role: j.role,
-          ville: j.ville,
-          photo: j.photo,
-          statut: j.statut || 'Inscrit',
-          kills: j.kills,
-          points: j.points
-        });
-      });
-    }
+  const joueurs: ELCJoueurProfil[] = useMemo(
+    () =>
+      (data.joueurs ?? []).map((j, i) => ({
+        id: j.id || `joueur-${i}`,
+        pseudo: j.pseudo || j.nom || 'Joueur',
+        nomReel: j.nomReel,
+        discipline: j.discipline || 'Esport',
+        equipe: j.equipe,
+        role: j.role,
+        ville: j.ville,
+        photo: j.photo,
+        statut: j.statut || 'Inscrit',
+        kills: j.kills,
+        points: j.points,
+      })),
+    [data.joueurs]
+  );
 
-    return list;
-  }, [data]);
-
-  const filteredList = allPlayers.filter(p => {
-    const matchesSearch =
-      p.pseudo.toLowerCase().includes(search.toLowerCase()) ||
-      (p.equipe && p.equipe.toLowerCase().includes(search.toLowerCase())) ||
-      (p.discipline && p.discipline.toLowerCase().includes(search.toLowerCase()));
-
-    const matchesGame =
-      filterGame === 'all' ||
-      (filterGame === 'hok' && p.discipline === 'Honor of Kings') ||
-      (filterGame === 'mlbb' && p.discipline === 'Mobile Legends') ||
-      (filterGame === 'pubgm' && p.discipline === 'PUBG Mobile') ||
-      (filterGame === 'ff' && p.discipline === 'Free Fire');
-
-    return matchesSearch && matchesGame;
-  });
+  const q = recherche.trim().toLowerCase();
+  const motif = FILTRES.find((f) => f.id === filtre)!.motifs;
+  const affiches = joueurs.filter(
+    (p) =>
+      motif.test(p.discipline) &&
+      (!q || [p.pseudo, p.equipe, p.discipline, p.nomReel].some((v) => v?.toLowerCase().includes(q)))
+  );
 
   return (
-    <div id="page-joueurs" className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-        <div>
-          <div className="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 tracking-wider uppercase mb-2">
-            <Users className="w-4 h-4" />
-            <span>ANNUAIRE DES COMPÉTITEURS</span>
-          </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Joueurs & Rosters ELC 2027
+    <>
+      <EnTetePage>
+        <Conteneur>
+          <p className="surtitre mb-4">Communauté et joueurs</p>
+          <h1 className="titre text-[2.3rem] sm:text-5xl lg:text-[3.6rem]">
+            Les joueurs
+            <span className="block">qui font la ligue.</span>
           </h1>
-        </div>
-        <p className="text-xs sm:text-sm text-slate-400 max-w-md">
-          Retrouvez l'ensemble des joueurs et équipes officiellement engagés dans les 4 disciplines de la Ligue Esport Est Cameroun.
-        </p>
-      </div>
-
-      {/* Filter and Search Bar */}
-      <div className="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
-          <button
-            onClick={() => setFilterGame('all')}
-            className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-              filterGame === 'all'
-                ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-950/40'
-                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
-            }`}
-          >
-            Tous ({allPlayers.length})
-          </button>
-
-          <button
-            onClick={() => setFilterGame('hok')}
-            title="Honor of Kings"
-            className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all cursor-pointer ${
-              filterGame === 'hok'
-                ? 'bg-amber-500/20 border-2 border-amber-500 shadow-md shadow-amber-950/40'
-                : 'bg-slate-800/80 border border-slate-700/70 hover:border-slate-500 hover:bg-slate-700/80'
-            }`}
-          >
-            <img
-              src={data.competition?.hok?.logoImage || '/img/logo-hok.svg'}
-              alt="Honor of Kings"
-              className="h-6 sm:h-7 w-auto object-contain"
-            />
-          </button>
-
-          <button
-            onClick={() => setFilterGame('mlbb')}
-            title="Mobile Legends: Bang Bang"
-            className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all cursor-pointer ${
-              filterGame === 'mlbb'
-                ? 'bg-blue-500/20 border-2 border-blue-500 shadow-md shadow-blue-950/40'
-                : 'bg-slate-800/80 border border-slate-700/70 hover:border-slate-500 hover:bg-slate-700/80'
-            }`}
-          >
-            <img
-              src={data.competition?.mlbb?.logoImage || '/img/logo-mlbb.svg'}
-              alt="Mobile Legends: Bang Bang"
-              className="h-6 sm:h-7 w-auto object-contain"
-            />
-          </button>
-
-          <button
-            onClick={() => setFilterGame('pubgm')}
-            title="PUBG Mobile"
-            className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all cursor-pointer ${
-              filterGame === 'pubgm'
-                ? 'bg-emerald-500/20 border-2 border-emerald-500 shadow-md shadow-emerald-950/40'
-                : 'bg-slate-800/80 border border-slate-700/70 hover:border-slate-500 hover:bg-slate-700/80'
-            }`}
-          >
-            <img
-              src={data.competition?.pubgm?.logoImage || '/img/logo-pubgm.svg'}
-              alt="PUBG Mobile"
-              className="h-6 sm:h-7 w-auto object-contain"
-            />
-          </button>
-
-          <button
-            onClick={() => setFilterGame('ff')}
-            title="Free Fire"
-            className={`flex items-center justify-center px-4 py-2 rounded-xl transition-all cursor-pointer ${
-              filterGame === 'ff'
-                ? 'bg-orange-500/20 border-2 border-orange-500 shadow-md shadow-orange-950/40'
-                : 'bg-slate-800/80 border border-slate-700/70 hover:border-slate-500 hover:bg-slate-700/80'
-            }`}
-          >
-            <img
-              src={data.competition?.ff?.logoImage || '/img/logo-ff.svg'}
-              alt="Free Fire"
-              className="h-6 sm:h-7 w-auto object-contain"
-            />
-          </button>
-        </div>
-
-        <div className="relative w-full md:w-72">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Rechercher par pseudo ou équipe..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
-          />
-        </div>
-      </div>
-
-      {/* Players Grid or Empty Professional State */}
-      {filteredList.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {filteredList.map((player) => (
-            <div
-              key={player.id}
-              className="bg-slate-900/80 border border-slate-800 hover:border-emerald-500/40 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700">
-                    {player.discipline}
-                  </span>
-                  <span className="text-[10px] font-semibold text-emerald-400">
-                    {player.statut}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 overflow-hidden shrink-0 group-hover:border-emerald-500/40 transition-colors">
-                    {player.photo ? (
-                      <img
-                        src={player.photo}
-                        alt={player.pseudo}
-                        className="w-full h-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <User className="w-6 h-6 text-slate-500" />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-display font-bold text-base text-white truncate group-hover:text-emerald-300 transition-colors">
-                      {player.pseudo}
-                    </h3>
-                    <p className="text-xs text-slate-400 truncate">
-                      {player.equipe || player.role || 'Compétiteur'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-slate-800/80 space-y-1 text-xs">
-                  {player.points !== undefined && (
-                    <div className="flex justify-between text-slate-400">
-                      <span>Points ELC :</span>
-                      <span className="font-mono font-bold text-emerald-400">
-                        {player.points} pts
-                      </span>
-                    </div>
-                  )}
-                  {player.kills !== undefined && (
-                    <div className="flex justify-between text-slate-400">
-                      <span>Kills / Éliminations :</span>
-                      <span className="font-mono text-amber-300">
-                        {player.kills}
-                      </span>
-                    </div>
-                  )}
-                  {player.ville && (
-                    <div className="flex justify-between text-slate-400">
-                      <span>Zone :</span>
-                      <span className="text-slate-300">{player.ville}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
-                <span className="flex items-center gap-1 text-emerald-500">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  Homologué
-                </span>
-                <span className="font-mono text-[10px]">ID: {player.id.slice(0, 10)}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-20 bg-slate-900/60 rounded-3xl border border-dashed border-slate-800 max-w-2xl mx-auto px-6">
-          <div className="w-16 h-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center mx-auto mb-4">
-            <Sparkles className="w-8 h-8" />
-          </div>
-          <h3 className="font-display text-xl font-bold text-white mb-2">
-            Aucun compétiteur enregistré pour l'instant
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6">
-            La saison 2027 n'a pas encore débuté et les listes officielles des rosters et joueurs s'afficheront ici au fur et à mesure des validations par le comité de la ligue et la FECASES.
+          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-texte">
+            Les joueurs et les équipes engagés dans les disciplines de la ligue, validés par le comité de l'ELC et la
+            FECASES.
           </p>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700">
-            <span>Statut : Inscriptions ouvertes</span>
+        </Conteneur>
+      </EnTetePage>
+
+      <section className="pb-20">
+        <Conteneur>
+          <div className="mb-8 flex flex-col gap-4 border-b border-bord-fort pb-6 lg:flex-row lg:items-center lg:justify-between">
+            <div role="group" aria-label="Filtrer par discipline" className="-mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
+              {FILTRES.map((f) => {
+                const actif = filtre === f.id;
+                const nombre = f.id === 'tous' ? joueurs.length : joueurs.filter((p) => f.motifs.test(p.discipline)).length;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => setFiltre(f.id)}
+                    aria-pressed={actif}
+                    className={`shrink-0 cursor-pointer rounded-full border px-4 py-2 text-sm font-bold italic whitespace-nowrap transition-colors ${
+                      actif ? 'border-magenta-plein bg-magenta-plein text-white' : 'border-bord-fort text-doux hover:border-magenta hover:text-white'
+                    }`}
+                  >
+                    {f.label} <span className="font-normal opacity-80">({nombre})</span>
+                  </button>
+                );
+              })}
+            </div>
+            <label className="relative block w-full lg:w-72">
+              <span className="sr-only">Rechercher un joueur ou une équipe</span>
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-doux" aria-hidden="true" />
+              <input
+                type="search"
+                value={recherche}
+                onChange={(e) => setRecherche(e.target.value)}
+                placeholder="Pseudo ou équipe"
+                className="w-full border border-bord-champ bg-encre py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-doux focus:border-magenta focus:outline-none"
+              />
+            </label>
           </div>
-        </div>
-      )}
-    </div>
+
+          {affiches.length > 0 ? (
+            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {affiches.map((p) => (
+                <li key={p.id}>
+                  <Carte as="article" className="flex h-full flex-col p-5">
+                    <div className="mb-4 flex items-center justify-between gap-2">
+                      <Pastille>{p.discipline}</Pastille>
+                      <span className="text-xs font-bold italic text-magenta">{p.statut}</span>
+                    </div>
+                    <div className="mb-4 flex items-center gap-4">
+                      {p.photo ? (
+                        <img
+                          src={urlSure(p.photo)}
+                          alt=""
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          className="h-14 w-14 shrink-0 border border-bord-fort object-cover"
+                        />
+                      ) : (
+                        <span aria-hidden="true" className="titre flex h-14 w-14 shrink-0 items-center justify-center border border-bord-fort bg-carte-haute text-lg text-doux">
+                          {initiales(p.pseudo)}
+                        </span>
+                      )}
+                      <div className="min-w-0">
+                        <TitreCarte className="truncate text-lg">{p.pseudo}</TitreCarte>
+                        <p className="truncate text-sm text-doux">{p.equipe || p.role || 'Compétiteur'}</p>
+                      </div>
+                    </div>
+                    {(p.points !== undefined || p.kills !== undefined || p.ville) && (
+                      <dl className="mt-auto space-y-1.5 border-t border-bord pt-4 text-sm">
+                        {p.points !== undefined && (
+                          <div className="flex justify-between">
+                            <dt className="text-doux">Points ELC</dt>
+                            <dd className="font-bold text-magenta">{p.points}</dd>
+                          </div>
+                        )}
+                        {p.kills !== undefined && (
+                          <div className="flex justify-between">
+                            <dt className="text-doux">Éliminations</dt>
+                            <dd className="font-semibold text-white">{p.kills}</dd>
+                          </div>
+                        )}
+                        {p.ville && (
+                          <div className="flex justify-between">
+                            <dt className="text-doux">Zone</dt>
+                            <dd className="text-white">{p.ville}</dd>
+                          </div>
+                        )}
+                      </dl>
+                    )}
+                  </Carte>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <Carte className="px-6 py-14 text-center sm:px-16">
+              <TitreCarte className="mb-4 text-2xl">
+                {joueurs.length === 0 ? 'Aucun joueur publié pour le moment.' : 'Aucun joueur ne correspond.'}
+              </TitreCarte>
+              <p className="mx-auto mb-7 max-w-2xl leading-relaxed text-texte">
+                {joueurs.length === 0
+                  ? "Les listes officielles des joueurs et des équipes s'afficheront ici au fur et à mesure des validations par le comité de la ligue et la FECASES."
+                  : 'Essayez une autre discipline ou un autre nom.'}
+              </p>
+              {joueurs.length === 0 && (
+                <div className="flex flex-wrap justify-center gap-4">
+                  <LienPage section="inscription" onNaviguer={onNaviguer} bouton="plein">
+                    S'inscrire
+                  </LienPage>
+                  <LienPage section="apropos" onNaviguer={onNaviguer} bouton="contour">
+                    Les équipes de la communauté
+                  </LienPage>
+                </div>
+              )}
+            </Carte>
+          )}
+        </Conteneur>
+      </section>
+    </>
   );
 };
 
