@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
 
   return (
     <header id="elc-header" className="absolute inset-x-0 top-0 z-40">
-      <div className="mx-auto flex h-28 max-w-[1440px] items-start justify-between px-4 pt-4 sm:h-36 sm:px-8 sm:pt-6 lg:px-[6%]">
+      <div className="flex h-28 w-full items-start justify-between px-4 pt-4 sm:h-36 sm:px-8 sm:pt-6 lg:px-[5%]">
         <LienPage section="accueil" onNaviguer={aller} aria-label="Ligue Esport Est Cameroun — accueil" className="shrink-0">
           <img
             src="/img/logo-ligue-est.webp"
