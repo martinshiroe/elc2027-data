@@ -93,12 +93,12 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
           <div className="grid gap-10 lg:grid-cols-[1fr_330px] lg:items-start">
             <div>
               <p className="surtitre mb-4">Saison news · ELC — East League of Cameroun</p>
-              <h1 className="titre text-[2.3rem] sm:text-5xl lg:text-[3.6rem]">
+              <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
                 La scène de l'Est.
                 <span className="block">Toute une saison</span>
                 <span className="block">à construire.</span>
               </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-relaxed text-texte">
+              <p className="mt-7 max-w-2xl text-base leading-relaxed text-texte sm:text-lg">
                 Actualités de la ligue, classements par jeu et faits marquants : suivez l'ELC depuis Bertoua, au cœur de
                 l'Est Cameroun.
               </p>
@@ -111,16 +111,16 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
               <Trait className="mt-6" />
             </Carte>
           </div>
-          <div className="mt-12">
+          <div className="mt-8 sm:mt-12">
             <OngletsSaison actif="actualites" onNaviguer={onNaviguer} />
           </div>
         </Conteneur>
       </EnTetePage>
 
       {/* ---------- Repères ---------- */}
-      <section className="pb-14 sm:pb-16">
+      <section className="pb-10 sm:pb-16">
         <Conteneur>
-          <TitreSection surtitre="Les repères de la saison" titre="Quatre jeux. Des histoires à suivre." className="mb-8" />
+          <TitreSection surtitre="Les repères de la saison" titre="Quatre jeux. Des histoires à suivre." className="mb-6 sm:mb-8" />
           <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {reperes.map((r) => (
               <li key={r.titre}>
@@ -132,13 +132,13 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
       </section>
 
       {/* ---------- Nouvelles ---------- */}
-      <section className="py-14 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Conteneur>
-          <TitreSection surtitre="La vie de l'ELC" titre="Les nouvelles de la ligue." className="mb-8" />
+          <TitreSection surtitre="La vie de l'ELC" titre="Les nouvelles de la ligue." className="mb-6 sm:mb-8" />
           <ul className="grid gap-5 md:grid-cols-2">
             {saison.actualites.map((a, i) => (
               <li key={i}>
-                <Carte as="article" className="flex h-full flex-col p-7">
+                <Carte as="article" className="flex h-full flex-col p-5 sm:p-7">
                   <p className="surtitre mb-4 text-[0.7rem]">{a.rubrique}</p>
                   <TitreCarte className="mb-4 text-xl sm:text-2xl">{a.titre}</TitreCarte>
                   <p className="leading-relaxed text-texte">{a.texte}</p>
@@ -155,7 +155,7 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
       </section>
 
       {/* ---------- Communauté ---------- */}
-      <section className="pb-20 pt-6">
+      <section className="pb-14 pt-4 sm:pb-20 sm:pt-6">
         <Conteneur>
           <BandePlanete className="border border-bord-fort">
             <div className="p-7 sm:p-9">

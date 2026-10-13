@@ -74,8 +74,8 @@ export const CarteFaitMarquant: React.FC<{ fait: ELCFaitMarquant; compact?: bool
         )}
         <div className="flex-1">
           <p className="surtitre mb-4">{fait.distinction.split(',').reverse().map((s) => s.trim()).join(' · ')}</p>
-          <h3 className="titre text-3xl sm:text-4xl">{nomComplet}</h3>
-          <p className="mt-5 text-lg leading-relaxed text-texte">{fait.description}</p>
+          <h3 className="titre text-2xl sm:text-4xl">{nomComplet}</h3>
+          <p className="mt-5 text-base leading-relaxed text-texte sm:text-lg">{fait.description}</p>
           {fait.stats && fait.stats.length > 0 && (
             <dl className="mt-7 grid gap-6 sm:grid-cols-2">
               {fait.stats.map((s) => (

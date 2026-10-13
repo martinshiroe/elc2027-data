@@ -37,7 +37,14 @@ if (!ADMIN_KEY) {
 
 function verifyAdminKey(req: express.Request): boolean {
   const provided = req.get('x-admin-key') || (req.query.key as string);
-  return Boolean(provided && ADMIN_KEY && provided === ADMIN_KEY);
+  if (!provided || !ADMIN_KEY) return false;
+  let cle = provided;
+  try {
+    cle = decodeURIComponent(provided);
+  } catch {
+    /* code brut */
+  }
+  return cle === ADMIN_KEY;
 }
 
 async function startServer() {

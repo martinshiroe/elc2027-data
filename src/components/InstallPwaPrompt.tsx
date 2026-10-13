@@ -46,7 +46,7 @@ export const InstallPwaPrompt: React.FC = () => {
       <div className="flex items-center gap-2">
         <button
           onClick={handleInstallClick}
-          className="px-3 py-1.5 rounded-lg bg-magenta-plein text-white font-semibold text-xs hover:bg-[#b000c2] transition-colors cursor-pointer whitespace-nowrap"
+          className="px-3 py-1.5 rounded-lg bg-magenta-plein text-white font-semibold text-xs hover:bg-[#a3000a] transition-colors cursor-pointer whitespace-nowrap"
         >
           Installer
         </button>

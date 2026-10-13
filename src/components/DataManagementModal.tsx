@@ -96,7 +96,7 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
 
             <button
               onClick={handleDownload}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-magenta-plein hover:bg-[#b000c2] text-white italic text-xs font-bold transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-magenta-plein hover:bg-[#a3000a] text-white italic text-xs font-bold transition-colors cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Télécharger .json</span>

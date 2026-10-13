@@ -19,7 +19,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
   return (
     <>
       {/* ---------- Héros plein écran (cadre « LIGUE DE L'EST SITE WEB ») ---------- */}
-      <section className="relative isolate flex min-h-[640px] flex-col overflow-hidden md:min-h-[100svh]" aria-labelledby="titre-accueil">
+      <section className="relative isolate flex min-h-[560px] flex-col overflow-hidden md:min-h-[100svh]" aria-labelledby="titre-accueil">
         <div aria-hidden="true" className="absolute inset-0 -z-10">
           <img
             src="/img/hero-joueur.webp"
@@ -40,12 +40,12 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         <span aria-hidden="true" className="pointer-events-none absolute left-[6.5%] top-36 bottom-[19rem] hidden w-0.5 bg-rose/90 md:block" />
         <span aria-hidden="true" className="pointer-events-none absolute right-[6.5%] top-36 bottom-[16rem] hidden w-0.5 bg-rose/90 md:block" />
 
-        <div className="flex flex-1 items-center px-5 pt-32 pb-40 sm:px-[11.5%] md:pt-40">
-          <div className="max-w-md border border-white/10 bg-white/[0.07] px-8 py-9 text-center shadow-2xl backdrop-blur-md sm:px-12">
-            <h1 id="titre-accueil" className="titre text-[1.75rem] leading-[1.18] tracking-[0.04em] sm:text-[2rem]">
+        <div className="flex flex-1 items-center px-5 pt-24 pb-32 sm:px-[11.5%] md:pt-40 md:pb-40">
+          <div className="max-w-md border border-white/10 bg-white/[0.07] px-6 py-7 text-center shadow-2xl backdrop-blur-md sm:px-12 sm:py-9">
+            <h1 id="titre-accueil" className="titre text-[1.4rem] leading-[1.18] tracking-[0.04em] sm:text-[2rem]">
               Affronte les meilleurs — sans compromis
             </h1>
-            <p className="mx-auto mt-5 max-w-xs text-left text-lg font-medium italic leading-snug tracking-wide text-white">
+            <p className="mx-auto mt-4 max-w-xs text-left text-base font-medium italic leading-snug tracking-wide text-white sm:mt-5 sm:text-lg">
               Pour que l'esport rayonne dans toute la région de l'Est.
             </p>
             <p className="sr-only">
@@ -90,12 +90,12 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         </ul>
 
         {/* « S'inscrire » en biseau, entre deux filets */}
-        <div className="absolute inset-x-0 bottom-8 flex items-center px-5 sm:px-[13%]">
+        <div className="absolute inset-x-0 bottom-6 flex items-center px-5 sm:bottom-8 sm:px-[13%]">
           <span aria-hidden="true" className="h-0.5 flex-1 bg-magenta/90" />
           <LienPage
             section={inscriptionOuverte ? 'inscription' : 'contact'}
             onNaviguer={onNaviguer}
-            className="relative isolate mx-2 px-14 py-4 text-lg font-extrabold italic uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03] sm:px-20"
+            className="relative isolate mx-2 px-10 py-3 text-base font-extrabold italic uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03] sm:px-20 sm:py-4 sm:text-lg"
           >
             <span aria-hidden="true" className="biseau absolute inset-0 -z-10 bg-magenta-plein" />
             {inscriptionOuverte ? "S'inscrire" : 'Nous rejoindre'}
@@ -105,14 +105,14 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Disciplines ---------- */}
-      <section className="py-16 sm:py-20">
+      <section className="py-12 sm:py-20">
         <Conteneur>
           <BlocDisciplines data={data} onNaviguer={onNaviguer} />
         </Conteneur>
       </section>
 
       {/* ---------- Les nouvelles de la ligue ---------- */}
-      <section className="pb-16 sm:pb-20">
+      <section className="pb-12 sm:pb-20">
         <Conteneur>
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <TitreSection surtitre="La vie de l'ELC" titre="Les nouvelles de la ligue." />
@@ -123,7 +123,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
           <ul className="grid gap-5 md:grid-cols-2">
             {saison.actualites.slice(0, 2).map((a, i) => (
               <li key={i}>
-                <Carte as="article" className="flex h-full flex-col p-7">
+                <Carte as="article" className="flex h-full flex-col p-5 sm:p-7">
                   <p className="surtitre mb-4 text-[0.7rem]">{a.rubrique}</p>
                   <TitreCarte className="mb-4 text-xl sm:text-2xl">{a.titre}</TitreCarte>
                   <p className="leading-relaxed text-texte">{a.texte}</p>
@@ -136,7 +136,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Calendrier ---------- */}
-      <section className="pb-16 sm:pb-20">
+      <section className="pb-12 sm:pb-20">
         <Conteneur>
           <BlocPhases data={data} />
           <div className="mt-8">
@@ -148,7 +148,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Vidéos ---------- */}
-      <section className="pb-16 sm:pb-20">
+      <section className="pb-12 sm:pb-20">
         <Conteneur>
           <BlocVideos data={data} onNaviguer={onNaviguer} />
         </Conteneur>

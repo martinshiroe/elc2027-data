@@ -79,11 +79,11 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data, onNaviguer }) => {
       <EnTetePage image={data.meta.videosBannerImage ? urlSure(data.meta.videosBannerImage) : undefined}>
         <Conteneur>
           <p className="surtitre mb-4">Diffusion · Vidéos officielles</p>
-          <h1 className="titre text-[2.3rem] sm:text-5xl lg:text-[3.6rem]">
+          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
             Le jeu en direct.
             <span className="block">Les moments forts.</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-texte">
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">
             Matchs en direct, highlights et clips de la ligue, publiés sur nos chaînes YouTube et TikTok.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
@@ -103,7 +103,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data, onNaviguer }) => {
         </Conteneur>
       </EnTetePage>
 
-      <section className="pb-20">
+      <section className="pb-14 sm:pb-20">
         <Conteneur>
           {videos.length === 0 ? (
             <Carte className="px-6 py-14 text-center sm:px-16">

@@ -55,18 +55,18 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
       <EnTetePage>
         <Conteneur>
           <p className="surtitre mb-4">Communauté et joueurs</p>
-          <h1 className="titre text-[2.3rem] sm:text-5xl lg:text-[3.6rem]">
+          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
             Les joueurs
             <span className="block">qui font la ligue.</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-texte">
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">
             Les joueurs et les équipes engagés dans les disciplines de la ligue, validés par le comité de l'ELC et la
             FECASES.
           </p>
         </Conteneur>
       </EnTetePage>
 
-      <section className="pb-20">
+      <section className="pb-14 sm:pb-20">
         <Conteneur>
           <div className="mb-8 flex flex-col gap-4 border-b border-bord-fort pb-6 lg:flex-row lg:items-center lg:justify-between">
             <div role="group" aria-label="Filtrer par discipline" className="-mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">

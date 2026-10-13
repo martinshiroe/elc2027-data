@@ -78,14 +78,14 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
 
   return (
     <header id="elc-header" className="absolute inset-x-0 top-0 z-40">
-      <div className="flex h-28 w-full items-start justify-between px-4 pt-4 sm:h-36 sm:px-8 sm:pt-6 lg:px-[5%]">
+      <div className="flex h-20 w-full items-start justify-between px-4 pt-3 sm:h-36 sm:px-8 sm:pt-6 lg:px-[5%]">
         <LienPage section="accueil" onNaviguer={aller} aria-label="Ligue Esport Est Cameroun — accueil" className="shrink-0">
           <img
             src="/img/logo-ligue-est.webp"
             alt=""
             width={282}
             height={400}
-            className="h-20 w-auto drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)] sm:h-28"
+            className="h-14 w-auto drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)] sm:h-28"
           />
         </LienPage>
 
@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
           aria-label="Ouvrir le menu"
           aria-expanded={menuOuvert}
           aria-controls="menu-complet"
-          className="mt-3 flex h-12 w-12 shrink-0 cursor-pointer flex-col items-end justify-center gap-[5px] bg-fuchsia px-3 transition-transform hover:scale-105 sm:mt-4 sm:h-[52px] sm:w-[52px]"
+          className="mt-1 flex h-11 w-11 shrink-0 cursor-pointer flex-col items-end justify-center gap-[5px] bg-fuchsia px-2.5 transition-transform hover:scale-105 sm:mt-4 sm:h-[52px] sm:w-[52px] sm:px-3"
         >
           <span className="block h-[3px] w-6 bg-white" />
           <span className="block h-[3px] w-4 bg-white" />

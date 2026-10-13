@@ -17,14 +17,15 @@
   --color-bord-champ: #86689a;  /* contour des champs de saisie : 4:1, lisible */
   --color-texte: #d8d1e2;       /* texte courant */
   --color-doux: #aaa1bd;        /* texte secondaire */
-  --color-magenta: #e900fe;     /* accent : titres, liserés, filets */
-  /* Fond des boutons pleins. Le magenta de la maquette ne donne que 3,6:1
-     avec du texte blanc ; celui-ci atteint 4,7:1 (WCAG AA). */
-  --color-magenta-plein: #c800db;
-  --color-rose: #fb1b7a;        /* filets décoratifs */
-  --color-fuchsia: #fb1bbf;     /* bouton menu */
+  /* Accent rouge, tiré du blason de la ligue. Le nom « magenta » reste celui
+     des classes (text-magenta, bg-magenta-plein…) : seule la teinte change. */
+  --color-magenta: #ff3b45;     /* accent : titres, liserés, filets (5:1 sur fond) */
+  /* Fond des boutons pleins : le rouge exact du blason, 6,3:1 avec du blanc. */
+  --color-magenta-plein: #c4000c;
+  --color-rose: #e0101c;        /* filets décoratifs */
+  --color-fuchsia: #c4000c;     /* bouton menu */
   --color-alerte: #ff95b8;      /* erreurs */
-  --color-avis: #2f1338;        /* fond des bandeaux d'information */
+  --color-avis: #34121a;        /* fond des bandeaux d'information */
 }
 
 @layer base {

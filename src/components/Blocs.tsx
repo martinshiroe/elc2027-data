@@ -30,7 +30,7 @@ export const BlocDisciplines: React.FC<{ data: ELCData; onNaviguer: Naviguer; ni
   const titres = data.visual1?.titres ?? [];
   return (
     <div>
-      <TitreSection niveau={niveau} surtitre="Les disciplines" titre="Quatre jeux. Une seule ligue." className="mb-8">
+      <TitreSection niveau={niveau} surtitre="Les disciplines" titre="Quatre jeux. Une seule ligue." className="mb-6 sm:mb-8">
         {data.visual2?.bandeauSousTitre}
       </TitreSection>
       <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -99,7 +99,7 @@ export const BlocPhases: React.FC<{ data: ELCData; niveau?: 2 | 3 }> = ({ data, 
         niveau={niveau}
         surtitre={v2.calendrierLabel || 'Calendrier prévisionnel'}
         titre={v2.calendrierPeriode || 'La saison'}
-        className="mb-8"
+        className="mb-6 sm:mb-8"
       />
       <ol className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         {v2.phases.map((phase, i) => {
@@ -211,7 +211,7 @@ export const BlocVideos: React.FC<{ data: ELCData; onNaviguer: Naviguer }> = ({ 
 export const BlocInscription: React.FC<{ data: ELCData; onNaviguer: Naviguer }> = ({ data, onNaviguer }) => {
   const ouvert = Boolean(data.meta.googleFormUrl);
   return (
-    <BandePlanete className="py-16 sm:py-20">
+    <BandePlanete className="py-12 sm:py-20">
       <Conteneur>
         <Carte haute className="bg-carte-haute/80 p-7 sm:p-10">
           <TitreSection

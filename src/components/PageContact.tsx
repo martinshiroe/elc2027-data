@@ -97,13 +97,13 @@ export const PageContact: React.FC<PageContactProps> = ({ data, onNaviguer }) =>
     <EnTetePage className="min-h-[80vh]">
       <Conteneur>
         <p className="surtitre mb-3">Contact et réseaux</p>
-        <h1 className="titre text-[2.1rem] sm:text-5xl">Bertoua, Est Cameroun.</h1>
+        <h1 className="titre text-[1.6rem] sm:text-5xl">Bertoua, Est Cameroun.</h1>
 
         <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,330px)_1fr] lg:gap-12">
           {/* ---------- Colonne de gauche ---------- */}
           <div>
             <h2 className="titre text-2xl">Échangeons.</h2>
-            <p className="mt-5 text-lg leading-relaxed text-texte">
+            <p className="mt-5 text-base leading-relaxed text-texte sm:text-lg">
               Une question ou une envie de collaboration ? Écrivez-nous via le formulaire.
             </p>
             <Trait className="my-6" />
@@ -160,7 +160,7 @@ export const PageContact: React.FC<PageContactProps> = ({ data, onNaviguer }) =>
                 <h2 ref={titreConfirmation} tabIndex={-1} className="titre text-2xl focus:outline-none sm:text-[1.9rem]">
                   Votre message a été envoyé.
                 </h2>
-                <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-texte">
+                <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-texte sm:text-lg">
                   Merci d'avoir contacté la ligue. Vous pouvez poursuivre votre visite ou écrire un nouveau message.
                 </p>
                 <Trait className="mx-auto my-7" />
@@ -183,7 +183,7 @@ export const PageContact: React.FC<PageContactProps> = ({ data, onNaviguer }) =>
                 {/* Bandeau d'état : erreurs, envoi en cours, échec. */}
                 <div ref={resume} tabIndex={-1} aria-live="polite" className="focus:outline-none">
                   {nbErreurs > 0 && etat === 'saisie' && (
-                    <div role="alert" className="mt-5 flex gap-4 border border-alerte bg-[#2a1630] px-5 py-4">
+                    <div role="alert" className="mt-5 flex gap-4 border border-alerte bg-[#2c1018] px-5 py-4">
                       <AlertCircle className="mt-0.5 h-6 w-6 shrink-0 text-alerte" aria-hidden="true" />
                       <div>
                         <p className="font-semibold text-alerte">
@@ -209,7 +209,7 @@ export const PageContact: React.FC<PageContactProps> = ({ data, onNaviguer }) =>
                     </div>
                   )}
                   {etat === 'echec' && (
-                    <div role="alert" className="mt-5 flex gap-4 border border-alerte bg-[#2a1630] px-5 py-4">
+                    <div role="alert" className="mt-5 flex gap-4 border border-alerte bg-[#2c1018] px-5 py-4">
                       <AlertCircle className="mt-0.5 h-6 w-6 shrink-0 text-alerte" aria-hidden="true" />
                       <div>
                         <p className="font-semibold text-alerte">Le message n'a pas été envoyé</p>

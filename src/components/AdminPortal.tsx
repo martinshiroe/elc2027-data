@@ -36,28 +36,44 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
   const [newVideoDescription, setNewVideoDescription] = useState('');
   const [newVideoFeatured, setNewVideoFeatured] = useState(false);
 
+  // Le code part encodé : un en-tête HTTP n'accepte que des caractères
+  // Latin-1, et le navigateur refusait d'envoyer la requête dès que le code
+  // contenait « € », « œ » ou un emoji — l'admin affichait alors « serveur
+  // injoignable » alors que rien n'avait été envoyé. Le serveur décode.
+  const enTeteCle = encodeURIComponent(adminKey);
+
   // Verify key against backend /api/admin/check
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError('');
     setIsVerifying(true);
 
+    let res: Response;
     try {
-      const res = await fetch('/api/admin/check', {
-        headers: { 'x-admin-key': adminKey }
+      res = await fetch('/api/admin/check', {
+        headers: { 'x-admin-key': enTeteCle }
       });
+    } catch {
+      setAuthError(
+        "Connexion au serveur impossible. Vérifiez votre connexion internet, puis réessayez depuis www.eastofcameroon.site (les aperçus Vercel protégés bloquent l'admin)."
+      );
+      setIsVerifying(false);
+      return;
+    }
+
+    try {
       const json = await res.json();
       if (res.ok && json.ok) {
         setIsAuthenticated(true);
       } else {
         setAuthError(json.error || 'Code administrateur invalide.');
       }
-    } catch (err: any) {
+    } catch {
       // Aucun repli : seul le serveur peut valider le code. Ouvrir l'éditeur
       // hors ligne ne servirait à rien de toute façon — aucune sauvegarde
       // n'aboutirait — et laisserait le contenu de l'admin à la vue de
       // n'importe qui sachant ajouter #admin à l'URL.
-      setAuthError('Serveur injoignable : impossible de vérifier le code administrateur.');
+      setAuthError(`Réponse inattendue du serveur (erreur ${res.status}). Réessayez dans un instant depuis www.eastofcameroon.site.`);
     } finally {
       setIsVerifying(false);
     }
@@ -71,7 +87,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': adminKey
+          'x-admin-key': enTeteCle
         },
         body: JSON.stringify(formData)
       });
@@ -109,7 +125,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': adminKey
+          'x-admin-key': enTeteCle
         },
         body: JSON.stringify(payload)
       });
