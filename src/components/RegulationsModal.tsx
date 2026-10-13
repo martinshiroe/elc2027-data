@@ -135,7 +135,7 @@ export const RegulationsModal: React.FC<RegulationsModalProps> = ({
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-full bg-magenta-plein hover:bg-[#b000c2] text-white italic font-bold text-xs transition-colors cursor-pointer"
+            className="px-4 py-1.5 rounded-full bg-magenta-plein hover:bg-[#a3000a] text-white italic font-bold text-xs transition-colors cursor-pointer"
           >
             Fermer
           </button>

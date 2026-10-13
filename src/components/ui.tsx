@@ -69,7 +69,7 @@ export const TitreCarte: React.FC<{ className?: string; niveau?: 2 | 3 | 4; chil
 const BASE_BOUTON =
   'inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[0.82rem] font-bold italic tracking-wide sm:px-6 sm:py-3 sm:text-sm transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-60';
 const VARIANTES = {
-  plein: 'bg-magenta-plein text-white hover:bg-[#b000c2]',
+  plein: 'bg-magenta-plein text-white hover:bg-[#a3000a]',
   contour: 'border-2 border-magenta text-white hover:bg-magenta/15',
   attente: 'bg-avis text-doux disabled:opacity-100',
 };
@@ -147,7 +147,7 @@ export const Avis: React.FC<{
     <div
       role={erreur ? 'alert' : undefined}
       className={`flex gap-4 px-5 py-4 ${
-        erreur ? 'border border-alerte bg-[#2a1630]' : 'border-l-4 border-magenta bg-avis'
+        erreur ? 'border border-alerte bg-[#2c1018]' : 'border-l-4 border-magenta bg-avis'
       } ${className}`}
     >
       <Icone className={`mt-0.5 h-5 w-5 shrink-0 ${erreur ? 'text-alerte' : 'text-magenta'}`} aria-hidden="true" />

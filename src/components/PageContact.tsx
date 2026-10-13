@@ -183,7 +183,7 @@ export const PageContact: React.FC<PageContactProps> = ({ data, onNaviguer }) =>
                 {/* Bandeau d'état : erreurs, envoi en cours, échec. */}
                 <div ref={resume} tabIndex={-1} aria-live="polite" className="focus:outline-none">
                   {nbErreurs > 0 && etat === 'saisie' && (
-                    <div role="alert" className="mt-5 flex gap-4 border border-alerte bg-[#2a1630] px-5 py-4">
+                    <div role="alert" className="mt-5 flex gap-4 border border-alerte bg-[#2c1018] px-5 py-4">
                       <AlertCircle className="mt-0.5 h-6 w-6 shrink-0 text-alerte" aria-hidden="true" />
                       <div>
                         <p className="font-semibold text-alerte">
@@ -209,7 +209,7 @@ export const PageContact: React.FC<PageContactProps> = ({ data, onNaviguer }) =>
                     </div>
                   )}
                   {etat === 'echec' && (
-                    <div role="alert" className="mt-5 flex gap-4 border border-alerte bg-[#2a1630] px-5 py-4">
+                    <div role="alert" className="mt-5 flex gap-4 border border-alerte bg-[#2c1018] px-5 py-4">
                       <AlertCircle className="mt-0.5 h-6 w-6 shrink-0 text-alerte" aria-hidden="true" />
                       <div>
                         <p className="font-semibold text-alerte">Le message n'a pas été envoyé</p>
