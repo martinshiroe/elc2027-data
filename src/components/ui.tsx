@@ -28,15 +28,15 @@ export const TitreSection: React.FC<{
   const Balise = `h${niveau}` as 'h1' | 'h2' | 'h3';
   const tailles =
     taille === 'page'
-      ? 'text-[2.1rem] sm:text-5xl lg:text-[3.4rem]'
-      : 'text-[1.6rem] sm:text-3xl lg:text-[2.1rem]';
+      ? 'text-[1.6rem] sm:text-5xl lg:text-[3.4rem]'
+      : 'text-[1.3rem] sm:text-3xl lg:text-[2.1rem]';
   return (
     <div className={className}>
-      {surtitre && <p className="surtitre mb-3">{surtitre}</p>}
+      {surtitre && <p className="surtitre mb-2 text-[0.68rem] sm:mb-3 sm:text-xs">{surtitre}</p>}
       <Balise id={id} className={`titre ${tailles}`}>
         {titre}
       </Balise>
-      {children && <div className="mt-4 text-base sm:text-[1.05rem] leading-relaxed text-texte max-w-3xl">{children}</div>}
+      {children && <div className="mt-3 text-[0.95rem] sm:mt-4 sm:text-[1.05rem] leading-relaxed text-texte max-w-3xl">{children}</div>}
     </div>
   );
 };
@@ -63,11 +63,11 @@ export const TitreCarte: React.FC<{ className?: string; niveau?: 2 | 3 | 4; chil
   children,
 }) => {
   const Balise = `h${niveau}` as 'h2' | 'h3' | 'h4';
-  return <Balise className={`titre text-lg sm:text-xl ${className}`}>{children}</Balise>;
+  return <Balise className={`titre text-base sm:text-xl ${className}`}>{children}</Balise>;
 };
 
 const BASE_BOUTON =
-  'inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold italic tracking-wide transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-60';
+  'inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[0.82rem] font-bold italic tracking-wide sm:px-6 sm:py-3 sm:text-sm transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-60';
 const VARIANTES = {
   plein: 'bg-magenta-plein text-white hover:bg-[#b000c2]',
   contour: 'border-2 border-magenta text-white hover:bg-magenta/15',
@@ -217,7 +217,7 @@ export const EnTetePage: React.FC<{
     </div>
     <span aria-hidden="true" className="pointer-events-none absolute left-[6.5%] top-44 bottom-16 hidden w-0.5 bg-rose/80 lg:block" />
     <span aria-hidden="true" className="pointer-events-none absolute right-[6.5%] top-44 bottom-16 hidden w-0.5 bg-rose/80 lg:block" />
-    <div className="pt-36 pb-12 sm:pt-44 sm:pb-16">{children}</div>
+    <div className="pt-24 pb-8 sm:pt-44 sm:pb-16">{children}</div>
   </section>
 );
 

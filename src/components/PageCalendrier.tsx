@@ -27,11 +27,11 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
       <EnTetePage>
         <Conteneur>
           <p className="surtitre mb-4">Calendrier · Saison {data.meta.saison || '2027'}</p>
-          <h1 className="titre text-[2.3rem] sm:text-5xl lg:text-[3.6rem]">
+          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
             Une saison.
             <span className="block">Quatre disciplines.</span>
           </h1>
-          {v2?.bandeauSousTitre && <p className="mt-6 max-w-3xl text-lg leading-relaxed text-texte">{v2.bandeauSousTitre}.</p>}
+          {v2?.bandeauSousTitre && <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">{v2.bandeauSousTitre}.</p>}
           <div className="mt-8 flex flex-wrap gap-4">
             {data.meta.startGgUrl && (
               <BoutonLien href={urlSure(data.meta.startGgUrl)} target="_blank" rel="noopener noreferrer">
@@ -46,16 +46,16 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
         </Conteneur>
       </EnTetePage>
 
-      <section className="pb-14 sm:pb-16">
+      <section className="pb-10 sm:pb-16">
         <Conteneur>
           <BlocPhases data={data} />
         </Conteneur>
       </section>
 
       {/* ---------- Par discipline ---------- */}
-      <section className="py-14 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Conteneur>
-          <TitreSection surtitre="Par discipline" titre="Les dates de chaque jeu." className="mb-8" />
+          <TitreSection surtitre="Par discipline" titre="Les dates de chaque jeu." className="mb-6 sm:mb-8" />
           <ul className="grid gap-5 md:grid-cols-2">
             {JEUX.map((j) => {
               const jeu = data.competition?.[j.id];
@@ -93,9 +93,9 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
       </section>
 
       {/* ---------- Format ---------- */}
-      <section className="py-14 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Conteneur>
-          <TitreSection surtitre="Format de compétition" titre="Comment se joue la saison." className="mb-8" />
+          <TitreSection surtitre="Format de compétition" titre="Comment se joue la saison." className="mb-6 sm:mb-8" />
           {faits.length > 0 && (
             <dl className="mb-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {faits.map((f) => (

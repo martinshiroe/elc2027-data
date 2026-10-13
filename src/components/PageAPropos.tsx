@@ -30,7 +30,7 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
     <>
       <EnTetePage>
         <Conteneur>
-          <h1 className="titre max-w-3xl text-[2.1rem] sm:text-5xl lg:text-[3.4rem]">
+          <h1 className="titre max-w-3xl text-[1.6rem] sm:text-5xl lg:text-[3.4rem]">
             Ligue régionale d'esport de l'Est Cameroun
             <span className="mt-2 block">ELC — East League of Cameroun</span>
           </h1>
@@ -49,15 +49,15 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
       </EnTetePage>
 
       {/* ---------- Qui nous sommes ---------- */}
-      <BandePlanete className="py-14 sm:py-16">
+      <BandePlanete className="py-10 sm:py-16">
         <Conteneur>
-          <TitreSection surtitre="Qui nous sommes" titre={apropos.accroche} className="mb-8">
+          <TitreSection surtitre="Qui nous sommes" titre={apropos.accroche} className="mb-6 sm:mb-8">
             {apropos.presentation}
           </TitreSection>
           <ul className="grid gap-5 md:grid-cols-3">
             {apropos.piliers.map((p) => (
               <li key={p.titre}>
-                <Carte className="h-full p-6">
+                <Carte className="h-full p-5 sm:p-6">
                   <TitreCarte className="mb-4">{p.titre}</TitreCarte>
                   <p className="leading-relaxed text-texte">{p.texte}</p>
                 </Carte>
@@ -68,20 +68,20 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
       </BandePlanete>
 
       {/* ---------- Ce que nous faisons ---------- */}
-      <section className="py-14 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Conteneur>
-          <TitreSection surtitre="Ce que nous faisons" titre="Compétitions, diffusion et suivi des résultats." className="mb-8" />
+          <TitreSection surtitre="Ce que nous faisons" titre="Compétitions, diffusion et suivi des résultats." className="mb-6 sm:mb-8" />
           <ul className="grid gap-5 md:grid-cols-3">
             {apropos.activites.map((a) => (
               <li key={a.titre}>
-                <Carte className="h-full p-6">
+                <Carte className="h-full p-5 sm:p-6">
                   <TitreCarte className="mb-4">{a.titre}</TitreCarte>
                   <p className="leading-relaxed text-texte">{a.texte}</p>
                 </Carte>
               </li>
             ))}
           </ul>
-          <Carte className="mt-5 p-6">
+          <Carte className="mt-5 p-5 sm:p-6">
             <TitreCarte className="mb-4">{apropos.competition.titre}</TitreCarte>
             <p className="leading-relaxed text-texte">{apropos.competition.texte}</p>
             {apropos.competition.projet && <p className="mt-4 text-sm leading-relaxed text-doux">{apropos.competition.projet}</p>}
@@ -90,13 +90,13 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Bureau exécutif ---------- */}
-      <section className="py-14 sm:py-16" aria-labelledby="titre-bureau">
+      <section className="py-10 sm:py-16" aria-labelledby="titre-bureau">
         <Conteneur>
           <TitreSection
             id="titre-bureau"
             surtitre="L'équipe / bureau exécutif"
             titre="Des noms, des rôles, une même ambition."
-            className="mb-8"
+            className="mb-6 sm:mb-8"
           >
             Le bureau exécutif, selon la liste du {apropos.dateBureau}.
           </TitreSection>
@@ -133,7 +133,7 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
               </li>
             ))}
           </ul>
-          <Carte className="mt-5 p-6">
+          <Carte className="mt-5 p-5 sm:p-6">
             <TitreCarte className="mb-4">{apropos.production.titre}</TitreCarte>
             <p className="leading-relaxed text-texte">{apropos.production.texte}</p>
           </Carte>
@@ -141,12 +141,12 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Communauté et joueurs ---------- */}
-      <section className="py-14 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Conteneur>
           <TitreSection
             surtitre="Communauté et joueurs"
             titre="Des équipes et des joueurs qui font vivre la compétition."
-            className="mb-8"
+            className="mb-6 sm:mb-8"
           />
           {apropos.equipes.length > 0 ? (
             <>
@@ -184,12 +184,12 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Partenaires ---------- */}
-      <section className="py-14 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Conteneur>
           <TitreSection
             surtitre="Partenaires et soutiens"
             titre="Affiliation institutionnelle et partenaires locaux."
-            className="mb-8"
+            className="mb-6 sm:mb-8"
           />
           <ul className="grid gap-5 md:grid-cols-3">
             {apropos.partenaires.map((p, i) => (
@@ -205,9 +205,9 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Contact et réseaux ---------- */}
-      <section className="pb-20 pt-14 sm:pt-16">
+      <section className="pb-14 pt-10 sm:pb-20 sm:pt-16">
         <Conteneur>
-          <TitreSection surtitre="Contact et réseaux" titre="Bertoua, Est Cameroun." className="mb-8" />
+          <TitreSection surtitre="Contact et réseaux" titre="Bertoua, Est Cameroun." className="mb-6 sm:mb-8" />
           <div className="grid gap-5 md:grid-cols-2">
             <Carte className="p-6">
               <p className="mb-2 font-extrabold italic uppercase text-magenta">Email officiel</p>

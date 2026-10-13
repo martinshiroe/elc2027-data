@@ -7,11 +7,11 @@ export const PageIntrouvable: React.FC<{ onNaviguer: (section: Section, jeu?: st
     <Conteneur className="grid items-center gap-12 lg:grid-cols-[1fr_minmax(0,500px)]">
       <div>
         <p className="surtitre mb-4">Page introuvable</p>
-        <h1 className="titre text-[2.3rem] sm:text-5xl lg:text-[3.1rem]">
+        <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.1rem]">
           Vous avez quitté
           <span className="block">le terrain.</span>
         </h1>
-        <p className="mt-6 max-w-md text-lg leading-relaxed text-texte">
+        <p className="mt-6 max-w-md text-base leading-relaxed text-texte sm:text-lg">
           Cette page n'existe pas ou n'est plus accessible à cette adresse. Retrouvez l'accueil ou découvrez la ligue.
         </p>
         <div className="mt-8 flex flex-wrap gap-4">

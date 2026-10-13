@@ -42,11 +42,11 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
       <EnTetePage image={meta.inscriptionBannerImage ? urlSure(meta.inscriptionBannerImage) : undefined}>
         <Conteneur>
           <p className="surtitre mb-4">Saison {meta.saison || '2027'} · Inscriptions</p>
-          <h1 className="titre text-[2.3rem] sm:text-5xl lg:text-[3.6rem]">
+          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
             Entre dans
             <span className="block">la compétition.</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-texte">
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">
             Inscrivez votre équipe (Honor of Kings, Mobile Legends) ou votre joueur (PUBG Mobile, Free Fire). Compétition
             organisée par la Ligue Esport Est Cameroun, affiliée à la FECASES.
           </p>
@@ -64,13 +64,13 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
         </Conteneur>
       </EnTetePage>
 
-      <section className="pb-14 sm:pb-16">
+      <section className="pb-10 sm:pb-16">
         <Conteneur>
-          <TitreSection surtitre="Avant de commencer" titre="Ce qu'il faut savoir." className="mb-8" />
+          <TitreSection surtitre="Avant de commencer" titre="Ce qu'il faut savoir." className="mb-6 sm:mb-8" />
           <ol className="grid gap-5 md:grid-cols-3">
             {CONDITIONS.map((c) => (
               <li key={c.n}>
-                <Carte className="h-full p-6">
+                <Carte className="h-full p-5 sm:p-6">
                   <p className="titre mb-4 text-3xl text-magenta">{c.n}</p>
                   <TitreCarte className="mb-3">{c.titre}</TitreCarte>
                   <p className="leading-relaxed text-texte">{c.texte}</p>
@@ -81,7 +81,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
         </Conteneur>
       </section>
 
-      <section className="pb-20 pt-6">
+      <section className="pb-14 pt-4 sm:pb-20 sm:pt-6">
         <Conteneur>
           <Carte haute className="overflow-hidden">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-bord-fort px-6 py-5">
@@ -102,7 +102,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
                   height={400}
                   className="mb-8 block h-auto w-full border border-bord-fort"
                 />
-                <p className="text-lg leading-relaxed text-texte">
+                <p className="text-base leading-relaxed text-texte sm:text-lg">
                   Équipes MOBA et joueurs Battle Royale : renseignez vos informations, votre pièce d'identité et la capture
                   de votre compte de jeu.
                 </p>

@@ -41,23 +41,23 @@ export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onN
       <EnTetePage>
         <Conteneur>
           <p className="surtitre mb-4">Saison news · ELC {data.meta.saison || '2027'}</p>
-          <h1 className="titre text-[2.1rem] sm:text-5xl lg:text-[3.6rem]">
+          <h1 className="titre text-[1.6rem] sm:text-5xl lg:text-[3.6rem]">
             Ranking —<span className="block">{info.nom}</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-texte">
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">
             {info.famille} · {titres?.badge ? `${titres.badge.toLowerCase()}, ` : ''}
             {moba
               ? 'classement par séries, puis tableau final à élimination directe.'
               : 'classement individuel au cumul des points de placement et des éliminations.'}
             {titres?.lancement ? ` Lancement prévu : ${titres.lancement}.` : ''}
           </p>
-          <div className="mt-12">
+          <div className="mt-8 sm:mt-12">
             <OngletsSaison actif={jeu} onNaviguer={onNaviguer} />
           </div>
         </Conteneur>
       </EnTetePage>
 
-      <section className="pb-14">
+      <section className="pb-10 sm:pb-14">
         <Conteneur>
           {moba ? (
             <ClassementMoba jeu={data.competition[jeu as 'hok' | 'mlbb']} data={data} />
@@ -71,7 +71,7 @@ export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onN
       <CalendrierJeu jeu={data.competition[jeu]} startGgUrl={data.meta.startGgUrl} />
 
       {/* ---------- Liens ---------- */}
-      <section className="pb-20">
+      <section className="pb-14 sm:pb-20">
         <Conteneur>
           <ul className="grid gap-5 md:grid-cols-2">
             <li>
@@ -109,11 +109,11 @@ export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onN
 /* ------------------------------------------------------------------ */
 
 const ChiffresCles: React.FC<{ chiffres: { valeur: string; legende: string }[] }> = ({ chiffres }) => (
-  <dl className="grid gap-5 sm:grid-cols-3">
+  <dl className="grid grid-cols-3 gap-2.5 sm:gap-5">
     {chiffres.map((c) => (
-      <div key={c.legende} className="flex items-center gap-4 border border-bord bg-carte px-6 py-5">
-        <dd className="titre text-3xl normal-case sm:text-4xl">{c.valeur}</dd>
-        <dt className="text-texte">{c.legende}</dt>
+      <div key={c.legende} className="flex flex-col gap-1 border border-bord bg-carte px-3 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-5">
+        <dd className="titre text-2xl normal-case sm:text-4xl">{c.valeur}</dd>
+        <dt className="text-xs leading-snug text-texte sm:text-base">{c.legende}</dt>
       </div>
     ))}
   </dl>
@@ -195,31 +195,27 @@ const ClassementMoba: React.FC<{ jeu: ELCMobaGame; data: ELCData }> = ({ jeu, da
               : ''}
           </p>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] text-left">
-            <caption className="sr-only">Classement des équipes de {jeu.nom}</caption>
-            <thead className="bg-carte-haute text-sm font-semibold text-doux">
-              <tr>
-                <th scope="col" className="px-6 py-4">Rang</th>
-                <th scope="col" className="py-4 pr-4">Équipe</th>
-                <th scope="col" className="px-3 py-4 text-center">Joués</th>
-                <th scope="col" className="px-3 py-4 text-center">Victoires</th>
-                {avecNuls && <th scope="col" className="px-3 py-4 text-center">Nuls</th>}
-                <th scope="col" className="px-3 py-4 text-center">Défaites</th>
-                <th scope="col" className="px-3 py-4 text-center">Manches V–D</th>
-                <th scope="col" className="px-3 py-4 text-center">Diff.</th>
-                <th scope="col" className="px-6 py-4 text-center">Points</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lignes.length === 0 ? (
+        {lignes.length === 0 ? (
+          <p className="px-6 py-10 text-center text-doux">Aucune équipe annoncée pour l'instant.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] text-left">
+              <caption className="sr-only">Classement des équipes de {jeu.nom}</caption>
+              <thead className="bg-carte-haute text-sm font-semibold text-doux">
                 <tr>
-                  <td colSpan={avecNuls ? 9 : 8} className="px-6 py-10 text-center text-doux">
-                    Aucune équipe annoncée pour l'instant.
-                  </td>
+                  <th scope="col" className="px-6 py-4">Rang</th>
+                  <th scope="col" className="py-4 pr-4">Équipe</th>
+                  <th scope="col" className="px-3 py-4 text-center">Joués</th>
+                  <th scope="col" className="px-3 py-4 text-center">Victoires</th>
+                  {avecNuls && <th scope="col" className="px-3 py-4 text-center">Nuls</th>}
+                  <th scope="col" className="px-3 py-4 text-center">Défaites</th>
+                  <th scope="col" className="px-3 py-4 text-center">Manches V–D</th>
+                  <th scope="col" className="px-3 py-4 text-center">Diff.</th>
+                  <th scope="col" className="px-6 py-4 text-center">Points</th>
                 </tr>
-              ) : (
-                lignes.map((l, i) => {
+              </thead>
+              <tbody>
+                {lignes.map((l, i) => {
                   const diff = l.mg - l.mp;
                   return (
                     <tr key={l.equipe.id} className={`border-t border-bord ${i === 0 && resultats ? 'bg-carte-haute' : ''}`}>
@@ -240,11 +236,11 @@ const ClassementMoba: React.FC<{ jeu: ELCMobaGame; data: ELCData }> = ({ jeu, da
                       <td className="px-6 py-4 text-center text-lg font-bold text-magenta">{l.points}</td>
                     </tr>
                   );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
         <p className="border-t border-bord-fort px-6 py-4 text-sm text-doux">
           Joués, victoires et défaites portent sur les séries. Les manches sont les parties gagnées ou perdues au sein de
           ces séries.
@@ -417,20 +413,20 @@ const ClassementTps: React.FC<{ jeu: ELCTpsGame }> = ({ jeu }) => {
           )}
         </div>
         <div className="max-h-[640px] overflow-auto">
-          <table className="w-full min-w-[520px] text-left">
+          <table className="w-full text-left">
             <caption className="sr-only">Classement individuel de {jeu.nom}</caption>
             <thead className="sticky top-0 bg-carte-haute text-sm font-semibold text-doux">
               <tr>
-                <th scope="col" className="px-6 py-4">Rang</th>
+                <th scope="col" className="px-3 py-4 sm:px-6">Rang</th>
                 <th scope="col" className="py-4 pr-4">Joueur</th>
-                <th scope="col" className="px-3 py-4 text-center">Éliminations</th>
-                <th scope="col" className="px-6 py-4 text-center">Points</th>
+                <th scope="col" className="px-2 py-4 text-center"><abbr title="Éliminations" className="no-underline sm:hidden">Élim.</abbr><span className="hidden sm:inline">Éliminations</span></th>
+                <th scope="col" className="px-3 py-4 sm:px-6 text-center">Points</th>
               </tr>
             </thead>
             <tbody>
               {affiches.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-doux">
+                  <td colSpan={4} className="px-4 py-10 sm:px-6 text-center text-doux">
                     {joueurs.length === 0 ? "Aucun joueur annoncé pour l'instant." : 'Aucun joueur ne correspond à cette recherche.'}
                   </td>
                 </tr>
@@ -439,14 +435,14 @@ const ClassementTps: React.FC<{ jeu: ELCTpsGame }> = ({ jeu }) => {
                   const rang = joueurs.indexOf(j) + 1;
                   return (
                     <tr key={j.id} className={`border-t border-bord ${rang === 1 && resultats ? 'bg-carte-haute' : ''}`}>
-                      <td className="px-6 py-3.5">
+                      <td className="px-3 py-3.5 sm:px-6">
                         <span className={`titre text-2xl ${rang === 1 && resultats ? 'text-magenta' : ''}`}>{deuxChiffres(rang)}</span>
                       </td>
                       <td className="py-3.5 pr-4">
                         <CelluleEquipe nom={j.nom} logo={j.photo} />
                       </td>
                       <td className="px-3 py-3.5 text-center text-white">{j.kills}</td>
-                      <td className="px-6 py-3.5 text-center text-lg font-bold text-magenta">{j.scoreTotal}</td>
+                      <td className="px-3 py-3.5 sm:px-6 text-center text-lg font-bold text-magenta">{j.scoreTotal}</td>
                     </tr>
                   );
                 })
@@ -489,7 +485,7 @@ const ClassementTps: React.FC<{ jeu: ELCTpsGame }> = ({ jeu }) => {
 const CalendrierJeu: React.FC<{ jeu: ELCMobaGame | ELCTpsGame; startGgUrl?: string }> = ({ jeu, startGgUrl }) => {
   if (!jeu.calendrier?.length && !startGgUrl) return null;
   return (
-    <section className="pb-14">
+    <section className="pb-10 sm:pb-14">
       <Conteneur>
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <TitreSection surtitre="Calendrier de la discipline" titre={`Les phases ${jeu.nom}.`} />

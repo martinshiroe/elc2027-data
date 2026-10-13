@@ -119,35 +119,35 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
       <EnTetePage>
         <Conteneur>
           <p className="surtitre mb-4">Saison news · Les faits marquants</p>
-          <h1 className="titre text-[2.3rem] sm:text-5xl lg:text-[3.6rem]">
+          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
             {pantheon.titrePrincipal || 'Hall of Fame.'}
             <span className="block">La mémoire de l'Est.</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-texte">
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">
             {pantheon.sousTitre ||
               'Les distinctions et les faits marquants de la ligue, avec une règle : séparer les informations connues du palmarès encore à confirmer.'}
           </p>
-          <div className="mt-12">
+          <div className="mt-8 sm:mt-12">
             <OngletsSaison actif="halloffame" onNaviguer={onNaviguer} />
           </div>
         </Conteneur>
       </EnTetePage>
 
       {/* ---------- Le fait marquant ---------- */}
-      <section className="pb-14 sm:pb-16">
+      <section className="pb-10 sm:pb-16">
         <Conteneur>
-          <TitreSection surtitre="Dans la présentation de la ligue" titre="Une performance à retenir." className="mb-8" />
+          <TitreSection surtitre="Dans la présentation de la ligue" titre="Une performance à retenir." className="mb-6 sm:mb-8" />
           <CarteFaitMarquant fait={faitMarquant} />
         </Conteneur>
       </section>
 
       {/* ---------- Les distinctions ---------- */}
-      <section className="py-14 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Conteneur>
           <TitreSection
             surtitre={aucunLaureat ? 'Le prochain chapitre' : `Distinctions officielles · Saison ${saison}`}
             titre={aucunLaureat ? 'Le palmarès reste à écrire.' : 'Les distinctions de la saison.'}
-            className="mb-8"
+            className="mb-6 sm:mb-8"
           >
             {aucunLaureat
               ? "Aucun palmarès officiel n'a été fourni. Ces espaces sont réservés aux distinctions de la saison, après confirmation des compétitions, des résultats et des accords de publication."
@@ -166,7 +166,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
       </section>
 
       {/* ---------- Attribution ---------- */}
-      <section className="py-14 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Conteneur>
           <div className="relative isolate overflow-hidden border border-bord-fort bg-carte p-7 sm:p-10">
             {data.meta.pantheonBannerImage && (
@@ -176,7 +176,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
                 style={{ backgroundImage: `url("${urlCss(data.meta.pantheonBannerImage)}")` }}
               />
             )}
-            <TitreSection surtitre="Les règles" titre={pantheon.titreAttribution || 'Comment sont-elles attribuées ?'} className="mb-8" />
+            <TitreSection surtitre="Les règles" titre={pantheon.titreAttribution || 'Comment sont-elles attribuées ?'} className="mb-6 sm:mb-8" />
             <ol className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {etapes.map((e) => (
                 <li key={e.step}>
@@ -196,7 +196,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
       </section>
 
       {/* ---------- Liens ---------- */}
-      <section className="pb-20">
+      <section className="pb-14 sm:pb-20">
         <Conteneur>
           <ul className="grid gap-5 md:grid-cols-2">
             <li>
