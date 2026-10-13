@@ -2,6 +2,7 @@ import React from 'react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
 import { contenuDe } from '../data/contenu';
+import { urlSure } from '../lib/urls';
 import { Conteneur, Carte, TitreCarte, TitreSection, LienPage } from './ui';
 import { ReseauxSociaux } from './ReseauxSociaux';
 import { BlocDisciplines, BlocPhases, BlocVideos, BlocInscription, JEUX } from './Blocs';
@@ -34,9 +35,10 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-nuit to-transparent" />
         </div>
 
-        {/* Filets roses verticaux de la maquette */}
-        <span aria-hidden="true" className="pointer-events-none absolute left-[6.5%] top-36 bottom-[22%] hidden w-0.5 bg-rose/90 md:block" />
-        <span aria-hidden="true" className="pointer-events-none absolute right-[6.5%] top-36 bottom-[22%] hidden w-0.5 bg-rose/90 md:block" />
+        {/* Filets roses verticaux de la maquette. Ils s'arrêtent au-dessus des
+            réseaux et des logos, sans jamais les traverser. */}
+        <span aria-hidden="true" className="pointer-events-none absolute left-[6.5%] top-36 bottom-[19rem] hidden w-0.5 bg-rose/90 md:block" />
+        <span aria-hidden="true" className="pointer-events-none absolute right-[6.5%] top-36 bottom-[16rem] hidden w-0.5 bg-rose/90 md:block" />
 
         <div className="flex flex-1 items-center px-5 pt-32 pb-40 sm:px-[11.5%] md:pt-40">
           <div className="max-w-md border border-white/10 bg-white/[0.07] px-8 py-9 text-center shadow-2xl backdrop-blur-md sm:px-12">
@@ -56,19 +58,29 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         <ReseauxSociaux
           reseaux={data.meta.reseaux}
           vertical
-          className="absolute bottom-28 left-[5.2%] hidden md:flex"
+          className="absolute bottom-28 left-[5.2%] hidden gap-4! md:flex"
         />
 
-        {/* Disciplines, en bas à droite (logos s'ils sont fournis dans l'admin) */}
-        <ul className="absolute bottom-28 right-[5.5%] hidden flex-col items-end gap-2 md:flex" aria-label="Disciplines">
+        {/* Disciplines, en bas à droite : logos s'ils sont fournis dans l'admin.
+            Grille 2 × 2 à hauteur égale ; un liseré clair garde lisibles les
+            logos sombres (Free Fire) sur l'illustration. */}
+        <ul
+          className="absolute bottom-28 right-[5%] hidden grid-cols-2 items-center justify-items-center gap-x-5 gap-y-3 md:grid"
+          aria-label="Disciplines"
+        >
           {JEUX.map((j) => {
             const logo = data.competition?.[j.id]?.logoImage;
             return (
-              <li key={j.id}>
+              <li key={j.id} className="flex h-11 w-32 items-center justify-center">
                 {logo ? (
-                  <img src={logo} alt={j.nom} className="h-9 w-auto max-w-[140px] object-contain" />
+                  <img
+                    src={urlSure(logo)}
+                    alt={j.nom}
+                    referrerPolicy="no-referrer"
+                    className="max-h-full max-w-full object-contain [filter:drop-shadow(0_0_1px_rgba(255,255,255,0.9))_drop-shadow(0_0_6px_rgba(255,255,255,0.25))]"
+                  />
                 ) : (
-                  <span className="text-sm font-extrabold italic uppercase tracking-wider text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                  <span className="text-center text-sm font-extrabold italic uppercase leading-tight tracking-wider text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
                     {j.nom.replace(': Bang Bang', '')}
                   </span>
                 )}
