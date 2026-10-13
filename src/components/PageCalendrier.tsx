@@ -4,7 +4,7 @@ import { ELCData } from '../types';
 import { Section } from '../lib/routes';
 import { urlSure } from '../lib/urls';
 import { Conteneur, EnTetePage, Carte, TitreCarte, TitreSection, LienPage, Bouton, BoutonLien } from './ui';
-import { BlocPhases, BlocInscription, JEUX } from './Blocs';
+import { BlocPhases, BlocInscription, jeuxActifs, nombreDeJeux } from './Blocs';
 
 interface PageCalendrierProps {
   data: ELCData;
@@ -29,7 +29,7 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
           <p className="surtitre mb-4">Calendrier · Saison {data.meta.saison || '2027'}</p>
           <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
             Une saison.
-            <span className="block">Quatre disciplines.</span>
+            <span className="block">{nombreDeJeux(jeuxActifs(data).length, 'discipline')}.</span>
           </h1>
           {v2?.bandeauSousTitre && <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">{v2.bandeauSousTitre}.</p>}
           <div className="mt-8 flex flex-wrap gap-4">
@@ -57,7 +57,7 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
         <Conteneur>
           <TitreSection surtitre="Par discipline" titre="Les dates de chaque jeu." className="mb-6 sm:mb-8" />
           <ul className="grid gap-5 md:grid-cols-2">
-            {JEUX.map((j) => {
+            {jeuxActifs(data).map((j) => {
               const jeu = data.competition?.[j.id];
               return (
                 <li key={j.id}>

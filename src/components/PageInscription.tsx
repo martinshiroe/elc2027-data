@@ -3,12 +3,24 @@ import { ExternalLink } from 'lucide-react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
 import { urlSure } from '../lib/urls';
+import { jeuxActifs, listeDesJeux } from './Blocs';
 import { Conteneur, EnTetePage, Carte, TitreCarte, TitreSection, Bouton, BoutonLien, LienPage, Avis, Pastille } from './ui';
 
 interface PageInscriptionProps {
   data: ELCData;
   onNaviguer: (section: Section, jeu?: string) => void;
   onOpenRegulations: () => void;
+}
+
+// Les textes qui nomment les jeux suivent les disciplines actives de la saison.
+function conditions(moba: string, br: string) {
+  const composition = [
+    moba && `MOBA (${moba}) : 5 titulaires et 2 remplaçants au maximum.`,
+    br && `Battle Royale (${br}) : solo, duo ou squad selon le tournoi.`,
+  ]
+    .filter(Boolean)
+    .join(' ');
+  return CONDITIONS.map((c) => (c.n === '02' ? { ...c, texte: composition || c.texte } : c));
 }
 
 const CONDITIONS = [
@@ -36,6 +48,10 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
   const { meta } = data;
   const formulaire = meta.googleFormUrl || '';
   const whatsapp = meta.reseaux?.whatsapp;
+  const jeux = jeuxActifs(data);
+  const moba = listeDesJeux(jeux.filter((j) => j.famille === 'MOBA'));
+  const br = listeDesJeux(jeux.filter((j) => j.famille === 'Battle Royale'));
+  const quoi = [moba && `votre équipe (${moba})`, br && `votre joueur (${br})`].filter(Boolean).join(' ou ');
 
   return (
     <>
@@ -47,8 +63,8 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
             <span className="block">la compétition.</span>
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">
-            Inscrivez votre équipe (Honor of Kings, Mobile Legends) ou votre joueur (PUBG Mobile, Free Fire). Compétition
-            organisée par la Ligue Esport Est Cameroun, affiliée à la FECASES.
+            Inscrivez {quoi || 'votre équipe'}. Compétition organisée par la Ligue Esport Est Cameroun, affiliée à la
+            FECASES.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             {formulaire && (
@@ -68,7 +84,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
         <Conteneur>
           <TitreSection surtitre="Avant de commencer" titre="Ce qu'il faut savoir." className="mb-6 sm:mb-8" />
           <ol className="grid gap-5 md:grid-cols-3">
-            {CONDITIONS.map((c) => (
+            {conditions(moba, br).map((c) => (
               <li key={c.n}>
                 <Carte className="h-full p-5 sm:p-6">
                   <p className="titre mb-4 text-3xl text-magenta">{c.n}</p>

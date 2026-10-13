@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import {
   Shield, KeyRound, Save, CheckCircle2, AlertCircle, RefreshCw,
   Globe, Swords, Calendar, Users, Trophy, Image, Link, FileText, Plus, Trash2,
-  Film, Video, Play, ExternalLink, Star, Camera, Upload, User, Target, Crosshair
+  Film, Video, Play, ExternalLink, Star, Camera, Upload, User, Target, Crosshair, Newspaper, LayoutTemplate
 } from 'lucide-react';
+import { OngletActualites, OngletPages, Commandes, BoutonAjout } from './AdminContenu';
 import { ELCData, ELCPantheonItem, ELCVideo } from '../types';
 
 interface AdminPortalProps {
@@ -20,7 +21,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
 
   // Working copy of data
   const [formData, setFormData] = useState<ELCData>(JSON.parse(JSON.stringify(data)));
-  const [activeTab, setActiveTab] = useState<'general' | 'disciplines' | 'calendrier' | 'moba' | 'tps' | 'pantheon' | 'videos'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'actualites' | 'pages' | 'disciplines' | 'calendrier' | 'moba' | 'tps' | 'pantheon' | 'videos'>('general');
   const [saveStatus, setSaveStatus] = useState<{ loading: boolean; success?: string; error?: string }>({
     loading: false
   });
@@ -494,7 +495,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Synchronisé avec le serveur local Express (/data/elc2027-data.json)
+                Les modifications sont publiées sur le site après « Enregistrer tout ».
               </p>
             </div>
           </div>
@@ -547,6 +548,30 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
           </button>
 
           <button
+            onClick={() => setActiveTab('actualites')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+              activeTab === 'actualites'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Newspaper className="w-3.5 h-3.5" />
+            <span>Actualités</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('pages')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+              activeTab === 'pages'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <LayoutTemplate className="w-3.5 h-3.5" />
+            <span>Pages (À propos, Hall of Fame)</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('disciplines')}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
               activeTab === 'disciplines'
@@ -555,7 +580,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
             }`}
           >
             <Swords className="w-3.5 h-3.5" />
-            <span>Disciplines (4 Titres)</span>
+            <span>Disciplines</span>
           </button>
 
           <button
@@ -1312,17 +1337,36 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
             </div>
           )}
 
+          {/* ACTUALITÉS : liste, lien, vidéo, encadré « prochain chapitre » */}
+          {activeTab === 'actualites' && <OngletActualites formData={formData} setFormData={setFormData} />}
+
+          {/* PAGES : À propos, bureau, équipes, partenaires, fait marquant */}
+          {activeTab === 'pages' && <OngletPages formData={formData} setFormData={setFormData} />}
+
           {/* TAB 2: DISCIPLINES */}
           {activeTab === 'disciplines' && (
             <div className="space-y-4">
               <p className="text-xs text-slate-400">
-                Édition des 4 disciplines sélectionnées pour l'ELC 2027.
+                Activez seulement les disciplines confirmées pour la saison. Une discipline désactivée disparaît de tout
+                le site public (accueil, Saison news, rankings, calendrier, joueurs, inscription) ; ses données sont
+                conservées et réapparaissent si vous la réactivez. Pensez à « Enregistrer tout ».
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {formData.visual1.titres.map((titre, idx) => (
-                  <div key={titre.id} className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                    <div className="flex items-center justify-between">
+                {formData.visual1.titres.map((titre, idx) => {
+                  const cle = titre.id as 'hok' | 'mlbb' | 'pubgm' | 'ff';
+                  const actif = formData.competition[cle]?.actif !== false;
+                  const basculer = () =>
+                    setFormData({
+                      ...formData,
+                      competition: {
+                        ...formData.competition,
+                        [cle]: { ...formData.competition[cle], actif: !actif },
+                      },
+                    });
+                  return (
+                  <div key={titre.id} className={`p-4 rounded-2xl border space-y-3 transition-opacity ${actif ? 'bg-slate-950/60 border-emerald-500/40' : 'bg-slate-950/30 border-slate-800 opacity-70'}`}>
+                    <div className="flex items-center justify-between gap-2">
                       <span className="font-display font-bold text-white text-sm">
                         {titre.nom} ({titre.id.toUpperCase()})
                       </span>
@@ -1330,6 +1374,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                         {titre.discipline}
                       </span>
                     </div>
+
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={actif}
+                      aria-label={`${titre.nom} : ${actif ? 'active cette saison' : 'masquée sur le site'}`}
+                      onClick={basculer}
+                      className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-left cursor-pointer"
+                    >
+                      <span className="text-xs font-bold text-white">
+                        {actif ? 'Active cette saison' : 'Masquée sur le site'}
+                        <span className="block text-[10px] font-normal text-slate-400">
+                          {actif ? 'Visible partout sur le site public' : 'Données conservées, rien n’est affiché'}
+                        </span>
+                      </span>
+                      <span className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${actif ? 'bg-emerald-500' : 'bg-slate-700'}`}>
+                        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${actif ? 'left-[22px]' : 'left-0.5'}`} />
+                      </span>
+                    </button>
 
                     <div>
                       <label className="block text-[11px] text-slate-400 mb-1">Nom d'affichage</label>
@@ -1374,7 +1437,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -1383,15 +1447,40 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
           {activeTab === 'calendrier' && (
             <div className="space-y-4">
               <p className="text-xs text-slate-400">
-                Édition des 4 phases de la roadmap officielle.
+                Phases de la saison, dans l'ordre d'affichage. Supprimez une phase qui ne concerne qu'une discipline
+                désactivée ; le badge (ex. « PRÉSENTIEL ») met la phase en avant.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {formData.visual2.phases.map((phase, idx) => (
                   <div key={idx} className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
                     <div className="flex items-center justify-between text-xs font-bold text-amber-400">
-                      <span>PHASE 0{idx + 1}</span>
-                      <span>{phase.tag}</span>
+                      <span>PHASE {String(idx + 1).padStart(2, '0')}</span>
+                      <Commandes
+                        liste={formData.visual2.phases}
+                        index={idx}
+                        onChange={(phases) => setFormData({ ...formData, visual2: { ...formData.visual2, phases } })}
+                        nom={phase.titre || 'cette phase'}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] text-slate-400 mb-1">Badge (facultatif)</label>
+                      <input
+                        type="text"
+                        value={phase.tag}
+                        placeholder="PRÉSENTIEL"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            visual2: {
+                              ...formData.visual2,
+                              phases: formData.visual2.phases.map((p, j) => (j === idx ? { ...p, tag: e.target.value } : p)),
+                            },
+                          })
+                        }
+                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white"
+                      />
                     </div>
 
                     <div>
@@ -1438,6 +1527,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                   </div>
                 ))}
               </div>
+              <BoutonAjout
+                onClick={() =>
+                  setFormData({
+                    ...formData,
+                    visual2: {
+                      ...formData.visual2,
+                      phases: [...formData.visual2.phases, { titre: '', sousTitre: '', periode: '', tag: '' }],
+                    },
+                  })
+                }
+              >
+                Ajouter une phase
+              </BoutonAjout>
             </div>
           )}
 
