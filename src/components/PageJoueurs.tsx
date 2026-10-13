@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import { ELCData, ELCJoueurProfil } from '../types';
 import { Section } from '../lib/routes';
 import { urlSure } from '../lib/urls';
+import { jeuxActifs } from './Blocs';
 import { Conteneur, EnTetePage, Carte, TitreCarte, LienPage, Pastille, initiales } from './ui';
 
 interface PageJoueursProps {
@@ -42,6 +43,10 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
     [data.joueurs]
   );
 
+  // Filtres : « Tous » puis les seules disciplines actives de la saison.
+  const actifs = jeuxActifs(data).map((j) => j.id as string);
+  const filtres = FILTRES.filter((f) => f.id === 'tous' || actifs.includes(f.id));
+
   const q = recherche.trim().toLowerCase();
   const motif = FILTRES.find((f) => f.id === filtre)!.motifs;
   const affiches = joueurs.filter(
@@ -70,7 +75,7 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
         <Conteneur>
           <div className="mb-8 flex flex-col gap-4 border-b border-bord-fort pb-6 lg:flex-row lg:items-center lg:justify-between">
             <div role="group" aria-label="Filtrer par discipline" className="-mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
-              {FILTRES.map((f) => {
+              {filtres.map((f) => {
                 const actif = filtre === f.id;
                 const nombre = f.id === 'tous' ? joueurs.length : joueurs.filter((p) => f.motifs.test(p.discipline)).length;
                 return (

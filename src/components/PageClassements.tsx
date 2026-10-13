@@ -15,7 +15,7 @@ import {
   initiales,
 } from './ui';
 import { OngletsSaison } from './OngletsSaison';
-import { JEUX, Jeu } from './Blocs';
+import { JEUX, Jeu, jeuxActifs } from './Blocs';
 
 interface PageClassementsProps {
   data: ELCData;
@@ -32,8 +32,9 @@ const deuxChiffres = (n: number) => String(n).padStart(2, '0');
 export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onNaviguer }) => {
   const info = JEUX.find((j) => j.id === jeu)!;
   const moba = jeu === 'hok' || jeu === 'mlbb';
-  const autre = jeu === 'hok' ? 'mlbb' : jeu === 'mlbb' ? 'hok' : jeu === 'pubgm' ? 'ff' : 'pubgm';
-  const infoAutre = JEUX.find((j) => j.id === autre)!;
+  const actifs = jeuxActifs(data);
+  // L'autre jeu de la même famille, s'il est actif cette saison.
+  const infoAutre = actifs.find((j) => j.id !== jeu && j.famille === info.famille);
   const titres = data.visual1?.titres?.find((t) => t.id === jeu);
 
   return (
@@ -52,7 +53,7 @@ export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onN
             {titres?.lancement ? ` Lancement prévu : ${titres.lancement}.` : ''}
           </p>
           <div className="mt-8 sm:mt-12">
-            <OngletsSaison actif={jeu} onNaviguer={onNaviguer} />
+            <OngletsSaison actif={jeu} jeux={actifs.map((j) => j.id)} onNaviguer={onNaviguer} />
           </div>
         </Conteneur>
       </EnTetePage>
@@ -73,19 +74,21 @@ export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onN
       {/* ---------- Liens ---------- */}
       <section className="pb-14 sm:pb-20">
         <Conteneur>
-          <ul className="grid gap-5 md:grid-cols-2">
-            <li>
-              <CarteLien
-                section="classements"
-                jeu={autre}
-                onNaviguer={onNaviguer}
-                surtitre={moba ? "L'autre MOBA" : "L'autre Battle Royale"}
-                titre={infoAutre.nom}
-                texte="Retrouvez l'autre classement de la discipline : mêmes critères de lecture, même barème."
-                action="Voir le ranking"
-                icone={<ListOrdered className="h-6 w-6" />}
-              />
-            </li>
+          <ul className={`grid gap-5 ${infoAutre ? 'md:grid-cols-2' : ''}`}>
+            {infoAutre && (
+              <li>
+                <CarteLien
+                  section="classements"
+                  jeu={infoAutre.id}
+                  onNaviguer={onNaviguer}
+                  surtitre={moba ? "L'autre MOBA" : "L'autre Battle Royale"}
+                  titre={infoAutre.nom}
+                  texte="Retrouvez l'autre classement de la discipline : mêmes critères de lecture, même barème."
+                  action="Voir le ranking"
+                  icone={<ListOrdered className="h-6 w-6" />}
+                />
+              </li>
+            )}
             <li>
               <CarteLien
                 section="pantheon"

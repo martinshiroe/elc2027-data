@@ -3,6 +3,7 @@ import { ListOrdered, Trophy, CalendarDays, ArrowRight } from 'lucide-react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
 import { contenuDe } from '../data/contenu';
+import { CarteActualite } from './CarteActualite';
 import {
   Conteneur,
   EnTetePage,
@@ -16,6 +17,7 @@ import {
   Trait,
 } from './ui';
 import { OngletsSaison } from './OngletsSaison';
+import { jeuxActifs, nombreDeJeux } from './Blocs';
 
 interface PageSaisonProps {
   data: ELCData;
@@ -24,6 +26,7 @@ interface PageSaisonProps {
 
 export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
   const { saison, apropos } = contenuDe(data);
+  const actifs = jeuxActifs(data).map((j) => j.id as string);
 
   const reperes: React.ComponentProps<typeof CarteLien>[] = [
     {
@@ -112,7 +115,7 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
             </Carte>
           </div>
           <div className="mt-8 sm:mt-12">
-            <OngletsSaison actif="actualites" onNaviguer={onNaviguer} />
+            <OngletsSaison actif="actualites" jeux={actifs} onNaviguer={onNaviguer} />
           </div>
         </Conteneur>
       </EnTetePage>
@@ -120,9 +123,13 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
       {/* ---------- Repères ---------- */}
       <section className="pb-10 sm:pb-16">
         <Conteneur>
-          <TitreSection surtitre="Les repères de la saison" titre="Quatre jeux. Des histoires à suivre." className="mb-6 sm:mb-8" />
+          <TitreSection
+            surtitre="Les repères de la saison"
+            titre={`${nombreDeJeux(actifs.length)}. Des histoires à suivre.`}
+            className="mb-6 sm:mb-8"
+          />
           <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {reperes.map((r) => (
+            {reperes.filter((r) => !r.jeu || actifs.includes(r.jeu)).map((r) => (
               <li key={r.titre}>
                 <CarteLien {...r} />
               </li>
@@ -135,19 +142,13 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
       <section className="py-10 sm:py-16">
         <Conteneur>
           <TitreSection surtitre="La vie de l'ELC" titre="Les nouvelles de la ligue." className="mb-6 sm:mb-8" />
+          {saison.actualites.length === 0 && (
+            <Carte className="p-6 text-texte">Les premières actualités de la saison arrivent bientôt.</Carte>
+          )}
           <ul className="grid gap-5 md:grid-cols-2">
             {saison.actualites.map((a, i) => (
-              <li key={i}>
-                <Carte as="article" className="flex h-full flex-col p-5 sm:p-7">
-                  <p className="surtitre mb-4 text-[0.7rem]">{a.rubrique}</p>
-                  <TitreCarte className="mb-4 text-xl sm:text-2xl">{a.titre}</TitreCarte>
-                  <p className="leading-relaxed text-texte">{a.texte}</p>
-                  {a.note && (
-                    <div className="mt-auto pt-6">
-                      <p className="border-t border-bord-fort pt-4 text-sm text-doux">{a.note}</p>
-                    </div>
-                  )}
-                </Carte>
+              <li key={a.id ?? i}>
+                <CarteActualite actu={a} grand />
               </li>
             ))}
           </ul>

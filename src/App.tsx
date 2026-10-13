@@ -21,6 +21,7 @@ import { RegulationsModal } from './components/RegulationsModal';
 import { DataManagementModal } from './components/DataManagementModal';
 import { AdminPortal } from './components/AdminPortal';
 import { InstallPwaPrompt } from './components/InstallPwaPrompt';
+import { jeuxActifs } from './components/Blocs';
 
 export function App() {
   const [data, setData] = useState<ELCData>(initialELCData);
@@ -134,8 +135,14 @@ export function App() {
         return <PageSaison data={data} onNaviguer={allerA} />;
       case 'competition':
         return <PageCalendrier data={data} onNaviguer={allerA} onOpenRegulations={ouvrirReglement} />;
-      case 'classements':
-        return <PageClassements key={jeu ?? 'hok'} data={data} jeu={jeu ?? 'hok'} onNaviguer={allerA} />;
+      case 'classements': {
+        // Un lien vers le ranking d'une discipline désactivée mène au premier
+        // ranking actif plutôt qu'à une page vide.
+        const actifs = jeuxActifs(data);
+        const jeuAffiche = actifs.find((j) => j.id === jeu)?.id ?? actifs[0]?.id;
+        if (!jeuAffiche) return <PageSaison data={data} onNaviguer={allerA} />;
+        return <PageClassements key={jeuAffiche} data={data} jeu={jeuAffiche} onNaviguer={allerA} />;
+      }
       case 'pantheon':
         return <PageHallOfFame data={data} onNaviguer={allerA} />;
       case 'joueurs':

@@ -2,10 +2,11 @@ import React from 'react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
 import { contenuDe } from '../data/contenu';
+import { CarteActualite } from './CarteActualite';
 import { urlSure } from '../lib/urls';
 import { Conteneur, Carte, TitreCarte, TitreSection, LienPage } from './ui';
 import { ReseauxSociaux } from './ReseauxSociaux';
-import { BlocDisciplines, BlocPhases, BlocVideos, BlocInscription, JEUX } from './Blocs';
+import { BlocDisciplines, BlocPhases, BlocVideos, BlocInscription, jeuxActifs } from './Blocs';
 
 interface PageAccueilProps {
   data: ELCData;
@@ -68,7 +69,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
           className="absolute bottom-28 right-[5%] hidden grid-cols-2 items-center justify-items-center gap-x-5 gap-y-3 md:grid"
           aria-label="Disciplines"
         >
-          {JEUX.map((j) => {
+          {jeuxActifs(data).map((j) => {
             const logo = data.competition?.[j.id]?.logoImage;
             return (
               <li key={j.id} className="flex h-11 w-32 items-center justify-center">
@@ -112,6 +113,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Les nouvelles de la ligue ---------- */}
+      {saison.actualites.length > 0 && (
       <section className="pb-12 sm:pb-20">
         <Conteneur>
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -122,18 +124,14 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
           </div>
           <ul className="grid gap-5 md:grid-cols-2">
             {saison.actualites.slice(0, 2).map((a, i) => (
-              <li key={i}>
-                <Carte as="article" className="flex h-full flex-col p-5 sm:p-7">
-                  <p className="surtitre mb-4 text-[0.7rem]">{a.rubrique}</p>
-                  <TitreCarte className="mb-4 text-xl sm:text-2xl">{a.titre}</TitreCarte>
-                  <p className="leading-relaxed text-texte">{a.texte}</p>
-                  {a.note && <p className="mt-6 border-t border-bord-fort pt-4 text-sm text-doux">{a.note}</p>}
-                </Carte>
+              <li key={a.id ?? i}>
+                <CarteActualite actu={a} />
               </li>
             ))}
           </ul>
         </Conteneur>
       </section>
+      )}
 
       {/* ---------- Calendrier ---------- */}
       <section className="pb-12 sm:pb-20">

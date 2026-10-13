@@ -14,6 +14,7 @@ import {
 import { OngletsSaison } from './OngletsSaison';
 import { CarteFaitMarquant } from './CarteFaitMarquant';
 import { AfficheDistinction } from './AfficheDistinction';
+import { jeuxActifs, listeDesJeux } from './Blocs';
 
 interface PageHallOfFameProps {
   data: ELCData;
@@ -113,6 +114,13 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
   const aucunLaureat = distinctions.every((d) => !d.nom);
   const etapes = pantheon.attributionSteps?.length ? pantheon.attributionSteps : ETAPES_PAR_DEFAUT;
   const saison = data.meta.saison || '2027';
+  // GodLike récompense le MOBA, Demon King le Battle Royale : sans aucune
+  // discipline active dans la famille, la distinction n'a pas lieu d'être.
+  const jeux = jeuxActifs(data);
+  const familles = new Set(jeux.map((j) => j.famille));
+  const distinctionsVisibles = distinctions.filter(
+    (d) => (d.key !== 'godlike' || familles.has('MOBA')) && (d.key !== 'demonking' || familles.has('Battle Royale'))
+  );
 
   return (
     <>
@@ -128,7 +136,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
               'Les distinctions et les faits marquants de la ligue, avec une règle : séparer les informations connues du palmarès encore à confirmer.'}
           </p>
           <div className="mt-8 sm:mt-12">
-            <OngletsSaison actif="halloffame" onNaviguer={onNaviguer} />
+            <OngletsSaison actif="halloffame" jeux={jeux.map((j) => j.id)} onNaviguer={onNaviguer} />
           </div>
         </Conteneur>
       </EnTetePage>
@@ -156,7 +164,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
           {/* Deux colonnes, pas quatre : une affiche a besoin de largeur, sinon
               la photo du joueur et le héros deviennent des vignettes. */}
           <ul className="grid gap-6 md:grid-cols-2 lg:gap-8">
-            {distinctions.map((d) => (
+            {distinctionsVisibles.map((d) => (
               <li key={d.key}>
                 <AfficheDistinction d={d} saison={saison} />
               </li>
@@ -213,11 +221,11 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
             <li>
               <CarteLien
                 section="classements"
-                jeu="hok"
+                jeu={jeux[0]?.id ?? 'hok'}
                 onNaviguer={onNaviguer}
                 surtitre="Le suivi par jeu"
-                titre="Les quatre rankings"
-                texte="Honor of Kings, Mobile Legends, PUBG Mobile et Free Fire : les classements de chaque discipline."
+                titre={jeux.length > 1 ? 'Les rankings' : 'Le ranking'}
+                texte={`${listeDesJeux(jeux)} : ${jeux.length > 1 ? 'les classements de chaque discipline' : 'le classement de la saison'}.`}
                 action="Explorer les classements"
                 icone={<ListOrdered className="h-6 w-6" />}
               />

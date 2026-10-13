@@ -179,6 +179,8 @@ export interface ELCBaremeMoba {
 
 export interface ELCMobaGame {
   nom: string;
+  /** Faux : discipline masquée sur tout le site pour la saison. Absent = active. */
+  actif?: boolean;
   family: string;
   logoImage?: string;
   calendrier: ELCCalendrierItem[];
@@ -203,6 +205,8 @@ export interface ELCTpsPlayer {
 
 export interface ELCTpsGame {
   nom: string;
+  /** Faux : discipline masquée sur tout le site pour la saison. Absent = active. */
+  actif?: boolean;
   family: string;
   logoImage?: string;
   calendrier: ELCCalendrierItem[];
@@ -294,10 +298,20 @@ export interface ELCFaitMarquant {
 }
 
 export interface ELCActualite {
+  /** Identifiant stable, pour réordonner sans tout redessiner. */
+  id?: string;
   rubrique: string;
   titre: string;
   texte: string;
   note?: string;
+  /** Date de publication, au format AAAA-MM-JJ. */
+  date?: string;
+  /** Lien facultatif, affiché en bouton. */
+  lien?: { url: string; libelle?: string };
+  /** Vidéo facultative : YouTube se lit sur le site, le reste s'ouvre en lien. */
+  video?: string;
+  /** Image facultative, en tête de carte. */
+  image?: string;
 }
 
 export interface ELCContenu {

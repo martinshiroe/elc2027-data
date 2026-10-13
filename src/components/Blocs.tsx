@@ -19,22 +19,53 @@ export const JEUX: { id: Jeu; nom: string; court: string; famille: 'MOBA' | 'Bat
   { id: 'ff', nom: 'Free Fire', court: 'Free Fire', famille: 'Battle Royale' },
 ];
 
+/**
+ * Disciplines retenues pour la saison. Une discipline désactivée dans l'admin
+ * (`competition.<jeu>.actif === false`) disparaît de tout le site public.
+ */
+export function jeuxActifs(data: ELCData) {
+  return JEUX.filter((j) => data.competition?.[j.id]?.actif !== false);
+}
+
+const NOMBRES = ['Aucun', 'Un', 'Deux', 'Trois', 'Quatre'];
+
+/** « Deux jeux », « Un jeu »… pour les titres qui annonçaient « Quatre ». */
+export function nombreDeJeux(n: number, mot: 'jeu' | 'discipline' = 'jeu'): string {
+  const nombre = mot === 'discipline' && n === 1 ? 'Une' : NOMBRES[n] ?? String(n);
+  const pluriel = n > 1 ? (mot === 'jeu' ? 'jeux' : 'disciplines') : mot;
+  return `${nombre} ${pluriel}`;
+}
+
+/** « Honor of Kings et Mobile Legends », « A, B et C ». */
+export function listeDesJeux(jeux: { nom: string }[]): string {
+  const noms = jeux.map((j) => j.nom.replace(': Bang Bang', ''));
+  return noms.length < 2 ? noms.join('') : `${noms.slice(0, -1).join(', ')} et ${noms[noms.length - 1]}`;
+}
+
 type Naviguer = (section: Section, jeu?: string) => void;
 
-/** Les quatre disciplines, chacune menant à son ranking. */
+/** Les disciplines actives, chacune menant à son ranking. */
 export const BlocDisciplines: React.FC<{ data: ELCData; onNaviguer: Naviguer; niveau?: 2 | 3 }> = ({
   data,
   onNaviguer,
   niveau = 2,
 }) => {
   const titres = data.visual1?.titres ?? [];
+  const jeux = jeuxActifs(data);
+  if (jeux.length === 0) return null;
+  const colonnes = jeux.length >= 4 ? 'lg:grid-cols-4' : jeux.length === 3 ? 'lg:grid-cols-3' : '';
   return (
     <div>
-      <TitreSection niveau={niveau} surtitre="Les disciplines" titre="Quatre jeux. Une seule ligue." className="mb-6 sm:mb-8">
+      <TitreSection
+        niveau={niveau}
+        surtitre="Les disciplines"
+        titre={`${nombreDeJeux(jeux.length)}. Une seule ligue.`}
+        className="mb-6 sm:mb-8"
+      >
         {data.visual2?.bandeauSousTitre}
       </TitreSection>
-      <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {JEUX.map((jeu) => {
+      <ul className={`grid gap-5 sm:grid-cols-2 ${colonnes}`}>
+        {jeux.map((jeu) => {
           const t = titres.find((x) => x.id === jeu.id);
           const logo = data.competition?.[jeu.id]?.logoImage;
           const image = data.competition?.[jeu.id]?.heroImage;

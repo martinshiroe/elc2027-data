@@ -4,7 +4,8 @@ import { LienPage } from './ui';
 
 // Barre d'onglets de « Saison news ». Ce sont des liens : chaque onglet a son
 // adresse (`/classements?jeu=mlbb`, `/hall-of-fame`) et se partage tel quel.
-// La maquette prévoit deux rankings ; la ligue en compte quatre.
+// La maquette prévoit deux rankings ; la ligue en compte jusqu'à quatre, selon
+// les disciplines actives de la saison.
 
 export type OngletSaison = 'actualites' | 'hok' | 'mlbb' | 'pubgm' | 'ff' | 'halloffame';
 
@@ -19,11 +20,13 @@ const ONGLETS: { id: OngletSaison; label: string; section: Section; jeu?: string
 
 export const OngletsSaison: React.FC<{
   actif: OngletSaison;
+  /** Identifiants des disciplines actives : les autres onglets de ranking disparaissent. */
+  jeux: string[];
   onNaviguer: (section: Section, jeu?: string) => void;
-}> = ({ actif, onNaviguer }) => (
+}> = ({ actif, jeux, onNaviguer }) => (
   <nav aria-label="Rubriques de la saison" className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
     <ul className="flex min-w-max border-b border-bord-fort">
-      {ONGLETS.map((o) => {
+      {ONGLETS.filter((o) => !o.jeu || jeux.includes(o.jeu)).map((o) => {
         const estActif = o.id === actif;
         return (
           <li key={o.id}>
