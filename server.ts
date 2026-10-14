@@ -57,6 +57,11 @@ async function startServer() {
 
   // Read data
   app.get('/api/data', (req, res) => {
+    // `?panne=1` dans l'URL de la page simule une API injoignable, pour
+    // vérifier les états d'erreur (actualités, rankings, Hall of Fame).
+    if (String(req.get('referer') || '').includes('panne=1')) {
+      return res.status(503).json({ error: 'Panne simulée.' });
+    }
     try {
       if (!fs.existsSync(DATA_FILE)) {
         return res.status(404).json({ error: 'Fichier de données introuvable.' });

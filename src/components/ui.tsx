@@ -217,7 +217,7 @@ export const EnTetePage: React.FC<{
     </div>
     <span aria-hidden="true" className="pointer-events-none absolute left-[6.5%] top-44 bottom-16 hidden w-0.5 bg-rose/80 lg:block" />
     <span aria-hidden="true" className="pointer-events-none absolute right-[6.5%] top-44 bottom-16 hidden w-0.5 bg-rose/80 lg:block" />
-    <div className="pt-24 pb-8 sm:pt-44 sm:pb-16">{children}</div>
+    <div className="pt-[13.5rem] pb-8 sm:pt-60 sm:pb-16 lg:pt-44">{children}</div>
   </section>
 );
 

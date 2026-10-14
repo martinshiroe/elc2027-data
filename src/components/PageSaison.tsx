@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListOrdered, Trophy, CalendarDays, ArrowRight } from 'lucide-react';
+import { ListOrdered, Trophy, CalendarDays, ArrowRight, Newspaper, CircleDashed } from 'lucide-react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
 import { contenuDe } from '../data/contenu';
@@ -18,15 +18,24 @@ import {
 } from './ui';
 import { OngletsSaison } from './OngletsSaison';
 import { jeuxActifs, nombreDeJeux } from './Blocs';
+import { EtatDonnees, EnChargement, CarteGabarit, CarteEtat, LienCourt, LiensCourts } from './Etats';
 
 interface PageSaisonProps {
   data: ELCData;
+  etat: EtatDonnees;
+  onReessayer: () => void;
   onNaviguer: (section: Section, jeu?: string) => void;
 }
 
-export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
+export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer, onNaviguer }) => {
   const { saison, apropos } = contenuDe(data);
-  const actifs = jeuxActifs(data).map((j) => j.id as string);
+  const jeux = jeuxActifs(data);
+  const actifs = jeux.map((j) => j.id as string);
+  const premierRanking = jeux[0] ? (
+    <LienPage section="classements" jeu={jeux[0].id} onNaviguer={onNaviguer} bouton="contour">
+      Voir le ranking {jeux[0].court}
+    </LienPage>
+  ) : undefined;
 
   const reperes: React.ComponentProps<typeof CarteLien>[] = [
     {
@@ -142,16 +151,39 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
       <section className="py-10 sm:py-16">
         <Conteneur>
           <TitreSection surtitre="La vie de l'ELC" titre="Les nouvelles de la ligue." className="mb-6 sm:mb-8" />
-          {saison.actualites.length === 0 && (
-            <Carte className="p-6 text-texte">Les premières actualités de la saison arrivent bientôt.</Carte>
+          {etat === 'chargement' ? (
+            <>
+              <EnChargement texte="Chargement des actualités…" />
+              <div className="grid gap-5 md:grid-cols-2">
+                <CarteGabarit lignes={6} />
+                <CarteGabarit lignes={6} />
+              </div>
+            </>
+          ) : etat === 'erreur' ? (
+            <CarteEtat
+              icone={<CircleDashed className="h-6 w-6" />}
+              titre="Le flux d'actualités est indisponible."
+              erreur
+              onReessayer={onReessayer}
+              actions={premierRanking}
+            >
+              Nous n'avons pas pu charger les nouvelles de la ligue. Cela ne signifie pas qu'aucune actualité n'a été
+              publiée. Réessayez ou poursuivez votre visite sur les autres pages.
+            </CarteEtat>
+          ) : saison.actualites.length === 0 ? (
+            <CarteEtat icone={<Newspaper className="h-6 w-6" />} titre="Aucune nouvelle actualité publiée." actions={premierRanking}>
+              Les prochaines nouvelles apparaîtront ici après publication. Les repères de la ligue restent disponibles ;
+              aucune date de saison n'est encore validée.
+            </CarteEtat>
+          ) : (
+            <ul className="grid gap-5 md:grid-cols-2">
+              {saison.actualites.map((a, i) => (
+                <li key={a.id ?? i}>
+                  <CarteActualite actu={a} grand />
+                </li>
+              ))}
+            </ul>
           )}
-          <ul className="grid gap-5 md:grid-cols-2">
-            {saison.actualites.map((a, i) => (
-              <li key={a.id ?? i}>
-                <CarteActualite actu={a} grand />
-              </li>
-            ))}
-          </ul>
         </Conteneur>
       </section>
 
@@ -185,6 +217,32 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, onNaviguer }) => {
               </div>
             </div>
           </BandePlanete>
+        </Conteneur>
+      </section>
+
+      {/* ---------- Liens ---------- */}
+      <section className="pb-14 sm:pb-20">
+        <Conteneur>
+          <LiensCourts>
+            {jeux.slice(0, 2).map((j) => (
+              <LienCourt
+                key={j.id}
+                section="classements"
+                jeu={j.id}
+                onNaviguer={onNaviguer}
+                titre={`Ranking ${j.nom.replace(': Bang Bang', '')}`}
+                action={`Suivre ${j.nom.replace(': Bang Bang', '')}`}
+                icone={<ListOrdered className="h-6 w-6" />}
+              />
+            ))}
+            <LienCourt
+              section="pantheon"
+              onNaviguer={onNaviguer}
+              titre="Hall of Fame"
+              action="Explorer le Hall of Fame"
+              icone={<Trophy className="h-6 w-6" />}
+            />
+          </LiensCourts>
         </Conteneur>
       </section>
     </>

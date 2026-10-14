@@ -22,6 +22,7 @@ import { DataManagementModal } from './components/DataManagementModal';
 import { AdminPortal } from './components/AdminPortal';
 import { InstallPwaPrompt } from './components/InstallPwaPrompt';
 import { jeuxActifs } from './components/Blocs';
+import type { EtatDonnees } from './components/Etats';
 
 export function App() {
   const [data, setData] = useState<ELCData>(initialELCData);
@@ -34,22 +35,41 @@ export function App() {
   const [isDataModalOpen, setIsDataModalOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
-  // Données du site : le contenu embarqué s'affiche aussitôt, puis la version
-  // publiée par l'admin le remplace dès que l'API répond.
+  // Données du site. Les textes fixes s'affichent aussitôt avec le contenu
+  // embarqué ; les blocs qui dépendent des données publiées (actualités,
+  // classements, distinctions) montrent un état de chargement, puis d'erreur
+  // si l'API ne répond pas — plutôt que d'afficher en silence une version
+  // périmée, comme le prévoit la maquette.
+  const [etatDonnees, setEtatDonnees] = useState<EtatDonnees>('chargement');
+  const [essai, setEssai] = useState(0);
+  const reessayer = useCallback(() => {
+    setEtatDonnees('chargement');
+    setEssai((n) => n + 1);
+  }, []);
+
   useEffect(() => {
     let actif = true;
-    fetch('/api/data')
+    fetch('/api/data', { cache: 'no-store' })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
       .then((distant) => {
-        if (actif && distant && distant.meta) setData(distant);
+        if (!actif) return;
+        if (!distant?.meta) throw new Error('Réponse sans données');
+        setData(distant);
+        setEtatDonnees('pret');
       })
       .catch((err) => {
-        console.warn('API indisponible, données embarquées utilisées :', err);
+        console.warn('API indisponible :', err);
+        if (actif) setEtatDonnees('erreur');
       });
+    return () => {
+      actif = false;
+    };
+  }, [essai]);
 
+  useEffect(() => {
     // Accès discret au portail d'administration (aucun bouton public).
     const verifierAdmin = () => {
       if (
@@ -72,7 +92,6 @@ export function App() {
     window.addEventListener('keydown', auClavier);
 
     return () => {
-      actif = false;
       window.removeEventListener('hashchange', verifierAdmin);
       window.removeEventListener('keydown', auClavier);
     };
@@ -132,7 +151,7 @@ export function App() {
       case 'apropos':
         return <PageAPropos data={data} onNaviguer={allerA} />;
       case 'saison':
-        return <PageSaison data={data} onNaviguer={allerA} />;
+        return <PageSaison data={data} etat={etatDonnees} onReessayer={reessayer} onNaviguer={allerA} />;
       case 'competition':
         return <PageCalendrier data={data} onNaviguer={allerA} onOpenRegulations={ouvrirReglement} />;
       case 'classements': {
@@ -140,11 +159,11 @@ export function App() {
         // ranking actif plutôt qu'à une page vide.
         const actifs = jeuxActifs(data);
         const jeuAffiche = actifs.find((j) => j.id === jeu)?.id ?? actifs[0]?.id;
-        if (!jeuAffiche) return <PageSaison data={data} onNaviguer={allerA} />;
-        return <PageClassements key={jeuAffiche} data={data} jeu={jeuAffiche} onNaviguer={allerA} />;
+        if (!jeuAffiche) return <PageSaison data={data} etat={etatDonnees} onReessayer={reessayer} onNaviguer={allerA} />;
+        return <PageClassements key={jeuAffiche} data={data} jeu={jeuAffiche} etat={etatDonnees} onReessayer={reessayer} onNaviguer={allerA} />;
       }
       case 'pantheon':
-        return <PageHallOfFame data={data} onNaviguer={allerA} />;
+        return <PageHallOfFame data={data} etat={etatDonnees} onReessayer={reessayer} onNaviguer={allerA} />;
       case 'joueurs':
         return <PageJoueurs data={data} onNaviguer={allerA} />;
       case 'videos':

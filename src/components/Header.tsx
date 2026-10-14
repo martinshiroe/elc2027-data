@@ -89,6 +89,8 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
           />
         </LienPage>
 
+        <span aria-hidden="true" className="mx-5 mt-7 h-0.5 flex-1 bg-rose/90 sm:mt-10 lg:hidden" />
+
         <nav aria-label="Navigation principale" className="hidden flex-1 items-center pt-5 lg:flex">
           <span aria-hidden="true" className="mx-6 h-0.5 flex-1 bg-rose/90" />
           <ul className="flex items-center gap-2">
@@ -128,6 +130,31 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
           <span className="block h-[3px] w-6 bg-white" />
         </button>
       </div>
+
+      {/* Mobile et tablette : les quatre entrées restent visibles, en grille
+          2 × 2 sous le logo, comme sur la maquette mobile. */}
+      <nav aria-label="Navigation principale" className="px-4 sm:px-8 lg:hidden">
+        <ul className="grid grid-cols-2 gap-2">
+          {PRINCIPALES.map((item) => {
+            const actif = item.actifSur.includes(activeSection);
+            return (
+              <li key={item.id}>
+                <LienPage
+                  section={item.id}
+                  onNaviguer={aller}
+                  aria-current={activeSection === item.id ? 'page' : undefined}
+                  className={`relative isolate flex h-11 items-center justify-center px-2 text-[0.8rem] font-extrabold italic uppercase tracking-[0.14em] text-white sm:h-12 sm:text-sm ${
+                    actif ? '' : 'border border-bord-fort bg-nuit/55 backdrop-blur-sm'
+                  }`}
+                >
+                  {actif && <span aria-hidden="true" className="biseau absolute inset-0 -z-10 bg-magenta-plein" />}
+                  {item.label}
+                </LienPage>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
 
       {menuOuvert && (
         <div
