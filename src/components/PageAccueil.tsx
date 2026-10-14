@@ -20,7 +20,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
   return (
     <>
       {/* ---------- Héros plein écran (cadre « LIGUE DE L'EST SITE WEB ») ---------- */}
-      <section className="relative isolate flex min-h-[560px] flex-col overflow-hidden md:min-h-[100svh]" aria-labelledby="titre-accueil">
+      <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden md:min-h-[100svh]" aria-labelledby="titre-accueil">
         <div aria-hidden="true" className="absolute inset-0 -z-10">
           <img
             src="/img/hero-joueur.webp"
@@ -41,12 +41,12 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         <span aria-hidden="true" className="pointer-events-none absolute left-[6.5%] top-36 bottom-[19rem] hidden w-0.5 bg-rose/90 md:block" />
         <span aria-hidden="true" className="pointer-events-none absolute right-[6.5%] top-36 bottom-[16rem] hidden w-0.5 bg-rose/90 md:block" />
 
-        <div className="flex flex-1 items-center px-5 pt-24 pb-32 sm:px-[11.5%] md:pt-40 md:pb-40">
-          <div className="max-w-md border border-white/10 bg-white/[0.07] px-6 py-7 text-center shadow-2xl backdrop-blur-md sm:px-12 sm:py-9">
+        <div className="flex flex-1 items-center px-5 pt-[13.5rem] pb-56 sm:px-[11.5%] sm:pt-60 md:pb-40 lg:pt-40">
+          <div className="mx-auto w-full max-w-md border border-white/10 bg-white/[0.07] px-6 py-7 text-center shadow-2xl backdrop-blur-md sm:mx-0 sm:px-12 sm:py-9">
             <h1 id="titre-accueil" className="titre text-[1.4rem] leading-[1.18] tracking-[0.04em] sm:text-[2rem]">
               Affronte les meilleurs — sans compromis
             </h1>
-            <p className="mx-auto mt-4 max-w-xs text-left text-base font-medium italic leading-snug tracking-wide text-white sm:mt-5 sm:text-lg">
+            <p className="mx-auto mt-4 max-w-xs text-center text-base sm:text-left font-medium italic leading-snug tracking-wide text-white sm:mt-5 sm:text-lg">
               Pour que l'esport rayonne dans toute la région de l'Est.
             </p>
             <p className="sr-only">
@@ -89,6 +89,33 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
             );
           })}
         </ul>
+
+        {/* Mobile : réseaux à l'horizontale et disciplines empilées, au-dessus
+            de « S'inscrire », comme sur la maquette mobile. */}
+        <div className="absolute inset-x-0 bottom-24 flex items-end justify-between gap-4 px-5 md:hidden">
+          <ReseauxSociaux reseaux={data.meta.reseaux} className="gap-3!" />
+          <ul className="flex flex-col items-end gap-2" aria-label="Disciplines">
+            {jeuxActifs(data).map((j) => {
+              const logo = data.competition?.[j.id]?.logoImage;
+              return (
+                <li key={j.id} className="flex h-9 w-28 items-center justify-end">
+                  {logo ? (
+                    <img
+                      src={urlSure(logo)}
+                      alt={j.nom}
+                      referrerPolicy="no-referrer"
+                      className="max-h-full max-w-full object-contain [filter:drop-shadow(0_0_1px_rgba(255,255,255,0.9))_drop-shadow(0_0_6px_rgba(255,255,255,0.25))]"
+                    />
+                  ) : (
+                    <span className="text-right text-xs font-extrabold italic uppercase leading-tight tracking-wider text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                      {j.nom.replace(': Bang Bang', '')}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
 
         {/* « S'inscrire » en biseau, entre deux filets */}
         <div className="absolute inset-x-0 bottom-6 flex items-center px-5 sm:bottom-8 sm:px-[13%]">

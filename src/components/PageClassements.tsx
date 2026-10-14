@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ListOrdered, Trophy, ExternalLink, Search } from 'lucide-react';
+import { ListOrdered, Trophy, ExternalLink, Search, Newspaper, CircleDashed } from 'lucide-react';
 import { ELCData, ELCMobaGame, ELCTpsGame, ELCBracketTeam } from '../types';
 import { Section } from '../lib/routes';
 import { urlSure } from '../lib/urls';
@@ -7,8 +7,8 @@ import {
   Conteneur,
   EnTetePage,
   Carte,
-  CarteLien,
   TitreCarte,
+  LienPage,
   TitreSection,
   Avis,
   BoutonLien,
@@ -16,12 +16,23 @@ import {
 } from './ui';
 import { OngletsSaison } from './OngletsSaison';
 import { JEUX, Jeu, jeuxActifs } from './Blocs';
+import { EtatDonnees, EnChargement, Barre, CarteEtat, LienCourt, LiensCourts } from './Etats';
 
 interface PageClassementsProps {
   data: ELCData;
   jeu: Jeu;
+  etat: EtatDonnees;
+  onReessayer: () => void;
   onNaviguer: (section: Section, jeu?: string) => void;
 }
+
+type Naviguer = (section: Section, jeu?: string) => void;
+
+const RetourActus: React.FC<{ onNaviguer: Naviguer }> = ({ onNaviguer }) => (
+  <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour">
+    Retour aux actualités
+  </LienPage>
+);
 
 // Les emplacements non attribués portent un nom générique (« Équipe 3 »,
 // « Joueur 12 ») : ils ne doivent pas apparaître comme des engagés.
@@ -29,7 +40,7 @@ const estGenerique = (nom: string | undefined) => !nom || /^(équipe|equipe|joue
 
 const deuxChiffres = (n: number) => String(n).padStart(2, '0');
 
-export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onNaviguer }) => {
+export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, etat, onReessayer, onNaviguer }) => {
   const info = JEUX.find((j) => j.id === jeu)!;
   const moba = jeu === 'hok' || jeu === 'mlbb';
   const actifs = jeuxActifs(data);
@@ -60,47 +71,65 @@ export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onN
 
       <section className="pb-10 sm:pb-14">
         <Conteneur>
-          {moba ? (
-            <ClassementMoba jeu={data.competition[jeu as 'hok' | 'mlbb']} data={data} />
+          {etat === 'chargement' ? (
+            <ChargementClassement nom={info.nom} moba={moba} />
+          ) : etat === 'erreur' ? (
+            <CarteEtat
+              icone={<CircleDashed className="h-6 w-6" />}
+              titre="Le classement n'a pas pu être chargé."
+              erreur
+              onReessayer={onReessayer}
+              actions={<RetourActus onNaviguer={onNaviguer} />}
+            >
+              Les données du classement {info.nom} sont inaccessibles pour le moment. Il s'agit d'un problème de
+              chargement, pas d'une absence de résultats. Aucun tableau n'est affiché à leur place.
+            </CarteEtat>
+          ) : moba ? (
+            <ClassementMoba jeu={data.competition[jeu as 'hok' | 'mlbb']} data={data} onNaviguer={onNaviguer} />
           ) : (
-            <ClassementTps jeu={data.competition[jeu as 'pubgm' | 'ff']} />
+            <ClassementTps jeu={data.competition[jeu as 'pubgm' | 'ff']} onNaviguer={onNaviguer} />
+          )}
+          {etat !== 'pret' && (
+            <Avis titre={`ELC ${data.meta.saison || '2027'} · Résultats officiels`} className="mt-8">
+              Les résultats officiels de {info.nom} sont publiés ici après validation par la ligue.
+              {titres?.lancement ? ` Lancement prévu : ${titres.lancement}.` : ''}
+            </Avis>
           )}
         </Conteneur>
       </section>
 
       {/* ---------- Calendrier de la discipline ---------- */}
-      <CalendrierJeu jeu={data.competition[jeu]} startGgUrl={data.meta.startGgUrl} />
+      {etat === 'pret' && <CalendrierJeu jeu={data.competition[jeu]} startGgUrl={data.meta.startGgUrl} />}
 
       {/* ---------- Liens ---------- */}
       <section className="pb-14 sm:pb-20">
         <Conteneur>
-          <ul className={`grid gap-5 ${infoAutre ? 'md:grid-cols-2' : ''}`}>
+          <LiensCourts>
+            <LienCourt
+              section="saison"
+              onNaviguer={onNaviguer}
+              titre="Saison news"
+              action="Retour aux actualités"
+              icone={<Newspaper className="h-6 w-6" />}
+            />
             {infoAutre && (
-              <li>
-                <CarteLien
-                  section="classements"
-                  jeu={infoAutre.id}
-                  onNaviguer={onNaviguer}
-                  surtitre={moba ? "L'autre MOBA" : "L'autre Battle Royale"}
-                  titre={infoAutre.nom}
-                  texte="Retrouvez l'autre classement de la discipline : mêmes critères de lecture, même barème."
-                  action="Voir le ranking"
-                  icone={<ListOrdered className="h-6 w-6" />}
-                />
-              </li>
-            )}
-            <li>
-              <CarteLien
-                section="pantheon"
+              <LienCourt
+                section="classements"
+                jeu={infoAutre.id}
                 onNaviguer={onNaviguer}
-                surtitre="Au-delà du tableau"
-                titre="Hall of Fame"
-                texte="Découvrez les faits marquants connus et les distinctions de la ligue."
-                action="Explorer le Hall of Fame"
-                icone={<Trophy className="h-6 w-6" />}
+                titre={infoAutre.nom}
+                action={`Voir le ranking ${infoAutre.court}`}
+                icone={<ListOrdered className="h-6 w-6" />}
               />
-            </li>
-          </ul>
+            )}
+            <LienCourt
+              section="pantheon"
+              onNaviguer={onNaviguer}
+              titre="Hall of Fame"
+              action="Explorer le Hall of Fame"
+              icone={<Trophy className="h-6 w-6" />}
+            />
+          </LiensCourts>
         </Conteneur>
       </section>
     </>
@@ -111,12 +140,15 @@ export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, onN
 /* Chiffres clés                                                        */
 /* ------------------------------------------------------------------ */
 
-const ChiffresCles: React.FC<{ chiffres: { valeur: string; legende: string }[] }> = ({ chiffres }) => (
+const ChiffresCles: React.FC<{ chiffres: { valeur: string; legende: string; detail?: string }[] }> = ({ chiffres }) => (
   <dl className="grid grid-cols-3 gap-2.5 sm:gap-5">
     {chiffres.map((c) => (
       <div key={c.legende} className="flex flex-col gap-1 border border-bord bg-carte px-3 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-5">
         <dd className="titre text-2xl normal-case sm:text-4xl">{c.valeur}</dd>
-        <dt className="text-xs leading-snug text-texte sm:text-base">{c.legende}</dt>
+        <dt className="text-xs leading-snug text-texte sm:text-base">
+          {c.legende}
+          {c.detail && <span className="block text-[0.7rem] text-doux sm:text-xs">{c.detail}</span>}
+        </dt>
       </div>
     ))}
   </dl>
@@ -136,6 +168,42 @@ const CelluleEquipe: React.FC<{ nom: string; logo?: string }> = ({ nom, logo }) 
 );
 
 /* ------------------------------------------------------------------ */
+/* Chargement                                                           */
+/* ------------------------------------------------------------------ */
+
+const ChargementClassement: React.FC<{ nom: string; moba: boolean }> = ({ nom, moba }) => (
+  <div>
+    <EnChargement texte={`Chargement du classement ${nom}…`} />
+    <div className="grid grid-cols-3 gap-2.5 sm:gap-5" aria-hidden="true">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="flex items-center gap-3 border border-bord bg-carte px-4 py-5">
+          <Barre className="h-6 w-10 shrink-0" />
+          <Barre className="flex-1" />
+        </div>
+      ))}
+    </div>
+    <Carte className="mt-5 overflow-hidden">
+      <div className="border-b border-bord-fort px-6 py-5">
+        <TitreCarte niveau={2} className="text-xl sm:text-2xl">
+          Classement des {moba ? 'équipes' : 'joueurs'}
+        </TitreCarte>
+      </div>
+      <div aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="flex items-center gap-4 border-t border-bord px-6 py-5">
+            <Barre className="h-7 w-7 shrink-0" />
+            <Barre className="flex-1" />
+            <Barre className="hidden flex-1 sm:block" />
+            <Barre className="hidden flex-1 sm:block" />
+          </div>
+        ))}
+      </div>
+    </Carte>
+    <p className="mt-5 text-texte">Les rangs et les statistiques restent masqués pendant le chargement.</p>
+  </div>
+);
+
+/* ------------------------------------------------------------------ */
 /* MOBA : classement des équipes + tableau final                        */
 /* ------------------------------------------------------------------ */
 
@@ -150,7 +218,7 @@ interface LigneMoba {
   points: number;
 }
 
-const ClassementMoba: React.FC<{ jeu: ELCMobaGame; data: ELCData }> = ({ jeu, data }) => {
+const ClassementMoba: React.FC<{ jeu: ELCMobaGame; data: ELCData; onNaviguer: Naviguer }> = ({ jeu, data, onNaviguer }) => {
   const bareme = jeu.bareme ?? { victoire: 3, nul: 1, defaite: 0 };
   const equipes = (jeu.bracket?.equipes ?? []).filter((e) => !estGenerique(e.nom));
 
@@ -170,13 +238,30 @@ const ClassementMoba: React.FC<{ jeu: ELCMobaGame; data: ELCData }> = ({ jeu, da
   const seriesMax = Math.max(0, ...lignes.map((l) => l.joues));
   const format = data.visual2?.structure?.qualifsFinales?.match(/bo\s?(\d)/i)?.[1];
 
+  // Aucune équipe annoncée : pas de tableau vide ni d'arbre de « À déterminer ».
+  if (equipes.length === 0) {
+    return (
+      <div className="space-y-5">
+        <ChiffresCles
+          chiffres={[
+            { valeur: '—', legende: 'Équipes classées', detail: 'Non disponible' },
+            { valeur: '—', legende: 'Séries validées', detail: 'Non disponible' },
+            { valeur: format ? `Bo${format}` : '—', legende: 'Format officiel', detail: format ? undefined : 'Non disponible' },
+          ]}
+        />
+        <CarteEtat icone={<ListOrdered className="h-6 w-6" />} titre="Le classement reste à établir." actions={<RetourActus onNaviguer={onNaviguer} />}>
+          Pas encore de résultats validés pour établir un classement {jeu.nom}. Aucun rang ni point ne peut être
+          attribué avant validation.
+        </CarteEtat>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       {!resultats && (
-        <Avis titre={equipes.length > 0 ? 'Aucun résultat officiel pour le moment' : 'Classement pas encore ouvert'}>
-          {equipes.length > 0
-            ? 'Les équipes engagées sont listées ci-dessous. Le classement se remplira au fil des séries validées par la ligue.'
-            : "Les équipes engagées seront annoncées après la clôture des inscriptions. Le tableau se remplira au fil des séries validées par la ligue."}
+        <Avis titre="Aucun résultat officiel pour le moment">
+          Les équipes engagées sont listées ci-dessous. Le classement se remplira au fil des séries validées par la ligue.
         </Avis>
       )}
 
@@ -201,7 +286,50 @@ const ClassementMoba: React.FC<{ jeu: ELCMobaGame; data: ELCData }> = ({ jeu, da
         {lignes.length === 0 ? (
           <p className="px-6 py-10 text-center text-doux">Aucune équipe annoncée pour l'instant.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+          {/* Mobile : une carte par équipe, comme sur la maquette. Le tableau
+              à 8 colonnes ne tient pas sur un téléphone sans défiler. */}
+          <ol className="space-y-3 p-3 md:hidden" aria-label={`Classement des équipes de ${jeu.nom}`}>
+            {lignes.map((l, i) => {
+              const diff = l.mg - l.mp;
+              const tete = i === 0 && resultats;
+              const stats: [string, React.ReactNode][] = [
+                ['Joués', l.joues],
+                ['Victoires', l.v],
+                ...(avecNuls ? [['Nuls', l.n] as [string, React.ReactNode]] : []),
+                ['Défaites', l.d],
+                ['Manches V–D', `${l.mg} – ${l.mp}`],
+                ['Diff.', diff > 0 ? `+${diff}` : diff],
+              ];
+              return (
+                <li key={l.equipe.id} className={`border p-4 ${tete ? 'border-magenta bg-carte-haute' : 'border-bord bg-carte'}`}>
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <p className="text-xs text-doux">Rang</p>
+                      <p className={`titre text-3xl ${tete ? 'text-magenta' : ''}`}>{deuxChiffres(i + 1)}</p>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="mb-1 text-xs text-doux">Équipe</p>
+                      <CelluleEquipe nom={l.equipe.nom} logo={l.equipe.logo} />
+                    </div>
+                  </div>
+                  <dl className="mt-4 grid grid-cols-3 gap-x-3 gap-y-3 border-t border-bord pt-3">
+                    {stats.map(([libelle, valeur]) => (
+                      <div key={libelle}>
+                        <dt className="text-xs text-doux">{libelle}</dt>
+                        <dd className="text-lg text-white">{valeur}</dd>
+                      </div>
+                    ))}
+                    <div>
+                      <dt className="text-xs text-doux">Points</dt>
+                      <dd className="text-lg font-bold text-magenta">{l.points}</dd>
+                    </div>
+                  </dl>
+                </li>
+              );
+            })}
+          </ol>
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full min-w-[760px] text-left">
               <caption className="sr-only">Classement des équipes de {jeu.nom}</caption>
               <thead className="bg-carte-haute text-sm font-semibold text-doux">
@@ -243,6 +371,7 @@ const ClassementMoba: React.FC<{ jeu: ELCMobaGame; data: ELCData }> = ({ jeu, da
               </tbody>
             </table>
           </div>
+          </>
         )}
         <p className="border-t border-bord-fort px-6 py-4 text-sm text-doux">
           Joués, victoires et défaites portent sur les séries. Les manches sont les parties gagnées ou perdues au sein de
@@ -363,7 +492,7 @@ const TableauFinal: React.FC<{ jeu: ELCMobaGame }> = ({ jeu }) => {
 /* Battle Royale : classement individuel                                */
 /* ------------------------------------------------------------------ */
 
-const ClassementTps: React.FC<{ jeu: ELCTpsGame }> = ({ jeu }) => {
+const ClassementTps: React.FC<{ jeu: ELCTpsGame; onNaviguer: Naviguer }> = ({ jeu, onNaviguer }) => {
   const [recherche, setRecherche] = useState('');
   const bareme = jeu.bareme ?? { places: [], elimination: 0 };
 
@@ -382,11 +511,9 @@ const ClassementTps: React.FC<{ jeu: ELCTpsGame }> = ({ jeu }) => {
 
   return (
     <div className="space-y-8">
-      {!resultats && (
-        <Avis titre={joueurs.length > 0 ? 'Aucun résultat officiel pour le moment' : 'Classement pas encore ouvert'}>
-          {joueurs.length > 0
-            ? 'Les joueurs engagés sont listés ci-dessous. Les points se cumuleront au fil des manches validées par la ligue.'
-            : 'Les joueurs qualifiés seront annoncés après la clôture des inscriptions et des qualifications en ligne.'}
+      {!resultats && joueurs.length > 0 && (
+        <Avis titre="Aucun résultat officiel pour le moment">
+          Les joueurs engagés sont listés ci-dessous. Les points se cumuleront au fil des manches validées par la ligue.
         </Avis>
       )}
 
@@ -398,62 +525,69 @@ const ClassementTps: React.FC<{ jeu: ELCTpsGame }> = ({ jeu }) => {
         ]}
       />
 
-      <Carte className="overflow-hidden">
-        <div className="flex flex-col gap-4 border-b border-bord-fort px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-          <TitreCarte niveau={2} className="text-xl sm:text-2xl">Classement des joueurs</TitreCarte>
-          {joueurs.length > 0 && (
-            <label className="relative block w-full sm:w-72">
-              <span className="sr-only">Rechercher un joueur</span>
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-doux" aria-hidden="true" />
-              <input
-                type="search"
-                value={recherche}
-                onChange={(e) => setRecherche(e.target.value)}
-                placeholder="Rechercher un joueur"
-                className="w-full border border-bord-champ bg-encre py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-doux focus:border-magenta focus:outline-none"
-              />
-            </label>
-          )}
-        </div>
-        <div className="max-h-[640px] overflow-auto">
-          <table className="w-full text-left">
-            <caption className="sr-only">Classement individuel de {jeu.nom}</caption>
-            <thead className="sticky top-0 bg-carte-haute text-sm font-semibold text-doux">
-              <tr>
-                <th scope="col" className="px-3 py-4 sm:px-6">Rang</th>
-                <th scope="col" className="py-4 pr-4">Joueur</th>
-                <th scope="col" className="px-2 py-4 text-center"><abbr title="Éliminations" className="no-underline sm:hidden">Élim.</abbr><span className="hidden sm:inline">Éliminations</span></th>
-                <th scope="col" className="px-3 py-4 sm:px-6 text-center">Points</th>
-              </tr>
-            </thead>
-            <tbody>
-              {affiches.length === 0 ? (
+      {joueurs.length === 0 ? (
+        <CarteEtat icone={<ListOrdered className="h-6 w-6" />} titre="Le classement reste à établir." actions={<RetourActus onNaviguer={onNaviguer} />}>
+          Les joueurs qualifiés de {jeu.nom} seront annoncés après la clôture des inscriptions et des qualifications en
+          ligne. Aucun rang ni point ne peut être attribué avant validation.
+        </CarteEtat>
+      ) : (
+        <Carte className="overflow-hidden">
+          <div className="flex flex-col gap-4 border-b border-bord-fort px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+            <TitreCarte niveau={2} className="text-xl sm:text-2xl">Classement des joueurs</TitreCarte>
+            {joueurs.length > 0 && (
+              <label className="relative block w-full sm:w-72">
+                <span className="sr-only">Rechercher un joueur</span>
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-doux" aria-hidden="true" />
+                <input
+                  type="search"
+                  value={recherche}
+                  onChange={(e) => setRecherche(e.target.value)}
+                  placeholder="Rechercher un joueur"
+                  className="w-full border border-bord-champ bg-encre py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-doux focus:border-magenta focus:outline-none"
+                />
+              </label>
+            )}
+          </div>
+          <div className="max-h-[640px] overflow-auto">
+            <table className="w-full text-left">
+              <caption className="sr-only">Classement individuel de {jeu.nom}</caption>
+              <thead className="sticky top-0 bg-carte-haute text-sm font-semibold text-doux">
                 <tr>
-                  <td colSpan={4} className="px-4 py-10 sm:px-6 text-center text-doux">
-                    {joueurs.length === 0 ? "Aucun joueur annoncé pour l'instant." : 'Aucun joueur ne correspond à cette recherche.'}
-                  </td>
+                  <th scope="col" className="px-3 py-4 sm:px-6">Rang</th>
+                  <th scope="col" className="py-4 pr-4">Joueur</th>
+                  <th scope="col" className="px-2 py-4 text-center"><abbr title="Éliminations" className="no-underline sm:hidden">Élim.</abbr><span className="hidden sm:inline">Éliminations</span></th>
+                  <th scope="col" className="px-3 py-4 sm:px-6 text-center">Points</th>
                 </tr>
-              ) : (
-                affiches.map((j) => {
-                  const rang = joueurs.indexOf(j) + 1;
-                  return (
-                    <tr key={j.id} className={`border-t border-bord ${rang === 1 && resultats ? 'bg-carte-haute' : ''}`}>
-                      <td className="px-3 py-3.5 sm:px-6">
-                        <span className={`titre text-2xl ${rang === 1 && resultats ? 'text-magenta' : ''}`}>{deuxChiffres(rang)}</span>
-                      </td>
-                      <td className="py-3.5 pr-4">
-                        <CelluleEquipe nom={j.nom} logo={j.photo} />
-                      </td>
-                      <td className="px-3 py-3.5 text-center text-white">{j.kills}</td>
-                      <td className="px-3 py-3.5 sm:px-6 text-center text-lg font-bold text-magenta">{j.scoreTotal}</td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-      </Carte>
+              </thead>
+              <tbody>
+                {affiches.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-4 py-10 sm:px-6 text-center text-doux">
+                      {joueurs.length === 0 ? "Aucun joueur annoncé pour l'instant." : 'Aucun joueur ne correspond à cette recherche.'}
+                    </td>
+                  </tr>
+                ) : (
+                  affiches.map((j) => {
+                    const rang = joueurs.indexOf(j) + 1;
+                    return (
+                      <tr key={j.id} className={`border-t border-bord ${rang === 1 && resultats ? 'bg-carte-haute' : ''}`}>
+                        <td className="px-3 py-3.5 sm:px-6">
+                          <span className={`titre text-2xl ${rang === 1 && resultats ? 'text-magenta' : ''}`}>{deuxChiffres(rang)}</span>
+                        </td>
+                        <td className="py-3.5 pr-4">
+                          <CelluleEquipe nom={j.nom} logo={j.photo} />
+                        </td>
+                        <td className="px-3 py-3.5 text-center text-white">{j.kills}</td>
+                        <td className="px-3 py-3.5 sm:px-6 text-center text-lg font-bold text-magenta">{j.scoreTotal}</td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Carte>
+      )}
 
       <div>
         <TitreSection surtitre="Comprendre le tableau" titre="Le barème Battle Royale." className="mb-6" />

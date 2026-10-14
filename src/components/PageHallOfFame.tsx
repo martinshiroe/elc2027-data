@@ -1,23 +1,20 @@
 import React from 'react';
-import { Crown, Swords, Flame, Shield, Newspaper, ListOrdered } from 'lucide-react';
+import { Crown, Swords, Flame, Shield, Newspaper, ListOrdered, CircleDashed } from 'lucide-react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
 import { urlCss } from '../lib/urls';
 import { contenuDe } from '../data/contenu';
-import {
-  Conteneur,
-  EnTetePage,
-  CarteLien,
-  TitreSection,
-  Avis,
-} from './ui';
+import { Conteneur, EnTetePage, TitreSection, Avis, LienPage } from './ui';
+import { EtatDonnees, EnChargement, CarteGabarit, CarteEtat, LienCourt, LiensCourts } from './Etats';
 import { OngletsSaison } from './OngletsSaison';
 import { CarteFaitMarquant } from './CarteFaitMarquant';
 import { AfficheDistinction } from './AfficheDistinction';
-import { jeuxActifs, listeDesJeux } from './Blocs';
+import { jeuxActifs } from './Blocs';
 
 interface PageHallOfFameProps {
   data: ELCData;
+  etat: EtatDonnees;
+  onReessayer: () => void;
   onNaviguer: (section: Section, jeu?: string) => void;
 }
 
@@ -82,7 +79,7 @@ const ETAPES_PAR_DEFAUT = [
   },
 ];
 
-export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer }) => {
+export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onReessayer, onNaviguer }) => {
   const { faitMarquant } = contenuDe(data);
   const pantheon = data.pantheon ?? { curated: [] };
   const curated = pantheon.curated ?? [];
@@ -141,64 +138,111 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
         </Conteneur>
       </EnTetePage>
 
-      {/* ---------- Le fait marquant ---------- */}
-      <section className="pb-10 sm:pb-16">
-        <Conteneur>
-          <TitreSection surtitre="Dans la présentation de la ligue" titre="Une performance à retenir." className="mb-6 sm:mb-8" />
-          <CarteFaitMarquant fait={faitMarquant} />
-        </Conteneur>
-      </section>
+      {etat === 'pret' ? (
+        <>
+        {/* ---------- Le fait marquant ---------- */}
+        <section className="pb-10 sm:pb-16">
+          <Conteneur>
+            <TitreSection surtitre="Dans la présentation de la ligue" titre="Une performance à retenir." className="mb-6 sm:mb-8" />
+            <CarteFaitMarquant fait={faitMarquant} />
+          </Conteneur>
+        </section>
 
-      {/* ---------- Les distinctions ---------- */}
-      <section className="py-10 sm:py-16">
-        <Conteneur>
-          <TitreSection
-            surtitre={aucunLaureat ? 'Le prochain chapitre' : `Distinctions officielles · Saison ${saison}`}
-            titre={aucunLaureat ? 'Le palmarès reste à écrire.' : 'Les distinctions de la saison.'}
-            className="mb-6 sm:mb-8"
-          >
-            {aucunLaureat
-              ? "Aucun palmarès officiel n'a été fourni. Ces espaces sont réservés aux distinctions de la saison, après confirmation des compétitions, des résultats et des accords de publication."
-              : 'Chaque distinction récompense une saison entière, une fois les résultats validés.'}
-          </TitreSection>
-          {/* Deux colonnes, pas quatre : une affiche a besoin de largeur, sinon
-              la photo du joueur et le héros deviennent des vignettes. */}
-          <ul className="grid gap-6 md:grid-cols-2 lg:gap-8">
-            {distinctionsVisibles.map((d) => (
-              <li key={d.key}>
-                <AfficheDistinction d={d} saison={saison} />
-              </li>
-            ))}
-          </ul>
-        </Conteneur>
-      </section>
-
-      {/* ---------- Attribution ---------- */}
-      <section className="py-10 sm:py-16">
-        <Conteneur>
-          <div className="relative isolate overflow-hidden border border-bord-fort bg-carte p-7 sm:p-10">
-            {data.meta.pantheonBannerImage && (
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 -z-10 bg-cover bg-center opacity-30"
-                style={{ backgroundImage: `url("${urlCss(data.meta.pantheonBannerImage)}")` }}
-              />
-            )}
-            <TitreSection surtitre="Les règles" titre={pantheon.titreAttribution || 'Comment sont-elles attribuées ?'} className="mb-6 sm:mb-8" />
-            <ol className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {etapes.map((e) => (
-                <li key={e.step}>
-                  <p className="titre mb-3 text-3xl text-magenta">{e.step}</p>
-                  <p className="mb-2 font-bold italic text-white">{e.title}</p>
-                  <p className="text-sm leading-relaxed text-texte">{e.desc}</p>
+        {/* ---------- Les distinctions ---------- */}
+        <section className="py-10 sm:py-16">
+          <Conteneur>
+            <TitreSection
+              surtitre={aucunLaureat ? 'Le prochain chapitre' : `Distinctions officielles · Saison ${saison}`}
+              titre={aucunLaureat ? 'Le palmarès reste à écrire.' : 'Les distinctions de la saison.'}
+              className="mb-6 sm:mb-8"
+            >
+              {aucunLaureat
+                ? "Aucun palmarès officiel n'a été fourni. Ces espaces sont réservés aux distinctions de la saison, après confirmation des compétitions, des résultats et des accords de publication."
+                : 'Chaque distinction récompense une saison entière, une fois les résultats validés.'}
+            </TitreSection>
+            {/* Deux colonnes, pas quatre : une affiche a besoin de largeur, sinon
+                la photo du joueur et le héros deviennent des vignettes. */}
+            <ul className="grid gap-6 md:grid-cols-2 lg:gap-8">
+              {distinctionsVisibles.map((d) => (
+                <li key={d.key}>
+                  <AfficheDistinction d={d} saison={saison} />
                 </li>
               ))}
-            </ol>
-          </div>
+            </ul>
+          </Conteneur>
+        </section>
 
-          <Avis titre="Un Hall of Fame fondé sur la confiance." className="mt-10">
-            Avant toute publication : vérifier le résultat, confirmer le contexte et la distinction, puis obtenir les
-            accords nécessaires. Aucun titre n'est attribué sans validation de la ligue.
+        {/* ---------- Attribution ---------- */}
+        <section className="py-10 sm:py-16">
+          <Conteneur>
+            <div className="relative isolate overflow-hidden border border-bord-fort bg-carte p-7 sm:p-10">
+              {data.meta.pantheonBannerImage && (
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 -z-10 bg-cover bg-center opacity-30"
+                  style={{ backgroundImage: `url("${urlCss(data.meta.pantheonBannerImage)}")` }}
+                />
+              )}
+              <TitreSection surtitre="Les règles" titre={pantheon.titreAttribution || 'Comment sont-elles attribuées ?'} className="mb-6 sm:mb-8" />
+              <ol className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {etapes.map((e) => (
+                  <li key={e.step}>
+                    <p className="titre mb-3 text-3xl text-magenta">{e.step}</p>
+                    <p className="mb-2 font-bold italic text-white">{e.title}</p>
+                    <p className="text-sm leading-relaxed text-texte">{e.desc}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+          </Conteneur>
+        </section>
+        </>
+      ) : (
+        <section className="pb-4">
+          <Conteneur>
+            {etat === 'chargement' ? (
+              <>
+                <EnChargement texte="Chargement des distinctions…" />
+                <div className="grid gap-5 md:grid-cols-3">
+                  <CarteGabarit rond />
+                  <CarteGabarit rond />
+                  <CarteGabarit rond />
+                </div>
+                <p className="mt-6 text-texte">
+                  Les distinctions sont en cours de chargement. Aucune identité ni performance n'est affichée pendant
+                  l'attente.
+                </p>
+              </>
+            ) : (
+              <CarteEtat
+                icone={<CircleDashed className="h-6 w-6" />}
+                titre="Les distinctions sont inaccessibles."
+                erreur
+                onReessayer={onReessayer}
+                actions={
+                  <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour">
+                    Retour aux actualités
+                  </LienPage>
+                }
+              >
+                Nous n'avons pas pu accéder aux données des distinctions. Ce problème de chargement ne permet pas de
+                conclure à l'absence de palmarès. Réessayez ou retrouvez les actualités de la ligue.
+              </CarteEtat>
+            )}
+          </Conteneur>
+        </section>
+      )}
+
+      {/* ---------- Confiance ---------- */}
+      <section className="py-10 sm:py-12">
+        <Conteneur>
+          <Avis titre="Un Hall of Fame fondé sur la confiance.">
+            Vérifier le résultat, confirmer le contexte et la distinction, puis obtenir les accords nécessaires avant
+            toute publication.{' '}
+            {etat === 'pret' && !aucunLaureat
+              ? "Aucun titre n'est attribué sans validation de la ligue."
+              : "Aucun lauréat n'est annoncé ici."}
           </Avis>
         </Conteneur>
       </section>
@@ -206,31 +250,26 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, onNaviguer
       {/* ---------- Liens ---------- */}
       <section className="pb-14 sm:pb-20">
         <Conteneur>
-          <ul className="grid gap-5 md:grid-cols-2">
-            <li>
-              <CarteLien
-                section="saison"
-                onNaviguer={onNaviguer}
-                surtitre="La vie de la ligue"
-                titre="Saison news"
-                texte="Programme de la saison, matchs custom, diffusion et projet de Gaming House : retrouvez les informations de la ligue."
-                action="Retour aux actualités"
-                icone={<Newspaper className="h-6 w-6" />}
-              />
-            </li>
-            <li>
-              <CarteLien
+          <LiensCourts>
+            <LienCourt
+              section="saison"
+              onNaviguer={onNaviguer}
+              titre="Saison news"
+              action="Retour aux actualités"
+              icone={<Newspaper className="h-6 w-6" />}
+            />
+            {jeux.slice(0, 2).map((j) => (
+              <LienCourt
+                key={j.id}
                 section="classements"
-                jeu={jeux[0]?.id ?? 'hok'}
+                jeu={j.id}
                 onNaviguer={onNaviguer}
-                surtitre="Le suivi par jeu"
-                titre={jeux.length > 1 ? 'Les rankings' : 'Le ranking'}
-                texte={`${listeDesJeux(jeux)} : ${jeux.length > 1 ? 'les classements de chaque discipline' : 'le classement de la saison'}.`}
-                action="Explorer les classements"
+                titre={`Ranking ${j.nom.replace(': Bang Bang', '')}`}
+                action={`Voir le ranking ${j.court}`}
                 icone={<ListOrdered className="h-6 w-6" />}
               />
-            </li>
-          </ul>
+            ))}
+          </LiensCourts>
         </Conteneur>
       </section>
     </>

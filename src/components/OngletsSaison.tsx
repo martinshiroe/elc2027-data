@@ -24,8 +24,10 @@ export const OngletsSaison: React.FC<{
   jeux: string[];
   onNaviguer: (section: Section, jeu?: string) => void;
 }> = ({ actif, jeux, onNaviguer }) => (
-  <nav aria-label="Rubriques de la saison" className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
-    <ul className="flex min-w-max border-b border-bord-fort">
+  <nav aria-label="Rubriques de la saison" className="sm:overflow-x-auto">
+    {/* Mobile : onglets empilés pleine largeur (maquette mobile) ;
+        à partir de 640 px, la barre horizontale. */}
+    <ul className="flex flex-col gap-2 sm:min-w-max sm:flex-row sm:gap-0 sm:border-b sm:border-bord-fort">
       {ONGLETS.filter((o) => !o.jeu || jeux.includes(o.jeu)).map((o) => {
         const estActif = o.id === actif;
         return (
@@ -35,10 +37,10 @@ export const OngletsSaison: React.FC<{
               jeu={o.jeu}
               onNaviguer={onNaviguer}
               aria-current={estActif ? 'page' : undefined}
-              className={`-mb-px block border-b-[3px] px-5 py-4 text-sm font-bold italic whitespace-nowrap transition-colors sm:px-6 sm:text-[0.95rem] ${
+              className={`block border-b-[3px] px-5 py-3.5 text-[0.95rem] font-bold italic whitespace-nowrap transition-colors sm:-mb-px sm:px-6 sm:py-4 ${
                 estActif
-                  ? 'border-magenta bg-carte-haute text-white'
-                  : 'border-transparent text-doux hover:text-white'
+                  ? 'border-magenta bg-avis text-white sm:bg-carte-haute'
+                  : 'border-bord-fort bg-carte text-doux hover:text-white sm:border-transparent sm:bg-transparent'
               }`}
             >
               {o.label}
