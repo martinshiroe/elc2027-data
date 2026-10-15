@@ -182,8 +182,14 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
             {texteSite(apropos.partenaires.map((p, i) => (
               <li key={p.titre}>
                 <Carte haute={i === apropos.partenaires.length - 1} className="h-full p-6">
+                  {p.logo && (/^https?:\/\//i.test(p.url?.trim() ?? '') && urlSure(p.url) ? (
+                    <a href={urlSure(p.url)} target="_blank" rel="noopener noreferrer" aria-label={`Visiter ${p.titre} (nouvel onglet)`} className="mb-5 flex min-h-28 items-center justify-center rounded-lg border border-bord-fort bg-white/5 p-4 transition-colors hover:border-magenta focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-magenta">
+                      <ImagePublique src={imageSite(p.logo)} alt={`Logo ${p.titre}`} loading="lazy" referrerPolicy="no-referrer" className="h-24 w-full object-contain" />
+                    </a>
+                  ) : <ImagePublique src={imageSite(p.logo)} alt={`Logo ${p.titre}`} loading="lazy" referrerPolicy="no-referrer" className="mb-5 h-24 w-full object-contain" />)}
                   <TitreCarte className="mb-4">{texteSite(p.titre)}</TitreCarte>
                   <p className="leading-relaxed text-texte">{texteSite(p.texte)}</p>
+                  {/^https?:\/\//i.test(p.url?.trim() ?? '') && urlSure(p.url) && <a href={urlSure(p.url)} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block font-bold text-magenta underline underline-offset-4">Visiter {texteSite(p.titre)}<span className="sr-only"> (nouvel onglet)</span></a>}
                 </Carte>
               </li>
             )))}
