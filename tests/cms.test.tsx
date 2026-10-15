@@ -49,6 +49,27 @@ test('Le portrait survit à la fusion des contenus et reste visible dans le form
 
 const importedImage='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aV1sAAAAASUVORK5CYII=';
 
+test('Les partenaires conservent leurs logos et liens, y compris la FECASES',()=>{
+  const data=structuredClone(initialELCData);
+  data.contenu={...data.contenu,apropos:{...data.contenu?.apropos,partenaires:[
+    {titre:'FECASES',texte:'Affiliation',logo:importedImage,url:'https://example.com/fecases'},
+    {titre:'Partenaire local',texte:'Soutien',logo:'https://example.com/logo.png',url:'https://example.com/partenaire'},
+    {titre:'Sans lien',texte:'Présentation',logo:importedImage},
+    {titre:'Lien refusé',texte:'Présentation',logo:importedImage,url:'javascript:alert(1)'}
+  ]}};
+  const saved=JSON.parse(JSON.stringify(data));
+  assert.equal(contenuDe(saved).apropos.partenaires[0].logo,importedImage);
+  const html=render(<PageAPropos data={saved} onNaviguer={noop}/>);
+  assert.match(html,/aria-label="Visiter FECASES \(nouvel onglet\)"/);
+  assert.match(html,/href="https:\/\/example.com\/fecases"/);
+  assert.match(html,/href="https:\/\/example.com\/partenaire"/);
+  assert.match(html,/rel="noopener noreferrer"/);
+  assert.ok(!html.includes('javascript:'));
+  assert.ok(html.includes(`src="${importedImage}"`));
+  const admin=render(<OngletPages formData={saved} setFormData={noop}/>);
+  assert.match(admin,/Logo du partenaire/);assert.match(admin,/Lien vers le site ou la page/);assert.match(admin,/Ajouter un partenaire/);
+});
+
 test('Les imports raster sont acceptés uniquement comme images ; les liens de partage sont expliqués',()=>{
   assert.equal(urlImage(importedImage),importedImage);
   assert.equal(urlCss(importedImage),importedImage);

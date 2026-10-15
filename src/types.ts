@@ -281,6 +281,11 @@ export interface ELCBlocTexte {
   texte: string;
 }
 
+export interface ELCPartenaire extends ELCBlocTexte {
+  logo?: string;
+  url?: string;
+}
+
 export interface ELCMembreBureau {
   nom: string;
   role: string;
@@ -328,7 +333,7 @@ export interface ELCContenu {
     bureau?: ELCMembreBureau[];
     equipes?: string[];
     production?: ELCBlocTexte;
-    partenaires?: ELCBlocTexte[];
+    partenaires?: ELCPartenaire[];
   };
   saison?: {
     chapitre?: { annee: string; statut: string; texte: string };

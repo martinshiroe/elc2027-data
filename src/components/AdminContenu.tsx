@@ -346,7 +346,19 @@ export const OngletPages: React.FC<{ formData: ELCData; setFormData: Maj }> = ({
       </Bloc>
 
       <Bloc titre="Partenaires et soutiens">
-        <ListeBlocs liste={apropos.partenaires} onChange={(l) => majApropos({ partenaires: l })} nomElement="un partenaire" />
+        <p className="text-xs text-slate-400">Pour la FECASES comme pour chaque partenaire, ajoutez le logo et l’adresse de sa page ou de son site. Le lien s’ouvre dans un nouvel onglet.</p>
+        {apropos.partenaires.map((p, i) => {
+          const update = (patch: Partial<typeof p>) => majApropos({partenaires: apropos.partenaires.map((item, j) => j === i ? {...item, ...patch} : item)});
+          return <div key={i} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+            <Commandes liste={apropos.partenaires} index={i} onChange={partenaires=>majApropos({partenaires})} nom={p.titre || 'ce partenaire'}/>
+            <Champ label="Nom du partenaire" valeur={p.titre} onChange={titre=>update({titre})}/>
+            <Champ label="Présentation" valeur={p.texte} multiligne onChange={texte=>update({texte})}/>
+            <Champ label="Logo du partenaire" valeur={p.logo} onChange={logo=>update({logo:logo || undefined})}/>
+            <Champ label="Lien vers le site ou la page" valeur={p.url} placeholder="https://…" onChange={url=>update({url:url || undefined})} aide="Adresse complète commençant par https:// ou http://."/>
+            {p.url && !/^https?:\/\//i.test(p.url.trim()) && <p role="alert" className="text-xs text-amber-300">Ajoutez https:// au début du lien. Un lien invalide ne sera pas actif sur la vitrine.</p>}
+          </div>;
+        })}
+        <BoutonAjout onClick={()=>majApropos({partenaires:[...apropos.partenaires,{titre:'Nouveau partenaire',texte:''}]})}>Ajouter un partenaire</BoutonAjout>
       </Bloc>
 
       <Bloc titre="Fait marquant (À propos et Hall of Fame)" icone={<Star className="w-4 h-4" />}>
