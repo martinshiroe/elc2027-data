@@ -116,7 +116,9 @@ function choisir<T>(saisi: T | undefined, defaut: T): T {
 }
 
 function fusionner<T extends object>(saisi: Partial<T> | undefined, defaut: T): T {
-  const resultat = { ...defaut };
+  // Les champs facultatifs (ex. photo du fait marquant) n'existent pas
+  // forcément dans la maquette : conserver aussi les clés saisies.
+  const resultat = { ...defaut, ...saisi };
   if (!saisi) return resultat;
   for (const cle of Object.keys(defaut) as (keyof T)[]) {
     resultat[cle] = choisir(saisi[cle] as T[keyof T] | undefined, defaut[cle]);
