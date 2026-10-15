@@ -1,0 +1,2594 @@
+{
+  "textes": [
+    {
+      "valeur": " – ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " · ",
+      "fichiers": [
+        "CarteActualite.tsx",
+        "PageClassements.tsx",
+        "PageVideos.tsx",
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": " · Inscriptions",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": " « ",
+      "fichiers": [
+        "CarteFaitMarquant.tsx"
+      ]
+    },
+    {
+      "valeur": " »",
+      "fichiers": [
+        "CarteFaitMarquant.tsx"
+      ]
+    },
+    {
+      "valeur": " (nouvel onglet)",
+      "fichiers": [
+        "Blocs.tsx",
+        "CarteActualite.tsx",
+        "PageAPropos.tsx",
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": " + nuls",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " Conjointe pour les 4 disciplines, organisée en présentiel en Novembre 2027 dans la Région de l'Est du Cameroun.",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": " Déroulement 100% en ligne sous la supervision d'arbitres en temps réel.",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": " ELC",
+      "fichiers": [
+        "Footer.tsx"
+      ]
+    },
+    {
+      "valeur": " équipe",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " Groupes de 32 joueurs, attribution des points basée sur le placement officiel (15 à 1 pts) et 1 point par élimination confirmée.",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": " par élimination. Le classement additionne toutes les manches ; à égalité, le nombre d'éliminations départage.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " place",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " point",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " Tournois à 16 équipes en élimination directe au format Best of 3 (BO3).",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": ": Bang Bang",
+      "fichiers": [
+        "PageAccueil.tsx"
+      ]
+    },
+    {
+      "valeur": ".",
+      "fichiers": [
+        "PageAPropos.tsx",
+        "PageCalendrier.tsx",
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": ". Compétition organisée par la Ligue Esport Est Cameroun, affiliée à la FECASES.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "« ",
+      "fichiers": [
+        "CarteFaitMarquant.tsx"
+      ]
+    },
+    {
+      "valeur": "(",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": ")",
+      "fichiers": [
+        "PageJoueurs.tsx",
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "*",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "© ",
+      "fichiers": [
+        "Footer.tsx"
+      ]
+    },
+    {
+      "valeur": "+",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "01 · Barème",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "02 · Ordre du tableau",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "03 · Après la saison",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "1re",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "404",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "À attribuer",
+      "fichiers": [
+        "AfficheDistinction.tsx"
+      ]
+    },
+    {
+      "valeur": "à construire.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "À fournir",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "À la une",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "À propos",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx",
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "About us",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Accord de publication à obtenir",
+      "fichiers": [
+        "CarteFaitMarquant.tsx"
+      ]
+    },
+    {
+      "valeur": "Accueil",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Actualités",
+      "fichiers": [
+        "OngletsSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Actualités de la ligue, classements par jeu et faits marquants : suivez l'ELC depuis Bertoua, au cœur de l'Est Cameroun.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Affiliation institutionnelle et partenaires locaux.",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Affronte les meilleurs — sans compromis",
+      "fichiers": [
+        "PageAccueil.tsx"
+      ]
+    },
+    {
+      "valeur": "Annonce officielle",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Arbre officiel sur start.gg",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Assistance WhatsApp",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Au-delà du tableau",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucun joueur annoncé pour l'instant.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucun joueur ne correspond à cette recherche.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucun joueur ne correspond.",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucun joueur publié pour le moment.",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucun palmarès officiel n'a été fourni. Ces espaces sont réservés aux distinctions de la saison, après confirmation des compétitions, des résultats et des accords de publication.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucun portrait publié",
+      "fichiers": [
+        "CarteFaitMarquant.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucun résultat officiel pour le moment",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucune équipe annoncée pour l'instant.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucune présentation disponible pour le moment.",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucune vidéo ne correspond.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Avant de commencer",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Avant toute publication : vérifier le résultat, confirmer le contexte et la distinction, puis obtenir les accords nécessaires. Aucun titre n'est attribué sans validation de la ligue.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Battle Royale / TPS (PUBG Mobile & Free Fire) :",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Bertoua · Est Cameroun",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Bertoua, Est Cameroun.",
+      "fichiers": [
+        "PageAPropos.tsx",
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Bientôt disponible",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Biographie non disponible pour le moment.",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Brackets sur start.gg",
+      "fichiers": [
+        "PageCalendrier.tsx"
+      ]
+    },
+    {
+      "valeur": "Calcul des stats",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Calendrier",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Calendrier · Saison ",
+      "fichiers": [
+        "PageCalendrier.tsx"
+      ]
+    },
+    {
+      "valeur": "Calendrier de la discipline",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Calendrier prévisionnel",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Ce qu'il faut savoir.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Ce que nous faisons",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Cette page n'existe pas ou n'est plus accessible à cette adresse. Retrouvez l'accueil ou découvrez la ligue.",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "Cette vidéo ne peut pas être lue ici.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Chaîne YouTube",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Champion",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Changez de plateforme, de discipline ou de recherche.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Chaque distinction récompense une saison entière, une fois les résultats validés.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Chaque inscription est vérifiée par la commission technique pour garantir l'équité sportive et le respect du fair-play.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Chaque joueur doit soumettre son identifiant joueur (UID) et faire vérifier son terminal avant chaque manche par les commissaires de la Ligue.",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Chaque manche rapporte des points selon la place finale, plus ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Classement des équipes",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Classement des équipes de ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Classement des joueurs",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "classement individuel au cumul des points de placement et des éliminations.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Classement individuel de ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "classement par séries, puis tableau final à élimination directe.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Classement pas encore ouvert",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Comment lire ce ranking ?",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Comment se joue la saison.",
+      "fichiers": [
+        "PageCalendrier.tsx"
+      ]
+    },
+    {
+      "valeur": "Comment sont-elles attribuées ?",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Communauté et joueurs",
+      "fichiers": [
+        "PageAPropos.tsx",
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Compétiteur",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Compétitions, diffusion et suivi des résultats.",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Composition d'équipe",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Comprendre le tableau",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Compte TikTok",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Conditions requises",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Contact",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Contact et réseaux",
+      "fichiers": [
+        "PageAPropos.tsx",
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Contacter sur WhatsApp",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Contrôle Technique & Terminaux Personnels",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Dans la présentation de la ligue",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Décerné au joueur le plus dominant de la saison, toutes disciplines confondues. Une seule attribution par saison.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Découvrez les faits marquants connus et les distinctions de la ligue.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Découvrir le Hall of Fame",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Défaites",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Délégation Régionale de l'Est, FECASES",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Délégation régionale de l'Est, FECASES.",
+      "fichiers": [
+        "PageContact.tsx",
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "Délégation régionale de la FECASES.",
+      "fichiers": [
+        "Footer.tsx"
+      ]
+    },
+    {
+      "valeur": "Demi-finales",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Demie ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Demon King",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Dernière mise à jour : ",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Des équipes et des joueurs qui font vivre la compétition.",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Des noms, des rôles, une même ambition.",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Diff.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Diffusion",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Diffusion · Vidéos officielles",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "discipline",
+      "fichiers": [
+        "PageCalendrier.tsx"
+      ]
+    },
+    {
+      "valeur": "Discipline",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Discipline & Sanctions Arbitrales",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Disciplines",
+      "fichiers": [
+        "PageAccueil.tsx"
+      ]
+    },
+    {
+      "valeur": "Discord",
+      "fichiers": [
+        "ReseauxSociaux.tsx"
+      ]
+    },
+    {
+      "valeur": "Domination absolue dans les disciplines Battle Royale (PUBG Mobile, Free Fire). Calculé sur le cumul des points saison.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Échangeons.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "echec",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "ELC",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "ELC ",
+      "fichiers": [
+        "AfficheDistinction.tsx"
+      ]
+    },
+    {
+      "valeur": "ELC — East League of Cameroun",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "ELC — inscriptions ouvertes",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "ELC · Bertoua, Est Cameroun",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "Élim.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Élimination",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Éliminations",
+      "fichiers": [
+        "PageClassements.tsx",
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Élu par les pairs et les organisateurs pour son impact en jeu et son fair-play exemplaire tout au long de la saison.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "email",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Email officiel",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "En savoir plus",
+      "fichiers": [
+        "CarteActualite.tsx"
+      ]
+    },
+    {
+      "valeur": "Entre dans",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Envoi en cours…",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "envoye",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Envoyer",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Équipe",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Équipes MOBA et joueurs Battle Royale : inscrivez-vous pour la prochaine saison de la ligue.",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Équipes MOBA et joueurs Battle Royale : renseignez vos informations, votre pièce d'identité et la capture de votre compte de jeu.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Essayez une autre discipline ou un autre nom.",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "est vide",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Être résident au Cameroun (priorité Est Cameroun). Disposer d'un compte valide sur le jeu concerné et d'une connexion stable.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Explorer le Hall of Fame",
+      "fichiers": [
+        "PageClassements.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Explorer les classements",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Facebook",
+      "fichiers": [
+        "ReseauxSociaux.tsx"
+      ]
+    },
+    {
+      "valeur": "Fermer",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Fermer le lecteur",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Fermer le menu",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Filtrer par discipline",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Fin de saison",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Format de compétition",
+      "fichiers": [
+        "PageCalendrier.tsx"
+      ]
+    },
+    {
+      "valeur": "Format des Compétitions & Déroulement",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Formulaire d'inscription officiel",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Formulaire de contact",
+      "fichiers": [
+        "PageAPropos.tsx",
+        "PageContact.tsx",
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Formulaire ouvert",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "fr-FR",
+      "fichiers": [
+        "PageClassements.tsx",
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Free Fire",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageJoueurs.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "G.O.A.T",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "G.O.A.T, GodLike et Demon King sont calculés à partir du cumul des points saison par discipline.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "GodLike",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Grande finale",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Grande Finale :",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Greatest Of All Time",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "h-40 w-40",
+      "fichiers": [
+        "CarteFaitMarquant.tsx"
+      ]
+    },
+    {
+      "valeur": "h-64 w-full md:w-60",
+      "fichiers": [
+        "CarteFaitMarquant.tsx"
+      ]
+    },
+    {
+      "valeur": "Hall of Fame",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx",
+        "OngletsSaison.tsx",
+        "PageClassements.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Hall of Fame.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Home",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Homologation Officielle",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Honor of Kings",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageJoueurs.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Huitièmes",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Il est exigé par le formulaire pour l'envoi des pièces justificatives.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Inscription",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Inscrivez ",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Inspection technique",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Instagram",
+      "fichiers": [
+        "ReseauxSociaux.tsx"
+      ]
+    },
+    {
+      "valeur": "Je m'inscris",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Joués",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Joués, victoires et défaites portent sur les séries. Les manches sont les parties gagnées ou perdues au sein de ces séries.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Joueur",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Joueurs",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "L'adresse email doit être corrigée.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "L'autre Battle Royale",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "L'autre MOBA",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "L'envoi a échoué. Vos informations sont conservées ; vous pouvez réessayer",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "L'équipe / bureau exécutif",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "la compétition.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "La mémoire de l'Est.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "La saison",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "La scène de l'Est.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "la vidéo",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "La vie de l'ELC",
+      "fichiers": [
+        "PageAccueil.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "La vie de la ligue",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Le barème Battle Royale.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Le bureau exécutif, selon la liste du ",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "le classement de la saison",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Le classement des équipes MOBA, le tableau final à élimination directe et le barème.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Le classement individuel Battle Royale : points de placement et éliminations.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Le formulaire s'ouvre dans un nouvel onglet.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Le jeu en direct.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Le jeu en direct. Les moments forts en vidéo.",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Le message n'a pas été envoyé",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Le MVP est élu par les joueurs participants et les organisateurs via un formulaire de vote interne.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Le palmarès reste à écrire.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Le prochain chapitre",
+      "fichiers": [
+        "PageHallOfFame.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Le ranking",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Le suivi par jeu",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Le tableau final",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Le tableau final.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "le terrain.",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "les classements de chaque discipline",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les coordonnées et liens officiels ne sont pas encore disponibles. Le formulaire reste votre point de contact.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Les dates de chaque jeu.",
+      "fichiers": [
+        "PageCalendrier.tsx"
+      ]
+    },
+    {
+      "valeur": "Les disciplines",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Les distinctions de la saison.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les distinctions et les faits marquants de la ligue, avec une règle : séparer les informations connues du palmarès encore à confirmer.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les distinctions sont décernées à l'issue de la dernière journée de compétition, une fois tous les résultats validés.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les équipes de la communauté",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Les équipes de la communauté seront présentées ici dès qu'elles pourront l'être.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Les équipes engagées seront annoncées après la clôture des inscriptions. Le tableau se remplira au fil des séries validées par la ligue.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les équipes engagées sont listées ci-dessous. Le classement se remplira au fil des séries validées par la ligue.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les équipes poursuivent en élimination directe : huitièmes, quarts, demi-finales puis grande finale.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les faits connus, les distinctions à confirmer et les moments qui font vivre la ligue.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Les inscriptions ouvrent bientôt.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Les inscriptions ouvriront prochainement. Écrivez-nous dès maintenant pour pré-enregistrer votre équipe.",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Les inscriptions sont ouvertes.",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Les joueurs",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Les joueurs engagés sont listés ci-dessous. Les points se cumuleront au fil des manches validées par la ligue.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les joueurs et les équipes engagés dans les disciplines de la ligue, validés par le comité de l'ELC et la FECASES.",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Les joueurs qualifiés seront annoncés après la clôture des inscriptions et des qualifications en ligne.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les lauréats sont annoncés sur les réseaux sociaux de l'ELC et mis en avant sur cette page.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les listes officielles des joueurs et des équipes s'afficheront ici au fur et à mesure des validations par le comité de la ligue et la FECASES.",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Les moments forts.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Les nouvelles de la ligue.",
+      "fichiers": [
+        "PageAccueil.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Les phases de la saison, les périodes par discipline et le format des rencontres.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Les premières actualités de la saison arrivent bientôt.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Les premières vidéos de la ligue seront publiées ici.",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Les présentations de la communauté et des partenaires locaux ne sont pas encore disponibles à la publication. Pour échanger avec la ligue, contactez-nous.",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Les rankings",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les règles",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les repères de la saison",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Les résultats officiels seront publiés après validation, dans les rankings de chaque jeu.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Les retransmissions de matchs, résumés et clips de la ligue seront publiés ici dès les premières rencontres.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Les vidéos arrivent bientôt.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Les vidéos TikTok de la ligue se regardent sur l'application ou le site TikTok.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Ligue Esport Est Cameroun — accueil",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Ligue régionale d'esport de l'Est Cameroun",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx",
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Ligue Régionale d'Esport de l'Est Cameroun — ELC, East League of Cameroon. Délégation régionale de la FECASES.",
+      "fichiers": [
+        "PageAccueil.tsx"
+      ]
+    },
+    {
+      "valeur": "long",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Manches V–D",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Match ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Matchs en direct, highlights et clips de la ligue, publiés sur nos chaînes YouTube et TikTok.",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Meilleur joueur Battle Royale",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Meilleur joueur MOBA",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Mémoire de la ligue",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Mentions légales",
+      "fichiers": [
+        "Footer.tsx"
+      ]
+    },
+    {
+      "valeur": "Menu du site",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Merci d'avoir contacté la ligue. Vous pouvez poursuivre votre visite ou écrire un nouveau message.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Message ",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "MOBA (Honor of Kings & Mobile Legends) :",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "MOBA (Honor of Kings, Mobile Legends) : 5 titulaires et 2 remplaçants au maximum. Battle Royale (PUBG Mobile, Free Fire) : solo, duo ou squad selon le tournoi.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Mobile Legends",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Mobile Legends: Bang Bang",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Most Valuable Player",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "MVP",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Navigation principale",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "nom",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Nom / Équipe",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "nom@exemple.com",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Nomination à venir",
+      "fichiers": [
+        "AfficheDistinction.tsx"
+      ]
+    },
+    {
+      "valeur": "Nominé officiel",
+      "fichiers": [
+        "AfficheDistinction.tsx"
+      ]
+    },
+    {
+      "valeur": "Nous contacter",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Nous rejoindre",
+      "fichiers": [
+        "PageAccueil.tsx"
+      ]
+    },
+    {
+      "valeur": "Nouveau message",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Nuls",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "numeric",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "ou écrire directement à",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Ouvrir ",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Ouvrir le menu",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Page introuvable",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "Pages du site",
+      "fichiers": [
+        "Footer.tsx"
+      ]
+    },
+    {
+      "valeur": "Par discipline",
+      "fichiers": [
+        "PageCalendrier.tsx"
+      ]
+    },
+    {
+      "valeur": "Partenaires et soutiens",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Performance exceptionnelle dans les disciplines MOBA (Honor of Kings, Mobile Legends). Élu sur les stats de la saison entière.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Phase finale",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Photo du joueur",
+      "fichiers": [
+        "AfficheDistinction.tsx"
+      ]
+    },
+    {
+      "valeur": "Plateforme",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Points",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Points ELC",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Points, puis différence",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Portrait du nominé",
+      "fichiers": [
+        "AfficheDistinction.tsx"
+      ]
+    },
+    {
+      "valeur": "Portrait non disponible",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Pour que l'esport rayonne dans toute la région de l'Est.",
+      "fichiers": [
+        "PageAccueil.tsx"
+      ]
+    },
+    {
+      "valeur": "Préparez votre équipe.",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Prévoyez un compte Google",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Programme de la saison, matchs custom, diffusion et projet de Gaming House : retrouvez les informations de la ligue.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Pseudo ou équipe",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "PUBG Mobile",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageJoueurs.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Publication en attente de validation",
+      "fichiers": [
+        "CarteFaitMarquant.tsx"
+      ]
+    },
+    {
+      "valeur": "Qualifications :",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Quart ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Quarts",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "qui font la ligue.",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Qui nous sommes",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Rang",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking —",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking · Free Fire",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking · HoK",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking · MLBB",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking · PUBG M",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking Free Fire",
+      "fichiers": [
+        "OngletsSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking HoK",
+      "fichiers": [
+        "OngletsSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking MLBB",
+      "fichiers": [
+        "OngletsSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Ranking PUBG M",
+      "fichiers": [
+        "OngletsSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Rankings",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Rechercher un joueur",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Rechercher un joueur ou une équipe",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Rechercher une vidéo",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Réessayer",
+      "fichiers": [
+        "PageContact.tsx",
+        "Etats.tsx"
+      ]
+    },
+    {
+      "valeur": "Règlement FECASES",
+      "fichiers": [
+        "PageCalendrier.tsx",
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Règlement Intérieur & Statuts FECASES",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Réinitialiser les filtres",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Réseaux",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Retour à l'accueil",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "Retour au site",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Retour aux actualités",
+      "fichiers": [
+        "PageHallOfFame.tsx",
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Retour dans la partie",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "Retrouvez l'autre classement de la discipline : mêmes critères de lecture, même barème.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Rubriques de la saison",
+      "fichiers": [
+        "OngletsSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "s",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "S'inscrire",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageAccueil.tsx",
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "saisie",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Saison ",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Saison news",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx",
+        "PageAccueil.tsx",
+        "PageHallOfFame.tsx",
+        "PageVideos.tsx",
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Saison news · ELC ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Saison news · ELC — East League of Cameroun",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Saison news · Les faits marquants",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Site web",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "sont vides",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "sur TikTok",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Systèmes autorisés",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Terminaux Android et iOS natifs uniquement. L'utilisation d'émulateurs PC, de macros ou d'accessoires de modification matérielle non homologués est strictement interdite.",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "tiktok",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "TikTok",
+      "fichiers": [
+        "PageVideos.tsx",
+        "ReseauxSociaux.tsx"
+      ]
+    },
+    {
+      "valeur": "TikTok (",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "tous",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Tous",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Tous les champs sont requis.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Tout comportement anti-sportif, tentative de triche, déconnexion volontaire ou usurpation d'identité entraîne la disqualification immédiate du joueur ou de l'équipe, ainsi qu'un signalement officiel transmis à la FECASES pour inscription au registre national des sanctions.",
+      "fichiers": [
+        "RegulationsModal.tsx"
+      ]
+    },
+    {
+      "valeur": "Tout le calendrier",
+      "fichiers": [
+        "PageAccueil.tsx"
+      ]
+    },
+    {
+      "valeur": "Toute une saison",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Toutes (",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Toutes les disciplines",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Toutes les pages",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Toutes les vidéos",
+      "fichiers": [
+        "Blocs.tsx"
+      ]
+    },
+    {
+      "valeur": "Tri par points décroissants, puis différence de manches (V − D). Ensuite, manches gagnées.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Un classement dédié au jeu, avec ses équipes, ses séries et son tableau final.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Un Hall of Fame fondé sur la confiance.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Une communauté, avant les résultats.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Une performance à retenir.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Une question ou une envie de collaboration ? Écrivez-nous via le formulaire.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Une question ou une envie de collaboration ? Écrivez-nous.",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Une question sur l'inscription ?",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Une saison.",
+      "fichiers": [
+        "PageCalendrier.tsx"
+      ]
+    },
+    {
+      "valeur": "Validation FECASES",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Vérifiez ce champ avant l'envoi.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Veuillez patienter. Un seul envoi est en cours.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Victoires",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Vidéos",
+      "fichiers": [
+        "Footer.tsx",
+        "Header.tsx"
+      ]
+    },
+    {
+      "valeur": "Voir la vidéo",
+      "fichiers": [
+        "CarteActualite.tsx"
+      ]
+    },
+    {
+      "valeur": "Voir le ranking",
+      "fichiers": [
+        "Blocs.tsx",
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Voir le ranking ",
+      "fichiers": [
+        "PageCalendrier.tsx",
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Voir les classements",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Voir sur ",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "Vote MVP",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "votre équipe",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "Votre message",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Votre message a été envoyé.",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Votre message est en cours d'envoi",
+      "fichiers": [
+        "PageContact.tsx"
+      ]
+    },
+    {
+      "valeur": "Vous avez quitté",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "Vous pouvez dès maintenant contacter le comité d'organisation pour pré-enregistrer votre équipe.",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "WhatsApp",
+      "fichiers": [
+        "ReseauxSociaux.tsx"
+      ]
+    },
+    {
+      "valeur": "X",
+      "fichiers": [
+        "ReseauxSociaux.tsx"
+      ]
+    },
+    {
+      "valeur": "youtube",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "YouTube",
+      "fichiers": [
+        "PageVideos.tsx",
+        "ReseauxSociaux.tsx"
+      ]
+    },
+    {
+      "valeur": "YouTube (",
+      "fichiers": [
+        "PageVideos.tsx"
+      ]
+    },
+    {
+      "valeur": "YouTube, TikTok, Facebook, WhatsApp : liens à fournir",
+      "fichiers": [
+        "PageAPropos.tsx"
+      ]
+    },
+    {
+      "valeur": "Zone",
+      "fichiers": [
+        "PageJoueurs.tsx"
+      ]
+    },
+    {
+      "valeur": "Le classement n'a pas pu être chargé.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les données du classement ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " sont inaccessibles pour le moment. Il s'agit d'un problème de chargement, pas d'une absence de résultats. Aucun tableau n'est affiché à leur place.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les résultats officiels de ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " sont publiés ici après validation par la ligue.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Classement des ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les rangs et les statistiques restent masqués pendant le chargement.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Le classement reste à établir.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Pas encore de résultats validés pour établir un classement ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": ". Aucun rang ni point ne peut être attribué avant validation.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Les joueurs qualifiés de ",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": " seront annoncés après la clôture des inscriptions et des qualifications en ligne. Aucun rang ni point ne peut être attribué avant validation.",
+      "fichiers": [
+        "PageClassements.tsx"
+      ]
+    },
+    {
+      "valeur": "Chargement des distinctions…",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les distinctions sont en cours de chargement. Aucune identité ni performance n'est affichée pendant l'attente.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Les distinctions sont inaccessibles.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Nous n'avons pas pu accéder aux données des distinctions. Ce problème de chargement ne permet pas de conclure à l'absence de palmarès. Réessayez ou retrouvez les actualités de la ligue.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Vérifier le résultat, confirmer le contexte et la distinction, puis obtenir les accords nécessaires avant toute publication.",
+      "fichiers": [
+        "PageHallOfFame.tsx"
+      ]
+    },
+    {
+      "valeur": "Chargement des actualités…",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Le flux d'actualités est indisponible.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Nous n'avons pas pu charger les nouvelles de la ligue. Cela ne signifie pas qu'aucune actualité n'a été publiée. Réessayez ou poursuivez votre visite sur les autres pages.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Aucune nouvelle actualité publiée.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    },
+    {
+      "valeur": "Les prochaines nouvelles apparaîtront ici après publication. Les repères de la ligue restent disponibles ; aucune date de saison n'est encore validée.",
+      "fichiers": [
+        "PageSaison.tsx"
+      ]
+    }
+  ],
+  "images": [
+    {
+      "valeur": "/img/bandeau-inscription.png",
+      "fichiers": [
+        "PageInscription.tsx"
+      ]
+    },
+    {
+      "valeur": "/img/fond-planete.webp",
+      "fichiers": [
+        "CarteFaitMarquant.tsx",
+        "ui.tsx"
+      ]
+    },
+    {
+      "valeur": "/img/hero-joueur-1200.webp",
+      "fichiers": [
+        "PageIntrouvable.tsx"
+      ]
+    },
+    {
+      "valeur": "/img/hero-joueur.webp",
+      "fichiers": [
+        "PageAccueil.tsx",
+        "ui.tsx"
+      ]
+    },
+    {
+      "valeur": "/img/logo-ligue-est.webp",
+      "fichiers": [
+        "Header.tsx"
+      ]
+    }
+  ]
+}

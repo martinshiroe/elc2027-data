@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "test": "node --import tsx --test tests/cms.test.tsx",
     "dev": "tsx server.ts",
     "build": "vite build",
     "lint": "tsc --noEmit",

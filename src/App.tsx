@@ -23,13 +23,16 @@ import { AdminPortal } from './components/AdminPortal';
 import { InstallPwaPrompt } from './components/InstallPwaPrompt';
 import { jeuxActifs } from './components/Blocs';
 import type { EtatDonnees } from './components/Etats';
+import { SiteCustomizationProvider } from './lib/siteCustomization';
+import { PageLibre } from './components/PageLibre';
 
 export function App() {
   const [data, setData] = useState<ELCData>(initialELCData);
 
   // La vue affichée vient de l'URL : le bouton Retour, le partage de lien et
   // l'indexation en dépendent.
-  const { section, jeu, naviguer } = useRoute();
+  const { section, jeu, slug, naviguer } = useRoute();
+  const pageLibre = data.site?.pages?.find(p => p.publie && p.slug === slug);
 
   const [isRegulationsOpen, setIsRegulationsOpen] = useState(false);
   const [isDataModalOpen, setIsDataModalOpen] = useState(false);
@@ -101,7 +104,7 @@ export function App() {
   useEffect(() => {
     const nom = 'Ligue Esport Est Cameroun';
     const route = ROUTES[section];
-    document.title = section === 'accueil' ? `ELC — ${nom}` : `${route.titre} — ELC`;
+    document.title = section === 'accueil' ? `ELC — ${nom}` : `${section === 'page' ? pageLibre?.titre ?? 'Page introuvable' : data.site?.textes?.[route.titre] ?? route.titre} — ELC`;
     const meta = document.querySelector<HTMLMetaElement>("meta[name='description']");
     if (meta) meta.content = route.description;
 
@@ -114,7 +117,7 @@ export function App() {
       }
       lien.href = data.meta.favicon;
     }
-  }, [data.meta, section]);
+  }, [data.meta, data.site, section, pageLibre?.titre]);
 
   // Annonce du changement de page aux lecteurs d'écran, et focus sur le
   // contenu principal (sinon il reste sur le lien cliqué).
@@ -172,12 +175,15 @@ export function App() {
         return <PageInscription data={data} onNaviguer={allerA} onOpenRegulations={ouvrirReglement} />;
       case 'contact':
         return <PageContact data={data} onNaviguer={allerA} />;
+      case 'page':
+        return pageLibre ? <PageLibre page={pageLibre} /> : <PageIntrouvable onNaviguer={allerA} />;
       default:
         return <PageIntrouvable onNaviguer={allerA} />;
     }
   })();
 
   return (
+    <SiteCustomizationProvider value={data.site ?? {}}>
     <div className="relative flex min-h-screen flex-col bg-nuit text-texte selection:bg-magenta-plein selection:text-white">
       {/* Lien d'évitement : invisible jusqu'au premier Tab. */}
       <a
@@ -212,6 +218,7 @@ export function App() {
 
       <InstallPwaPrompt />
     </div>
+    </SiteCustomizationProvider>
   );
 }
 

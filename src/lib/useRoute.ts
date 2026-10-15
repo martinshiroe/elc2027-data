@@ -12,9 +12,14 @@ export type Jeu = 'hok' | 'mlbb' | 'pubgm' | 'ff';
  */
 export function useRoute(): {
   section: Section;
+  slug: string;
   jeu: Jeu | null;
   naviguer: (section: Section, jeu?: string) => void;
 } {
+  const lireSlug = () => {
+    try { return decodeURIComponent(window.location.pathname.split('/')[2] ?? ''); } catch { return ''; }
+  };
+  const [slug, setSlug] = useState(() => typeof window === 'undefined' ? '' : lireSlug());
   const [section, setSection] = useState<Section>(() =>
     typeof window === 'undefined' ? 'accueil' : sectionDepuisChemin(window.location.pathname)
   );
@@ -24,7 +29,7 @@ export function useRoute(): {
   // diffuse la bonne. Rien à faire sur une page 404 : l'URL fautive reste
   // visible, c'est elle que le visiteur doit pouvoir corriger.
   useEffect(() => {
-    if (section === 'introuvable') return;
+    if (section === 'introuvable' || section === 'page') return;
     const canonique = cheminDe(section);
     if (window.location.pathname.replace(/\/+$/, '') !== canonique.replace(/\/+$/, '')) {
       window.history.replaceState({}, '', canonique + window.location.search + window.location.hash);
@@ -39,6 +44,7 @@ export function useRoute(): {
     const auRetour = () => {
       setSection(sectionDepuisChemin(window.location.pathname));
       setJeu(jeuDepuisUrl());
+      setSlug(lireSlug());
     };
     window.addEventListener('popstate', auRetour);
     return () => window.removeEventListener('popstate', auRetour);
@@ -47,7 +53,7 @@ export function useRoute(): {
   const naviguer = useCallback((cible: Section, jeu?: string) => {
     // Le paramètre `jeu` rend partageable un bracket précis
     // (`/classements?jeu=hok`) plutôt que la seule page des classements.
-    const url = jeu ? `${cheminDe(cible)}?jeu=${encodeURIComponent(jeu)}` : cheminDe(cible);
+    const url = cible === 'page' ? `/pages/${encodeURIComponent(jeu ?? '')}` : jeu ? `${cheminDe(cible)}?jeu=${encodeURIComponent(jeu)}` : cheminDe(cible);
 
     // Même destination : on évite d'empiler une entrée d'historique, sinon un
     // clic répété sur l'onglet courant oblige à autant de Retour pour sortir.
@@ -56,9 +62,10 @@ export function useRoute(): {
     }
     setSection(cible);
     setJeu(jeuDepuisUrl());
+    setSlug(lireSlug());
   }, []);
 
-  return { section, jeu, naviguer };
+  return { section, jeu, slug, naviguer };
 }
 
 /** Jeu demandé dans l'URL (`?jeu=hok`), s'il est valide. */

@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
@@ -14,6 +15,8 @@ interface PageAccueilProps {
 }
 
 export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const { saison } = contenuDe(data);
   const inscriptionOuverte = Boolean(data.meta.googleFormUrl);
 
@@ -23,10 +26,10 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
       <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden md:min-h-[100svh]" aria-labelledby="titre-accueil">
         <div aria-hidden="true" className="absolute inset-0 -z-10">
           <img
-            src="/img/hero-joueur.webp"
-            srcSet="/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w"
+            src={imageSite("/img/hero-joueur.webp")}
+            srcSet={sourcesSite("/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w")}
             sizes="100vw"
-            alt=""
+            alt={texteSite("")}
             // React 18 ne connaît pas encore `fetchPriority` : attribut HTML brut.
             {...{ fetchpriority: 'high' }}
             className="h-full w-full object-cover object-[62%_center]"
@@ -43,15 +46,9 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
 
         <div className="flex flex-1 items-center px-5 pt-[13.5rem] pb-56 sm:px-[11.5%] sm:pt-60 md:pb-40 lg:pt-40">
           <div className="mx-auto w-full max-w-md border border-white/10 bg-white/[0.07] px-6 py-7 text-center shadow-2xl backdrop-blur-md sm:mx-0 sm:px-12 sm:py-9">
-            <h1 id="titre-accueil" className="titre text-[1.4rem] leading-[1.18] tracking-[0.04em] sm:text-[2rem]">
-              Affronte les meilleurs — sans compromis
-            </h1>
-            <p className="mx-auto mt-4 max-w-xs text-center text-base sm:text-left font-medium italic leading-snug tracking-wide text-white sm:mt-5 sm:text-lg">
-              Pour que l'esport rayonne dans toute la région de l'Est.
-            </p>
-            <p className="sr-only">
-              Ligue Régionale d'Esport de l'Est Cameroun — ELC, East League of Cameroon. Délégation régionale de la FECASES.
-            </p>
+            <h1 id="titre-accueil" className="titre text-[1.4rem] leading-[1.18] tracking-[0.04em] sm:text-[2rem]">{texteSite("Affronte les meilleurs — sans compromis")}</h1>
+            <p className="mx-auto mt-4 max-w-xs text-center text-base sm:text-left font-medium italic leading-snug tracking-wide text-white sm:mt-5 sm:text-lg">{texteSite("Pour que l'esport rayonne dans toute la région de l'Est.")}</p>
+            <p className="sr-only">{texteSite("Ligue Régionale d'Esport de l'Est Cameroun — ELC, East League of Cameroon. Délégation régionale de la FECASES.")}</p>
           </div>
         </div>
 
@@ -67,7 +64,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
             logos sombres (Free Fire) sur l'illustration. */}
         <ul
           className="absolute bottom-28 right-[5%] hidden grid-cols-2 items-center justify-items-center gap-x-5 gap-y-3 md:grid"
-          aria-label="Disciplines"
+          aria-label={texteSite("Disciplines")}
         >
           {jeuxActifs(data).map((j) => {
             const logo = data.competition?.[j.id]?.logoImage;
@@ -75,8 +72,8 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
               <li key={j.id} className="flex h-11 w-32 items-center justify-center">
                 {logo ? (
                   <img
-                    src={urlSure(logo)}
-                    alt={j.nom}
+                    src={imageSite(urlSure(logo))}
+                    alt={texteSite(j.nom)}
                     referrerPolicy="no-referrer"
                     className="max-h-full max-w-full object-contain [filter:drop-shadow(0_0_1px_rgba(255,255,255,0.9))_drop-shadow(0_0_6px_rgba(255,255,255,0.25))]"
                   />
@@ -94,15 +91,15 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
             de « S'inscrire », comme sur la maquette mobile. */}
         <div className="absolute inset-x-0 bottom-24 flex items-end justify-between gap-4 px-5 md:hidden">
           <ReseauxSociaux reseaux={data.meta.reseaux} className="gap-3!" />
-          <ul className="flex flex-col items-end gap-2" aria-label="Disciplines">
+          <ul className="flex flex-col items-end gap-2" aria-label={texteSite("Disciplines")}>
             {jeuxActifs(data).map((j) => {
               const logo = data.competition?.[j.id]?.logoImage;
               return (
                 <li key={j.id} className="flex h-9 w-28 items-center justify-end">
                   {logo ? (
                     <img
-                      src={urlSure(logo)}
-                      alt={j.nom}
+                      src={imageSite(urlSure(logo))}
+                      alt={texteSite(j.nom)}
                       referrerPolicy="no-referrer"
                       className="max-h-full max-w-full object-contain [filter:drop-shadow(0_0_1px_rgba(255,255,255,0.9))_drop-shadow(0_0_6px_rgba(255,255,255,0.25))]"
                     />
@@ -145,9 +142,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         <Conteneur>
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <TitreSection surtitre="La vie de l'ELC" titre="Les nouvelles de la ligue." />
-            <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">
-              Saison news
-            </LienPage>
+            <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">{texteSite("Saison news")}</LienPage>
           </div>
           <ul className="grid gap-5 md:grid-cols-2">
             {saison.actualites.slice(0, 2).map((a, i) => (
@@ -165,9 +160,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         <Conteneur>
           <BlocPhases data={data} />
           <div className="mt-8">
-            <LienPage section="competition" onNaviguer={onNaviguer} bouton="contour">
-              Tout le calendrier
-            </LienPage>
+            <LienPage section="competition" onNaviguer={onNaviguer} bouton="contour">{texteSite("Tout le calendrier")}</LienPage>
           </div>
         </Conteneur>
       </section>

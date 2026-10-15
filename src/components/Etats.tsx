@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 // États des blocs qui dépendent des données publiées (maquette, octobre 2026) :
 // chargement, vide et erreur, plus les cartes-liens courtes de bas de page.
 
@@ -11,24 +12,24 @@ export type EtatDonnees = 'chargement' | 'pret' | 'erreur';
 type Naviguer = (section: Section, jeu?: string) => void;
 
 /** Ligne « ◌ Chargement de… » au-dessus des gabarits. */
-export const EnChargement: React.FC<{ texte: string }> = ({ texte }) => (
+export const EnChargement: React.FC<{ texte: string }> = ({ texte }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <p role="status" className="mb-5 flex items-center gap-3 font-semibold text-white">
     <Loader2 className="h-5 w-5 animate-spin text-magenta" aria-hidden="true" />
-    {texte}
+    {texteSite(texte)}
   </p>
-);
+)); };
 
 /** Barre grisée d'un gabarit de chargement. */
-export const Barre: React.FC<{ className?: string }> = ({ className = '' }) => (
+export const Barre: React.FC<{ className?: string }> = ({ className = '' }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <span aria-hidden="true" className={`block h-4 animate-pulse bg-[#2e2440] ${className}`} />
-);
+)); };
 
 /** Carte gabarit : pastille ronde facultative et quelques barres. */
 export const CarteGabarit: React.FC<{ rond?: boolean; lignes?: number; className?: string }> = ({
   rond = false,
   lignes = 4,
   className = '',
-}) => (
+}) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <Carte className={`p-5 sm:p-6 ${className}`}>
     <div aria-hidden="true" className="space-y-4">
       {rond && <span className="block h-12 w-12 animate-pulse rounded-full bg-[#2e2440]" />}
@@ -38,7 +39,7 @@ export const CarteGabarit: React.FC<{ rond?: boolean; lignes?: number; className
       ))}
     </div>
   </Carte>
-);
+)); };
 
 /**
  * Carte d'état vide ou d'erreur : pictogramme cerclé, titre, texte, actions.
@@ -52,29 +53,27 @@ export const CarteEtat: React.FC<{
   onReessayer?: () => void;
   children: React.ReactNode;
   actions?: React.ReactNode;
-}> = ({ icone, titre, erreur = false, onReessayer, children, actions }) => (
+}> = ({ icone, titre, erreur = false, onReessayer, children, actions }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <Carte className="p-6 sm:p-8">
     <div role={erreur ? 'alert' : undefined}>
       <span className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-magenta text-magenta" aria-hidden="true">
-        {icone}
+        {texteSite(icone)}
       </span>
       <TitreCarte niveau={2} className="mb-4 text-xl sm:text-[1.7rem]">
-        {titre}
+        {texteSite(titre)}
       </TitreCarte>
-      <div className="max-w-3xl leading-relaxed text-texte">{children}</div>
+      <div className="max-w-3xl leading-relaxed text-texte">{texteSite(children)}</div>
       {(onReessayer || actions) && (
         <div className="mt-6 flex flex-wrap gap-3">
           {onReessayer && (
-            <Bouton variante="contour" type="button" onClick={onReessayer}>
-              Réessayer
-            </Bouton>
+            <Bouton variante="contour" type="button" onClick={onReessayer}>{texteSite("Réessayer")}</Bouton>
           )}
-          {actions}
+          {texteSite(actions)}
         </div>
       )}
     </div>
   </Carte>
-);
+)); };
 
 /** Carte-lien courte de bas de page : titre, pictogramme, lien. */
 export const LienCourt: React.FC<{
@@ -84,14 +83,14 @@ export const LienCourt: React.FC<{
   titre: string;
   action: string;
   icone: React.ReactNode;
-}> = ({ section, jeu, onNaviguer, titre, action, icone }) => (
+}> = ({ section, jeu, onNaviguer, titre, action, icone }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <Carte className="group relative flex h-full flex-col p-5 transition-colors hover:border-magenta/70">
     <div className="mb-4 flex items-start justify-between gap-3">
       <TitreCarte niveau={3} className="text-base sm:text-lg">
-        {titre}
+        {texteSite(titre)}
       </TitreCarte>
       <span className="text-magenta" aria-hidden="true">
-        {icone}
+        {texteSite(icone)}
       </span>
     </div>
     <LienPage
@@ -100,20 +99,22 @@ export const LienCourt: React.FC<{
       onNaviguer={onNaviguer}
       className="mt-auto flex items-center justify-between font-bold italic text-magenta after:absolute after:inset-0"
     >
-      <span>{action}</span>
+      <span>{texteSite(action)}</span>
       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
     </LienPage>
   </Carte>
-);
+)); };
 
 /** Rangée de cartes-liens courtes. */
 export const LiensCourts: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   // toArray écarte les cartes conditionnelles absentes (null, false).
   const cartes = React.Children.toArray(children);
   return (
     <ul className={`grid gap-4 sm:gap-5 ${cartes.length >= 3 ? 'md:grid-cols-3' : cartes.length === 2 ? 'md:grid-cols-2' : ''}`}>
       {cartes.map((c, i) => (
-        <li key={i}>{c}</li>
+        <li key={i}>{texteSite(c)}</li>
       ))}
     </ul>
   );

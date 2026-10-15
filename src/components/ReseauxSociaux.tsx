@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { ELCReseaux } from '../types';
 import { urlSure } from '../lib/urls';
@@ -37,23 +38,25 @@ export const ReseauxSociaux: React.FC<{
   vertical?: boolean;
   className?: string;
 }> = ({ reseaux, vertical = false, className = '' }) => {
+  const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const liste = reseauxRenseignes(reseaux);
   if (liste.length === 0) return null;
   return (
     <ul className={`flex ${vertical ? 'flex-col gap-6' : 'flex-wrap gap-5'} ${className}`}>
-      {liste.map(({ cle, nom, Icone, couleur }) => (
+      {texteSite(liste.map(({ cle, nom, Icone, couleur }) => (
         <li key={cle}>
           <a
             href={urlSure(reseaux?.[cle] ?? '')}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${nom} de la ligue (nouvel onglet)`}
+            aria-label={texteSite(`${nom} de la ligue (nouvel onglet)`)}
             className={`flex h-8 w-8 items-center justify-center transition-colors ${couleur}`}
           >
             <Icone className="h-6 w-6" />
           </a>
         </li>
-      ))}
+      )))}
     </ul>
   );
 };

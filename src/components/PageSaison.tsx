@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { ListOrdered, Trophy, CalendarDays, ArrowRight, Newspaper, CircleDashed } from 'lucide-react';
 import { ELCData } from '../types';
@@ -28,12 +29,13 @@ interface PageSaisonProps {
 }
 
 export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer, onNaviguer }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const { saison, apropos } = contenuDe(data);
   const jeux = jeuxActifs(data);
   const actifs = jeux.map((j) => j.id as string);
   const premierRanking = jeux[0] ? (
-    <LienPage section="classements" jeu={jeux[0].id} onNaviguer={onNaviguer} bouton="contour">
-      Voir le ranking {jeux[0].court}
+    <LienPage section="classements" jeu={jeux[0].id} onNaviguer={onNaviguer} bouton="contour">{texteSite("Voir le ranking ")}{texteSite(jeux[0].court)}
     </LienPage>
   ) : undefined;
 
@@ -104,22 +106,17 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
         <Conteneur>
           <div className="grid gap-10 lg:grid-cols-[1fr_330px] lg:items-start">
             <div>
-              <p className="surtitre mb-4">Saison news · ELC — East League of Cameroun</p>
-              <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
-                La scène de l'Est.
-                <span className="block">Toute une saison</span>
-                <span className="block">à construire.</span>
+              <p className="surtitre mb-4">{texteSite("Saison news · ELC — East League of Cameroun")}</p>
+              <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">{texteSite("La scène de l'Est.")}<span className="block">{texteSite("Toute une saison")}</span>
+                <span className="block">{texteSite("à construire.")}</span>
               </h1>
-              <p className="mt-7 max-w-2xl text-base leading-relaxed text-texte sm:text-lg">
-                Actualités de la ligue, classements par jeu et faits marquants : suivez l'ELC depuis Bertoua, au cœur de
-                l'Est Cameroun.
-              </p>
+              <p className="mt-7 max-w-2xl text-base leading-relaxed text-texte sm:text-lg">{texteSite("Actualités de la ligue, classements par jeu et faits marquants : suivez l'ELC depuis Bertoua, au cœur de l'Est Cameroun.")}</p>
             </div>
             <Carte haute className="bg-carte-haute/85 p-7 backdrop-blur-sm">
-              <p className="surtitre mb-4">Le prochain chapitre</p>
-              <p className="titre text-6xl sm:text-7xl">{saison.chapitre.annee}</p>
-              <Pastille className="mt-5">{saison.chapitre.statut}</Pastille>
-              <p className="mt-5 leading-relaxed text-texte">{saison.chapitre.texte}</p>
+              <p className="surtitre mb-4">{texteSite("Le prochain chapitre")}</p>
+              <p className="titre text-6xl sm:text-7xl">{texteSite(saison.chapitre.annee)}</p>
+              <Pastille className="mt-5">{texteSite(saison.chapitre.statut)}</Pastille>
+              <p className="mt-5 leading-relaxed text-texte">{texteSite(saison.chapitre.texte)}</p>
               <Trait className="mt-6" />
             </Carte>
           </div>
@@ -166,15 +163,9 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
               erreur
               onReessayer={onReessayer}
               actions={premierRanking}
-            >
-              Nous n'avons pas pu charger les nouvelles de la ligue. Cela ne signifie pas qu'aucune actualité n'a été
-              publiée. Réessayez ou poursuivez votre visite sur les autres pages.
-            </CarteEtat>
+            >{texteSite("Nous n'avons pas pu charger les nouvelles de la ligue. Cela ne signifie pas qu'aucune actualité n'a été publiée. Réessayez ou poursuivez votre visite sur les autres pages.")}</CarteEtat>
           ) : saison.actualites.length === 0 ? (
-            <CarteEtat icone={<Newspaper className="h-6 w-6" />} titre="Aucune nouvelle actualité publiée." actions={premierRanking}>
-              Les prochaines nouvelles apparaîtront ici après publication. Les repères de la ligue restent disponibles ;
-              aucune date de saison n'est encore validée.
-            </CarteEtat>
+            <CarteEtat icone={<Newspaper className="h-6 w-6" />} titre="Aucune nouvelle actualité publiée." actions={premierRanking}>{texteSite("Les prochaines nouvelles apparaîtront ici après publication. Les repères de la ligue restent disponibles ; aucune date de saison n'est encore validée.")}</CarteEtat>
           ) : (
             <ul className="grid gap-5 md:grid-cols-2">
               {saison.actualites.map((a, i) => (
@@ -201,18 +192,14 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
                 <ul className="mt-7 grid gap-4 sm:grid-cols-3">
                   {apropos.equipes.map((e) => (
                     <li key={e} className="border border-bord-fort bg-carte/90 px-5 py-4 font-bold italic text-white">
-                      {e}
+                      {texteSite(e)}
                     </li>
                   ))}
                 </ul>
               )}
               <div className="mt-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-xl text-sm text-doux">
-                  Les résultats officiels seront publiés après validation, dans les rankings de chaque jeu.
-                </p>
-                <LienPage section="pantheon" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">
-                  Découvrir le Hall of Fame
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                <p className="max-w-xl text-sm text-doux">{texteSite("Les résultats officiels seront publiés après validation, dans les rankings de chaque jeu.")}</p>
+                <LienPage section="pantheon" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">{texteSite("Découvrir le Hall of Fame")}<ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </LienPage>
               </div>
             </div>
