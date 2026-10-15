@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React, { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { ELCData } from '../types';
@@ -36,6 +37,8 @@ const MENU: { label: string; id: Section }[] = [
 ];
 
 export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const [menuOuvert, setMenuOuvert] = useState(false);
   const boutonMenu = useRef<HTMLButtonElement>(null);
   const panneau = useRef<HTMLDivElement>(null);
@@ -81,8 +84,8 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
       <div className="flex h-20 w-full items-start justify-between px-4 pt-3 sm:h-36 sm:px-8 sm:pt-6 lg:px-[5%]">
         <LienPage section="accueil" onNaviguer={aller} aria-label="Ligue Esport Est Cameroun — accueil" className="shrink-0">
           <img
-            src="/img/logo-ligue-est.webp"
-            alt=""
+            src={imageSite("/img/logo-ligue-est.webp")}
+            alt={texteSite("")}
             width={282}
             height={400}
             className="h-14 w-auto drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)] sm:h-28"
@@ -91,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
 
         <span aria-hidden="true" className="mx-5 mt-7 h-0.5 flex-1 bg-rose/90 sm:mt-10 lg:hidden" />
 
-        <nav aria-label="Navigation principale" className="hidden flex-1 items-center pt-5 lg:flex">
+        <nav aria-label={texteSite("Navigation principale")} className="hidden flex-1 items-center pt-5 lg:flex">
           <span aria-hidden="true" className="mx-6 h-0.5 flex-1 bg-rose/90" />
           <ul className="flex items-center gap-2">
             {PRINCIPALES.map((item) => {
@@ -107,7 +110,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
                     }`}
                   >
                     {actif && <span aria-hidden="true" className="biseau absolute inset-0 -z-10 bg-magenta-plein" />}
-                    {item.label}
+                    {texteSite(item.label)}
                   </LienPage>
                 </li>
               );
@@ -120,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
           ref={boutonMenu}
           type="button"
           onClick={() => setMenuOuvert(true)}
-          aria-label="Ouvrir le menu"
+          aria-label={texteSite("Ouvrir le menu")}
           aria-expanded={menuOuvert}
           aria-controls="menu-complet"
           className="mt-1 flex h-11 w-11 shrink-0 cursor-pointer flex-col items-end justify-center gap-[5px] bg-fuchsia px-2.5 transition-transform hover:scale-105 sm:mt-4 sm:h-[52px] sm:w-[52px] sm:px-3"
@@ -133,7 +136,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
 
       {/* Mobile et tablette : les quatre entrées restent visibles, en grille
           2 × 2 sous le logo, comme sur la maquette mobile. */}
-      <nav aria-label="Navigation principale" className="px-4 sm:px-8 lg:hidden">
+      <nav aria-label={texteSite("Navigation principale")} className="px-4 sm:px-8 lg:hidden">
         <ul className="grid grid-cols-2 gap-2">
           {PRINCIPALES.map((item) => {
             const actif = item.actifSur.includes(activeSection);
@@ -148,7 +151,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
                   }`}
                 >
                   {actif && <span aria-hidden="true" className="biseau absolute inset-0 -z-10 bg-magenta-plein" />}
-                  {item.label}
+                  {texteSite(item.label)}
                 </LienPage>
               </li>
             );
@@ -162,23 +165,23 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
           id="menu-complet"
           role="dialog"
           aria-modal="true"
-          aria-label="Menu du site"
+          aria-label={texteSite("Menu du site")}
           className="fixed inset-0 z-50 overflow-y-auto bg-nuit/97 backdrop-blur-sm"
         >
           <div className="mx-auto flex min-h-full max-w-[1120px] flex-col px-5 py-6 sm:px-8">
             <div className="flex items-center justify-between">
-              <img src="/img/logo-ligue-est.webp" alt="" width={282} height={400} className="h-16 w-auto" />
+              <img src={imageSite("/img/logo-ligue-est.webp")} alt={texteSite("")} width={282} height={400} className="h-16 w-auto" />
               <button
                 type="button"
                 onClick={() => setMenuOuvert(false)}
-                aria-label="Fermer le menu"
+                aria-label={texteSite("Fermer le menu")}
                 className="flex h-12 w-12 cursor-pointer items-center justify-center bg-fuchsia text-white"
               >
                 <X className="h-6 w-6" />
               </button>
             </div>
 
-            <nav aria-label="Toutes les pages" className="flex-1 py-10">
+            <nav aria-label={texteSite("Toutes les pages")} className="flex-1 py-10">
               <ul className="grid gap-1 sm:grid-cols-2 sm:gap-x-10">
                 {MENU.map((item, i) => {
                   const actif = activeSection === item.id;
@@ -194,19 +197,22 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
                       >
                         <span className="w-8 text-sm font-bold italic text-doux">{String(i + 1).padStart(2, '0')}</span>
                         <span className="titre text-2xl text-inherit sm:text-3xl">
-                          {item.label}
+                          {texteSite(item.label)}
                         </span>
                       </LienPage>
                     </li>
                   );
                 })}
+                {(data.site?.pages ?? []).filter(p => p.publie && p.menu).map(p => (
+                  <li key={p.id}><a href={`/pages/${encodeURIComponent(p.slug)}`} className="group flex items-baseline gap-4 border-b border-bord py-4 text-white hover:text-magenta">
+                    <span className="titre text-2xl text-inherit sm:text-3xl">{texteSite(p.titre)}</span>
+                  </a></li>
+                ))}
               </ul>
             </nav>
 
             <div className="flex flex-col gap-6 border-t border-bord pt-6 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm font-extrabold italic uppercase tracking-[0.15em] text-white">
-                Ligue régionale d'esport de l'Est Cameroun
-              </p>
+              <p className="text-sm font-extrabold italic uppercase tracking-[0.15em] text-white">{texteSite("Ligue régionale d'esport de l'Est Cameroun")}</p>
               <ReseauxSociaux reseaux={data.meta.reseaux} />
             </div>
           </div>

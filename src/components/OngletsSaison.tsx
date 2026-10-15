@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { Section } from '../lib/routes';
 import { LienPage } from './ui';
@@ -23,8 +24,8 @@ export const OngletsSaison: React.FC<{
   /** Identifiants des disciplines actives : les autres onglets de ranking disparaissent. */
   jeux: string[];
   onNaviguer: (section: Section, jeu?: string) => void;
-}> = ({ actif, jeux, onNaviguer }) => (
-  <nav aria-label="Rubriques de la saison" className="sm:overflow-x-auto">
+}> = ({ actif, jeux, onNaviguer }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
+  <nav aria-label={texteSite("Rubriques de la saison")} className="sm:overflow-x-auto">
     {/* Mobile : onglets empilés pleine largeur (maquette mobile) ;
         à partir de 640 px, la barre horizontale. */}
     <ul className="flex flex-col gap-2 sm:min-w-max sm:flex-row sm:gap-0 sm:border-b sm:border-bord-fort">
@@ -43,11 +44,11 @@ export const OngletsSaison: React.FC<{
                   : 'border-bord-fort bg-carte text-doux hover:text-white sm:border-transparent sm:bg-transparent'
               }`}
             >
-              {o.label}
+              {texteSite(o.label)}
             </LienPage>
           </li>
         );
       })}
     </ul>
   </nav>
-);
+)); };

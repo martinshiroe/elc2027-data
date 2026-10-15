@@ -138,6 +138,26 @@ function valider(corps: unknown): string | null {
     return 'Données invalides : « pantheon » doit être un objet.';
   }
 
+  if (corps.site !== undefined) {
+    if (!estObjet(corps.site)) return 'Personnalisation du site invalide.';
+    for (const key of ['textes', 'images']) {
+      const values = corps.site[key];
+      if (values !== undefined && (!estObjet(values) || Object.values(values).some(v => typeof v !== 'string'))) return `Catalogue ${key} invalide.`;
+    }
+    if (corps.site.pages !== undefined) {
+      if (!Array.isArray(corps.site.pages)) return 'La liste des pages est invalide.';
+      const slugs = new Set<string>();
+      const ids = new Set<string>();
+      for (const page of corps.site.pages) {
+        if (!estObjet(page) || typeof page.id !== 'string' || !page.id || ids.has(page.id) || typeof page.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(page.slug) || slugs.has(page.slug)) return 'Identifiant ou adresse de page invalide ou en double.';
+        if (typeof page.titre !== 'string' || !page.titre.trim() || typeof page.texte !== 'string' || typeof page.categorie !== 'string') return 'Titre, catégorie ou contenu de page invalide.';
+        if (['publie', 'menu', 'piedDePage'].some(k => typeof page[k] !== 'boolean')) return 'Options de publication invalides.';
+        if (page.publie && !page.texte.trim()) return 'Une page publiée doit avoir un contenu.';
+        slugs.add(page.slug); ids.add(page.id);
+      }
+    }
+  }
+
   const taille = Buffer.byteLength(JSON.stringify(corps), 'utf8');
   if (taille > TAILLE_MAX_OCTETS) {
     return `Document trop volumineux (${Math.round(taille / 1024)} Ko pour un maximum de ${TAILLE_MAX_OCTETS / 1024} Ko). Utilisez des URL d'images plutôt que des fichiers intégrés.`;
@@ -186,7 +206,13 @@ export default async function handler(req: Req, res: Res): Promise<void> {
       // Sans cette en-tête, un navigateur mobile ou un proxy opérateur peut
       // resservir une réponse périmée et masquer les dernières modifications.
       res.setHeader('Cache-Control', 'no-store');
-      res.status(200).json(rows[0].data);
+      const document = rows[0].data;
+      const admin = verifyAdminKey(header(req, 'x-admin-key'));
+      if (!admin && estObjet(document) && estObjet(document.site) && Array.isArray(document.site.pages)) {
+        res.status(200).json({ ...document, site: { ...document.site, pages: document.site.pages.filter(p => estObjet(p) && p.publie === true) } });
+      } else {
+        res.status(200).json(document);
+      }
     } catch (err) {
       res.status(500).json({ error: 'Impossible de lire les données.', details: String((err as Error).message || err) });
     }

@@ -68,6 +68,10 @@ async function startServer() {
       }
       const raw = fs.readFileSync(DATA_FILE, 'utf-8');
       const json = JSON.parse(raw);
+      if (!verifyAdminKey(req) && Array.isArray(json.site?.pages)) {
+        json.site.pages = json.site.pages.filter((p: { publie?: boolean }) => p.publie === true);
+      }
+      res.setHeader('Cache-Control', 'no-store');
       res.json(json);
     } catch (err: any) {
       res.status(500).json({ error: 'Impossible de lire les données.', details: err.message });

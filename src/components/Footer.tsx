@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
@@ -23,46 +24,47 @@ const LIENS: { label: string; id: Section }[] = [
 ];
 
 export const Footer: React.FC<FooterProps> = ({ data, onOpenRegulations, onNaviguer }) => {
+  const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const { meta } = data;
   const annee = meta.saison || '2027';
 
   return (
     <footer id="elc-footer" className="border-t border-bord-fort bg-nuit">
       <Conteneur className="flex flex-col gap-6 py-9 md:flex-row md:items-center md:justify-between">
-        <p className="text-sm font-extrabold italic uppercase tracking-[0.14em] text-white">
-          Ligue régionale d'esport de l'Est Cameroun
-        </p>
-        <p className="text-sm text-doux">Délégation régionale de la FECASES.</p>
+        <p className="text-sm font-extrabold italic uppercase tracking-[0.14em] text-white">{texteSite("Ligue régionale d'esport de l'Est Cameroun")}</p>
+        <p className="text-sm text-doux">{texteSite("Délégation régionale de la FECASES.")}</p>
         <ReseauxSociaux reseaux={meta.reseaux} />
       </Conteneur>
 
       <div className="border-t border-bord">
         <Conteneur className="flex flex-col gap-5 py-6 text-sm lg:flex-row lg:items-center lg:justify-between">
-          <nav aria-label="Pages du site">
+          <nav aria-label={texteSite("Pages du site")}>
             <ul className="flex flex-wrap gap-x-5 gap-y-2">
-              {LIENS.map((l) => (
+              {texteSite(LIENS.map((l) => (
                 <li key={l.id}>
                   <LienPage section={l.id} onNaviguer={onNaviguer} className="text-doux transition-colors hover:text-white">
-                    {l.label}
+                    {texteSite(l.label)}
                   </LienPage>
                 </li>
+              )))}
+              {(data.site?.pages ?? []).filter(p => p.publie && p.piedDePage).map(p => (
+                <li key={p.id}><a href={`/pages/${encodeURIComponent(p.slug)}`} className="text-doux transition-colors hover:text-white">{p.titre}</a></li>
               ))}
             </ul>
           </nav>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-doux">
-            {meta.contact?.email && (
+            {texteSite(meta.contact?.email && (
               <a href={`mailto:${meta.contact.email}`} className="transition-colors hover:text-white">
-                {meta.contact.email}
+                {texteSite(meta.contact.email)}
               </a>
-            )}
+            ))}
             <button
               type="button"
               onClick={onOpenRegulations}
               className="cursor-pointer transition-colors hover:text-white"
-            >
-              Mentions légales
-            </button>
-            <span>© {annee} ELC</span>
+            >{texteSite("Mentions légales")}</button>
+            <span>{texteSite("© ")}{texteSite(annee)}{texteSite(" ELC")}</span>
           </div>
         </Conteneur>
       </div>

@@ -1,8 +1,9 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { Crown, Swords, Flame, Shield, Newspaper, ListOrdered, CircleDashed } from 'lucide-react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
-import { urlCss } from '../lib/urls';
+import { urlCss, urlSure } from '../lib/urls';
 import { contenuDe } from '../data/contenu';
 import { Conteneur, EnTetePage, TitreSection, Avis, LienPage } from './ui';
 import { EtatDonnees, EnChargement, CarteGabarit, CarteEtat, LienCourt, LiensCourts } from './Etats';
@@ -80,11 +81,14 @@ const ETAPES_PAR_DEFAUT = [
 ];
 
 export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onReessayer, onNaviguer }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const { faitMarquant } = contenuDe(data);
   const pantheon = data.pantheon ?? { curated: [] };
   const curated = pantheon.curated ?? [];
 
-  const distinctions = DISTINCTIONS.map((def) => {
+  const definitions = [...DISTINCTIONS, ...(pantheon.distinctions ?? []).filter(d => !DISTINCTIONS.some(def => def.key === d.key)).map(d => ({ ...d, couleur: '#f4b544', Icone: Crown }))];
+  const distinctions = definitions.filter(def => pantheon.distinctions?.find(d => d.key === def.key)?.visible !== false).map((def) => {
     const perso = pantheon.distinctions?.find((d) => d.key === def.key);
     const laureat = curated.find(
       (item) =>
@@ -94,7 +98,8 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
     );
     return {
       ...def,
-      icone: <def.Icone className="h-6 w-6" />,
+      couleur: perso?.couleur && /^#[0-9a-f]{6}$/i.test(perso.couleur) ? perso.couleur : def.couleur,
+      icone: perso?.logoImage && urlSure(perso.logoImage) ? <img src={imageSite(urlSure(perso.logoImage))} alt={texteSite("")} className="h-6 w-6 object-contain" /> : <def.Icone className="h-6 w-6" />,
       title: perso?.title || def.title,
       subtitle: perso?.subtitle || def.subtitle,
       desc: perso?.desc || def.desc,
@@ -123,10 +128,10 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
     <>
       <EnTetePage>
         <Conteneur>
-          <p className="surtitre mb-4">Saison news · Les faits marquants</p>
+          <p className="surtitre mb-4">{texteSite("Saison news · Les faits marquants")}</p>
           <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
             {pantheon.titrePrincipal || 'Hall of Fame.'}
-            <span className="block">La mémoire de l'Est.</span>
+            <span className="block">{texteSite("La mémoire de l'Est.")}</span>
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">
             {pantheon.sousTitre ||
@@ -180,16 +185,16 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 -z-10 bg-cover bg-center opacity-30"
-                  style={{ backgroundImage: `url("${urlCss(data.meta.pantheonBannerImage)}")` }}
+                  style={{ backgroundImage: `url("${urlCss(imageSite(data.meta.pantheonBannerImage))}")` }}
                 />
               )}
               <TitreSection surtitre="Les règles" titre={pantheon.titreAttribution || 'Comment sont-elles attribuées ?'} className="mb-6 sm:mb-8" />
               <ol className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 {etapes.map((e) => (
                   <li key={e.step}>
-                    <p className="titre mb-3 text-3xl text-magenta">{e.step}</p>
-                    <p className="mb-2 font-bold italic text-white">{e.title}</p>
-                    <p className="text-sm leading-relaxed text-texte">{e.desc}</p>
+                    <p className="titre mb-3 text-3xl text-magenta">{texteSite(e.step)}</p>
+                    <p className="mb-2 font-bold italic text-white">{texteSite(e.title)}</p>
+                    <p className="text-sm leading-relaxed text-texte">{texteSite(e.desc)}</p>
                   </li>
                 ))}
               </ol>
@@ -209,10 +214,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
                   <CarteGabarit rond />
                   <CarteGabarit rond />
                 </div>
-                <p className="mt-6 text-texte">
-                  Les distinctions sont en cours de chargement. Aucune identité ni performance n'est affichée pendant
-                  l'attente.
-                </p>
+                <p className="mt-6 text-texte">{texteSite("Les distinctions sont en cours de chargement. Aucune identité ni performance n'est affichée pendant l'attente.")}</p>
               </>
             ) : (
               <CarteEtat
@@ -221,14 +223,9 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
                 erreur
                 onReessayer={onReessayer}
                 actions={
-                  <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour">
-                    Retour aux actualités
-                  </LienPage>
+                  <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour">{texteSite("Retour aux actualités")}</LienPage>
                 }
-              >
-                Nous n'avons pas pu accéder aux données des distinctions. Ce problème de chargement ne permet pas de
-                conclure à l'absence de palmarès. Réessayez ou retrouvez les actualités de la ligue.
-              </CarteEtat>
+              >{texteSite("Nous n'avons pas pu accéder aux données des distinctions. Ce problème de chargement ne permet pas de conclure à l'absence de palmarès. Réessayez ou retrouvez les actualités de la ligue.")}</CarteEtat>
             )}
           </Conteneur>
         </section>
@@ -237,9 +234,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
       {/* ---------- Confiance ---------- */}
       <section className="py-10 sm:py-12">
         <Conteneur>
-          <Avis titre="Un Hall of Fame fondé sur la confiance.">
-            Vérifier le résultat, confirmer le contexte et la distinction, puis obtenir les accords nécessaires avant
-            toute publication.{' '}
+          <Avis titre="Un Hall of Fame fondé sur la confiance.">{texteSite("Vérifier le résultat, confirmer le contexte et la distinction, puis obtenir les accords nécessaires avant toute publication.")}{texteSite(' ')}
             {etat === 'pret' && !aucunLaureat
               ? "Aucun titre n'est attribué sans validation de la ligue."
               : "Aucun lauréat n'est annoncé ici."}

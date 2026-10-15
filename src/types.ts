@@ -240,6 +240,9 @@ export interface ELCVideo {
 
 export interface ELCPantheonDistinction {
   key: string;
+  visible?: boolean;
+  couleur?: string;
+  logoImage?: string;
   title: string;
   subtitle: string;
   desc: string;
@@ -335,6 +338,7 @@ export interface ELCContenu {
 }
 
 export interface ELCData {
+  site?: ELCSiteCustomization;
   contenu?: ELCContenu;
   meta: ELCMeta;
   visual1: ELCVisual1;
@@ -345,4 +349,22 @@ export interface ELCData {
   joueurs: any[];
   pantheon: ELCPantheonData;
   videos?: ELCVideo[];
+}
+
+export interface ELCPageLibre {
+  id: string;
+  slug: string;
+  titre: string;
+  categorie: string;
+  texte: string;
+  image?: string;
+  publie: boolean;
+  menu: boolean;
+  piedDePage: boolean;
+}
+
+export interface ELCSiteCustomization {
+  textes?: Record<string, string>;
+  images?: Record<string, string>;
+  pages?: ELCPageLibre[];
 }

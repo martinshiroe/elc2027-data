@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { Camera } from 'lucide-react';
 import { urlSure, urlCss } from '../lib/urls';
@@ -35,13 +36,15 @@ const lisibleSur = (hex: string): string => {
 };
 
 export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d, saison }) => {
+  const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const aUnNomine = Boolean(d.nom || d.photo);
   const surAccent = lisibleSur(d.couleur);
 
   return (
     <article
       id={`distinction-${d.key}`}
-      aria-label={`${d.title} — ${d.subtitle}${d.nom ? ` : ${d.nom}` : ''}`}
+      aria-label={texteSite(`${d.title} — ${d.subtitle}${d.nom ? ` : ${d.nom}` : ''}`)}
       className="overflow-hidden transition-shadow duration-300"
       style={{ border: `1px solid ${d.couleur}66`, boxShadow: `0 10px 34px ${d.couleur}26` }}
     >
@@ -55,14 +58,14 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
           }}
         />
         {/* Fond personnalisé choisi dans l'admin, voilé pour garder le texte lisible */}
-        {d.fond && (
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${urlCss(d.fond)}")` }}>
+        {texteSite(d.fond && (
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${urlCss(imageSite(d.fond))}")` }}>
             <div
               className="absolute inset-0"
               style={{ background: 'linear-gradient(180deg, rgba(12,10,24,0.70) 0%, rgba(12,10,24,0.86) 100%)' }}
             />
           </div>
-        )}
+        ))}
 
         {/* Trame de points, comme sur les affiches de match */}
         <div
@@ -82,10 +85,10 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
         />
 
         {/* Héros du jeu, en retrait à droite, fondu sur les bords */}
-        {d.heros && (
+        {texteSite(d.heros && (
           <img
-            src={urlSure(d.heros)}
-            alt=""
+            src={imageSite(urlSure(d.heros))}
+            alt={texteSite("")}
             aria-hidden="true"
             referrerPolicy="no-referrer"
             loading="lazy"
@@ -97,13 +100,13 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
               WebkitMaskComposite: 'source-in',
             }}
           />
-        )}
+        ))}
 
         {/* Photo du joueur au premier plan, recadrée sur le visage */}
-        {d.photo ? (
+        {texteSite(d.photo ? (
           <img
-            src={urlSure(d.photo)}
-            alt={d.nom ? `Portrait de ${d.nom}` : 'Portrait du nominé'}
+            src={imageSite(urlSure(d.photo))}
+            alt={texteSite(d.nom ? `Portrait de ${d.nom}` : 'Portrait du nominé')}
             referrerPolicy="no-referrer"
             loading="lazy"
             className="absolute bottom-[15%] left-[40%] h-[64%] w-[42%] -translate-x-1/2 object-cover object-top"
@@ -116,9 +119,9 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
         ) : (
           <div className="absolute bottom-[15%] left-[40%] flex h-[64%] w-[42%] -translate-x-1/2 flex-col items-center justify-center gap-2 border border-dashed border-black/30 bg-black/25 text-white/75">
             <Camera className="h-10 w-10" aria-hidden="true" />
-            <span className="px-2 text-center text-[10px] font-bold uppercase tracking-widest">Photo du joueur</span>
+            <span className="px-2 text-center text-[10px] font-bold uppercase tracking-widest">{texteSite("Photo du joueur")}</span>
           </div>
-        )}
+        ))}
 
         {/* Intitulé de la distinction, à la verticale sur le flanc */}
         <div
@@ -127,24 +130,23 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
           style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
         >
           <span className="titre text-2xl leading-none drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)] sm:text-4xl lg:text-5xl">
-            {d.title}
+            {texteSite(d.title)}
           </span>
         </div>
 
         {/* Sous-titre, en haut à gauche */}
         <div className="absolute left-[4%] right-[38%] top-[5%]">
           <span className="block truncate text-[9px] font-bold uppercase tracking-[0.2em] text-white/70 sm:text-[10px]">
-            {d.subtitle}
+            {texteSite(d.subtitle)}
           </span>
         </div>
 
         {/* Repère de saison, en haut à droite */}
         <div className="absolute right-[6%] top-[6%] flex items-center gap-2">
-          <span className="text-[10px] font-extrabold italic uppercase tracking-widest sm:text-xs" style={{ color: d.couleur }}>
-            ELC {saison}
+          <span className="text-[10px] font-extrabold italic uppercase tracking-widest sm:text-xs" style={{ color: d.couleur }}>{texteSite("ELC ")}{texteSite(saison)}
           </span>
           <span aria-hidden="true" style={{ color: d.couleur }}>
-            {d.icone}
+            {texteSite(d.icone)}
           </span>
         </div>
 
@@ -152,28 +154,28 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
         <div className="absolute bottom-[16%] left-[30%] right-0">
           <div className="px-4 py-2.5 sm:px-6 sm:py-3.5" style={{ background: `linear-gradient(90deg, ${d.couleur} 0%, ${d.couleur}cc 100%)` }}>
             <span className="titre block truncate text-lg leading-none sm:text-2xl lg:text-3xl" style={{ color: surAccent }}>
-              {d.nom || 'À attribuer'}
+              {texteSite(d.nom || 'À attribuer')}
             </span>
           </div>
           <div className="px-4 pt-2 sm:px-6 sm:pt-3">
-            {d.clan && (
-              <div className="titre text-lg leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-2xl">{d.clan}</div>
-            )}
-            {d.details && <div className="mt-1 truncate text-[10px] text-white/75 sm:text-xs">{d.details}</div>}
+            {texteSite(d.clan && (
+              <div className="titre text-lg leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-2xl">{texteSite(d.clan)}</div>
+            ))}
+            {texteSite(d.details && <div className="mt-1 truncate text-[10px] text-white/75 sm:text-xs">{texteSite(d.details)}</div>)}
           </div>
         </div>
 
         {/* Pied d'affiche */}
         <div className="absolute bottom-[4%] left-0 right-0 text-center">
           <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/55 sm:text-[10px]">
-            {aUnNomine ? d.statut || 'Nominé officiel' : 'Nomination à venir'}
+            {texteSite(aUnNomine ? d.statut || 'Nominé officiel' : 'Nomination à venir')}
           </span>
         </div>
       </div>
 
       {/* ---------- Ce que récompense la distinction ---------- */}
       <div className="border-t border-bord bg-carte p-5">
-        <p className="text-sm leading-relaxed text-texte">{d.desc}</p>
+        <p className="text-sm leading-relaxed text-texte">{texteSite(d.desc)}</p>
       </div>
     </article>
   );

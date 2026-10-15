@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 import React, { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import { ELCData, ELCJoueurProfil } from '../types';
@@ -22,6 +23,8 @@ const FILTRES: { id: string; label: string; motifs: RegExp }[] = [
 ];
 
 export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) => {
+  const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const [recherche, setRecherche] = useState('');
   const [filtre, setFiltre] = useState('tous');
 
@@ -59,23 +62,18 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
     <>
       <EnTetePage>
         <Conteneur>
-          <p className="surtitre mb-4">Communauté et joueurs</p>
-          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">
-            Les joueurs
-            <span className="block">qui font la ligue.</span>
+          <p className="surtitre mb-4">{texteSite("Communauté et joueurs")}</p>
+          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">{texteSite("Les joueurs")}<span className="block">{texteSite("qui font la ligue.")}</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">
-            Les joueurs et les équipes engagés dans les disciplines de la ligue, validés par le comité de l'ELC et la
-            FECASES.
-          </p>
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">{texteSite("Les joueurs et les équipes engagés dans les disciplines de la ligue, validés par le comité de l'ELC et la FECASES.")}</p>
         </Conteneur>
       </EnTetePage>
 
       <section className="pb-14 sm:pb-20">
         <Conteneur>
           <div className="mb-8 flex flex-col gap-4 border-b border-bord-fort pb-6 lg:flex-row lg:items-center lg:justify-between">
-            <div role="group" aria-label="Filtrer par discipline" className="-mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
-              {filtres.map((f) => {
+            <div role="group" aria-label={texteSite("Filtrer par discipline")} className="-mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
+              {texteSite(filtres.map((f) => {
                 const actif = filtre === f.id;
                 const nombre = f.id === 'tous' ? joueurs.length : joueurs.filter((p) => f.motifs.test(p.discipline)).length;
                 return (
@@ -88,100 +86,96 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
                       actif ? 'border-magenta-plein bg-magenta-plein text-white' : 'border-bord-fort text-doux hover:border-magenta hover:text-white'
                     }`}
                   >
-                    {f.label} <span className="font-normal opacity-80">({nombre})</span>
+                    {texteSite(f.label)} <span className="font-normal opacity-80">{texteSite("(")}{texteSite(nombre)}{texteSite(")")}</span>
                   </button>
                 );
-              })}
+              }))}
             </div>
             <label className="relative block w-full lg:w-72">
-              <span className="sr-only">Rechercher un joueur ou une équipe</span>
+              <span className="sr-only">{texteSite("Rechercher un joueur ou une équipe")}</span>
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-doux" aria-hidden="true" />
               <input
                 type="search"
                 value={recherche}
                 onChange={(e) => setRecherche(e.target.value)}
-                placeholder="Pseudo ou équipe"
+                placeholder={texteSite("Pseudo ou équipe")}
                 className="w-full border border-bord-champ bg-encre py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-doux focus:border-magenta focus:outline-none"
               />
             </label>
           </div>
 
-          {affiches.length > 0 ? (
+          {texteSite(affiches.length > 0 ? (
             <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {affiches.map((p) => (
+              {texteSite(affiches.map((p) => (
                 <li key={p.id}>
                   <Carte as="article" className="flex h-full flex-col p-5">
                     <div className="mb-4 flex items-center justify-between gap-2">
-                      <Pastille>{p.discipline}</Pastille>
-                      <span className="text-xs font-bold italic text-magenta">{p.statut}</span>
+                      <Pastille>{texteSite(p.discipline)}</Pastille>
+                      <span className="text-xs font-bold italic text-magenta">{texteSite(p.statut)}</span>
                     </div>
                     <div className="mb-4 flex items-center gap-4">
-                      {p.photo ? (
+                      {texteSite(p.photo ? (
                         <img
-                          src={urlSure(p.photo)}
-                          alt=""
+                          src={imageSite(urlSure(p.photo))}
+                          alt={texteSite("")}
                           loading="lazy"
                           referrerPolicy="no-referrer"
                           className="h-14 w-14 shrink-0 border border-bord-fort object-cover"
                         />
                       ) : (
                         <span aria-hidden="true" className="titre flex h-14 w-14 shrink-0 items-center justify-center border border-bord-fort bg-carte-haute text-lg text-doux">
-                          {initiales(p.pseudo)}
+                          {texteSite(initiales(p.pseudo))}
                         </span>
-                      )}
+                      ))}
                       <div className="min-w-0">
-                        <TitreCarte className="truncate text-lg">{p.pseudo}</TitreCarte>
-                        <p className="truncate text-sm text-doux">{p.equipe || p.role || 'Compétiteur'}</p>
+                        <TitreCarte className="truncate text-lg">{texteSite(p.pseudo)}</TitreCarte>
+                        <p className="truncate text-sm text-doux">{texteSite(p.equipe || p.role || 'Compétiteur')}</p>
                       </div>
                     </div>
-                    {(p.points !== undefined || p.kills !== undefined || p.ville) && (
+                    {texteSite((p.points !== undefined || p.kills !== undefined || p.ville) && (
                       <dl className="mt-auto space-y-1.5 border-t border-bord pt-4 text-sm">
-                        {p.points !== undefined && (
+                        {texteSite(p.points !== undefined && (
                           <div className="flex justify-between">
-                            <dt className="text-doux">Points ELC</dt>
-                            <dd className="font-bold text-magenta">{p.points}</dd>
+                            <dt className="text-doux">{texteSite("Points ELC")}</dt>
+                            <dd className="font-bold text-magenta">{texteSite(p.points)}</dd>
                           </div>
-                        )}
-                        {p.kills !== undefined && (
+                        ))}
+                        {texteSite(p.kills !== undefined && (
                           <div className="flex justify-between">
-                            <dt className="text-doux">Éliminations</dt>
-                            <dd className="font-semibold text-white">{p.kills}</dd>
+                            <dt className="text-doux">{texteSite("Éliminations")}</dt>
+                            <dd className="font-semibold text-white">{texteSite(p.kills)}</dd>
                           </div>
-                        )}
-                        {p.ville && (
+                        ))}
+                        {texteSite(p.ville && (
                           <div className="flex justify-between">
-                            <dt className="text-doux">Zone</dt>
-                            <dd className="text-white">{p.ville}</dd>
+                            <dt className="text-doux">{texteSite("Zone")}</dt>
+                            <dd className="text-white">{texteSite(p.ville)}</dd>
                           </div>
-                        )}
+                        ))}
                       </dl>
-                    )}
+                    ))}
                   </Carte>
                 </li>
-              ))}
+              )))}
             </ul>
           ) : (
             <Carte className="px-6 py-14 text-center sm:px-16">
               <TitreCarte className="mb-4 text-2xl">
-                {joueurs.length === 0 ? 'Aucun joueur publié pour le moment.' : 'Aucun joueur ne correspond.'}
+                {texteSite(joueurs.length === 0 ? 'Aucun joueur publié pour le moment.' : 'Aucun joueur ne correspond.')}
               </TitreCarte>
               <p className="mx-auto mb-7 max-w-2xl leading-relaxed text-texte">
-                {joueurs.length === 0
+                {texteSite(joueurs.length === 0
                   ? "Les listes officielles des joueurs et des équipes s'afficheront ici au fur et à mesure des validations par le comité de la ligue et la FECASES."
-                  : 'Essayez une autre discipline ou un autre nom.'}
+                  : 'Essayez une autre discipline ou un autre nom.')}
               </p>
-              {joueurs.length === 0 && (
+              {texteSite(joueurs.length === 0 && (
                 <div className="flex flex-wrap justify-center gap-4">
-                  <LienPage section="inscription" onNaviguer={onNaviguer} bouton="plein">
-                    S'inscrire
-                  </LienPage>
-                  <LienPage section="apropos" onNaviguer={onNaviguer} bouton="contour">
-                    Les équipes de la communauté
-                  </LienPage>
+                  <LienPage section="inscription" onNaviguer={onNaviguer} bouton="plein">{texteSite("S'inscrire")}</LienPage>
+                  <LienPage section="apropos" onNaviguer={onNaviguer} bouton="contour">{texteSite("Les équipes de la communauté")}</LienPage>
                 </div>
-              )}
+              ))}
             </Carte>
-          )}
+          ))}
         </Conteneur>
       </section>
     </>

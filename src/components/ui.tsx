@@ -1,3 +1,4 @@
+import { useSiteCustomization } from '../lib/siteCustomization';
 // Briques visuelles de la maquette « Ligue de l'Est ».
 //
 // Toutes les pages s'assemblent avec ces composants : un seul endroit fixe le
@@ -13,7 +14,7 @@ import { Section, cheminDe } from '../lib/routes';
 export const Conteneur: React.FC<{ className?: string; children: React.ReactNode }> = ({
   className = '',
   children,
-}) => <div className={`mx-auto w-full max-w-[1120px] px-5 sm:px-8 ${className}`}>{children}</div>;
+}) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return (<div className={`mx-auto w-full max-w-[1120px] px-5 sm:px-8 ${className}`}>{texteSite(children)}</div>); };
 
 /** Surtitre + titre de section. `niveau` choisit la balise, pas la taille. */
 export const TitreSection: React.FC<{
@@ -25,6 +26,8 @@ export const TitreSection: React.FC<{
   id?: string;
   children?: React.ReactNode;
 }> = ({ surtitre, titre, niveau = 2, taille = 'section', className = '', id, children }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const Balise = `h${niveau}` as 'h1' | 'h2' | 'h3';
   const tailles =
     taille === 'page'
@@ -32,11 +35,11 @@ export const TitreSection: React.FC<{
       : 'text-[1.3rem] sm:text-3xl lg:text-[2.1rem]';
   return (
     <div className={className}>
-      {surtitre && <p className="surtitre mb-2 text-[0.68rem] sm:mb-3 sm:text-xs">{surtitre}</p>}
+      {surtitre && <p className="surtitre mb-2 text-[0.68rem] sm:mb-3 sm:text-xs">{texteSite(surtitre)}</p>}
       <Balise id={id} className={`titre ${tailles}`}>
-        {titre}
+        {texteSite(titre)}
       </Balise>
-      {children && <div className="mt-3 text-[0.95rem] sm:mt-4 sm:text-[1.05rem] leading-relaxed text-texte max-w-3xl">{children}</div>}
+      {children && <div className="mt-3 text-[0.95rem] sm:mt-4 sm:text-[1.05rem] leading-relaxed text-texte max-w-3xl">{texteSite(children)}</div>}
     </div>
   );
 };
@@ -48,10 +51,12 @@ export const Carte: React.FC<{
   as?: 'div' | 'article' | 'section' | 'li';
   children: React.ReactNode;
 }> = ({ className = '', haute = false, as = 'div', children }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const Balise = as;
   return (
     <Balise className={`border border-bord ${haute ? 'bg-carte-haute' : 'bg-carte'} ${className}`}>
-      {children}
+      {texteSite(children)}
     </Balise>
   );
 };
@@ -62,8 +67,10 @@ export const TitreCarte: React.FC<{ className?: string; niveau?: 2 | 3 | 4; chil
   niveau = 3,
   children,
 }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const Balise = `h${niveau}` as 'h2' | 'h3' | 'h4';
-  return <Balise className={`titre text-base sm:text-xl ${className}`}>{children}</Balise>;
+  return <Balise className={`titre text-base sm:text-xl ${className}`}>{texteSite(children)}</Balise>;
 };
 
 const BASE_BOUTON =
@@ -79,20 +86,20 @@ type Variante = keyof typeof VARIANTES;
 /** Bouton pilule de la maquette. */
 export const Bouton: React.FC<
   React.ButtonHTMLAttributes<HTMLButtonElement> & { variante?: Variante }
-> = ({ variante = 'plein', className = '', children, ...reste }) => (
+> = ({ variante = 'plein', className = '', children, ...reste }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <button className={`${BASE_BOUTON} ${VARIANTES[variante]} ${className}`} {...reste}>
-    {children}
+    {texteSite(children)}
   </button>
-);
+)); };
 
 /** Lien externe à l'apparence d'un bouton. */
 export const BoutonLien: React.FC<
   React.AnchorHTMLAttributes<HTMLAnchorElement> & { variante?: Variante }
-> = ({ variante = 'plein', className = '', children, ...reste }) => (
+> = ({ variante = 'plein', className = '', children, ...reste }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <a className={`${BASE_BOUTON} ${VARIANTES[variante]} ${className}`} {...reste}>
-    {children}
+    {texteSite(children)}
   </a>
-);
+)); };
 
 /**
  * Lien vers une page du site. Un vrai `<a href>` : clic molette, nouvel onglet
@@ -107,7 +114,7 @@ export const LienPage: React.FC<{
   'aria-current'?: 'page' | undefined;
   'aria-label'?: string;
   children: React.ReactNode;
-}> = ({ section, onNaviguer, jeu, className = '', bouton, children, ...aria }) => (
+}> = ({ section, onNaviguer, jeu, className = '', bouton, children, ...aria }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <a
     href={jeu ? `${cheminDe(section)}?jeu=${jeu}` : cheminDe(section)}
     className={bouton ? `${BASE_BOUTON} ${VARIANTES[bouton]} ${className}` : className}
@@ -118,21 +125,21 @@ export const LienPage: React.FC<{
     }}
     {...aria}
   >
-    {children}
+    {texteSite(children)}
   </a>
-);
+)); };
 
 /** Pastille « À confirmer », « Programme à confirmer »… */
 export const Pastille: React.FC<{ className?: string; children: React.ReactNode }> = ({
   className = '',
   children,
-}) => (
+}) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <span
     className={`inline-flex items-center rounded-full border border-bord-fort bg-avis px-3 py-1 text-xs font-medium text-white ${className}`}
   >
-    {children}
+    {texteSite(children)}
   </span>
-);
+)); };
 
 /** Bandeau d'information ou d'erreur, liseré à gauche. */
 export const Avis: React.FC<{
@@ -141,6 +148,8 @@ export const Avis: React.FC<{
   className?: string;
   children?: React.ReactNode;
 }> = ({ titre, ton = 'info', className = '', children }) => {
+ const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
   const erreur = ton === 'erreur';
   const Icone = erreur ? AlertCircle : Info;
   return (
@@ -152,8 +161,8 @@ export const Avis: React.FC<{
     >
       <Icone className={`mt-0.5 h-5 w-5 shrink-0 ${erreur ? 'text-alerte' : 'text-magenta'}`} aria-hidden="true" />
       <div>
-        <p className={`font-semibold ${erreur ? 'text-alerte' : 'text-white'}`}>{titre}</p>
-        {children && <div className="mt-1 text-sm leading-relaxed text-texte">{children}</div>}
+        <p className={`font-semibold ${erreur ? 'text-alerte' : 'text-white'}`}>{texteSite(titre)}</p>
+        {children && <div className="mt-1 text-sm leading-relaxed text-texte">{texteSite(children)}</div>}
       </div>
     </div>
   );
@@ -169,30 +178,30 @@ export const CarteLien: React.FC<{
   texte: string;
   action: string;
   icone?: React.ReactNode;
-}> = ({ section, jeu, onNaviguer, surtitre, titre, texte, action, icone }) => (
+}> = ({ section, jeu, onNaviguer, surtitre, titre, texte, action, icone }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <Carte className="group relative flex h-full flex-col p-6 transition-colors hover:border-magenta/70">
     <div className="mb-5 flex items-start justify-between gap-4">
-      <p className="surtitre text-[0.7rem]">{surtitre}</p>
-      {icone && <span className="text-magenta" aria-hidden="true">{icone}</span>}
+      <p className="surtitre text-[0.7rem]">{texteSite(surtitre)}</p>
+      {icone && <span className="text-magenta" aria-hidden="true">{texteSite(icone)}</span>}
     </div>
-    <TitreCarte className="mb-4">{titre}</TitreCarte>
-    <p className="mb-8 flex-1 leading-relaxed text-texte">{texte}</p>
+    <TitreCarte className="mb-4">{texteSite(titre)}</TitreCarte>
+    <p className="mb-8 flex-1 leading-relaxed text-texte">{texteSite(texte)}</p>
     <LienPage
       section={section}
       jeu={jeu}
       onNaviguer={onNaviguer}
       className="flex items-center justify-between font-bold italic text-magenta after:absolute after:inset-0"
     >
-      <span>{action}</span>
+      <span>{texteSite(action)}</span>
       <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
     </LienPage>
   </Carte>
-);
+)); };
 
 /** Petit trait magenta qui sépare deux blocs de texte. */
-export const Trait: React.FC<{ className?: string }> = ({ className = '' }) => (
+export const Trait: React.FC<{ className?: string }> = ({ className = '' }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <span className={`block h-0.5 w-14 bg-magenta ${className}`} aria-hidden="true" />
-);
+)); };
 
 /**
  * En-tête de page : l'illustration du joueur, voilée de violet nuit, encadrée
@@ -202,14 +211,14 @@ export const EnTetePage: React.FC<{
   image?: string;
   className?: string;
   children: React.ReactNode;
-}> = ({ image = '/img/hero-joueur.webp', className = '', children }) => (
+}> = ({ image = '/img/hero-joueur.webp', className = '', children }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <section className={`relative isolate overflow-hidden ${className}`}>
     <div aria-hidden="true" className="absolute inset-0 -z-10">
       <img
-        src={image}
-        srcSet={image === '/img/hero-joueur.webp' ? '/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w' : undefined}
+        src={imageSite(image)}
+        srcSet={sourcesSite(image === '/img/hero-joueur.webp' ? '/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w' : undefined)}
         sizes="100vw"
-        alt=""
+        alt={texteSite("")}
         className="h-full w-full object-cover object-[60%_30%] opacity-45"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-nuit/60 via-nuit/75 to-nuit" />
@@ -217,23 +226,23 @@ export const EnTetePage: React.FC<{
     </div>
     <span aria-hidden="true" className="pointer-events-none absolute left-[6.5%] top-44 bottom-16 hidden w-0.5 bg-rose/80 lg:block" />
     <span aria-hidden="true" className="pointer-events-none absolute right-[6.5%] top-44 bottom-16 hidden w-0.5 bg-rose/80 lg:block" />
-    <div className="pt-[13.5rem] pb-8 sm:pt-60 sm:pb-16 lg:pt-44">{children}</div>
+    <div className="pt-[13.5rem] pb-8 sm:pt-60 sm:pb-16 lg:pt-44">{texteSite(children)}</div>
   </section>
-);
+)); };
 
 /** Fond « planète violette » des bandes de la maquette. */
 export const BandePlanete: React.FC<{ className?: string; children: React.ReactNode }> = ({
   className = '',
   children,
-}) => (
+}) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <section className={`relative isolate overflow-hidden ${className}`}>
     <div aria-hidden="true" className="absolute inset-0 -z-10">
-      <img src="/img/fond-planete.webp" alt="" loading="lazy" className="h-full w-full object-cover opacity-40" />
+      <img src={imageSite("/img/fond-planete.webp")} alt={texteSite("")} loading="lazy" className="h-full w-full object-cover opacity-40" />
       <div className="absolute inset-0 bg-gradient-to-b from-nuit via-nuit/70 to-nuit" />
     </div>
-    {children}
+    {texteSite(children)}
   </section>
-);
+)); };
 
 /** Initiales d'un nom, pour les cartes sans portrait. */
 export function initiales(nom: string): string {

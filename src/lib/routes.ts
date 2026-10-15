@@ -6,6 +6,7 @@
 // fonctionnent.
 
 export type Section =
+  | 'page'
   | 'accueil'
   | 'apropos'
   | 'saison'
@@ -26,6 +27,7 @@ interface Route {
 }
 
 export const ROUTES: Record<Section, Route> = {
+  page: { chemin: '/pages', titre: 'Informations', description: 'Informations de la Ligue Esport Est Cameroun.' },
   accueil: {
     chemin: '/',
     titre: 'Accueil',
@@ -113,6 +115,7 @@ export function cheminDe(section: Section): string {
  * auparavant il retombait sur l'accueil, ce qui masquait les liens cassés.
  */
 export function sectionDepuisChemin(chemin: string): Section {
+  if (/^\/pages\/[^/]+\/?$/.test(chemin)) return 'page';
   const propre = chemin.replace(/\/+$/, '') || '/';
   return SECTIONS.find((s) => ROUTES[s].chemin === propre) ?? ALIAS[propre] ?? 'introuvable';
 }

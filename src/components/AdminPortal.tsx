@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Shield, KeyRound, Save, CheckCircle2, AlertCircle, RefreshCw,
   Globe, Swords, Calendar, Users, Trophy, Image, Link, FileText, Plus, Trash2,
@@ -6,6 +6,11 @@ import {
 } from 'lucide-react';
 import { OngletActualites, OngletPages, Commandes, BoutonAjout } from './AdminContenu';
 import { ELCData, ELCPantheonItem, ELCVideo } from '../types';
+
+import { AdminLogin, AdminShell, AdminDashboard, AdminModule } from './AdminInterface';
+import { AdminPersonnalisation, AdminPagesLibres, AdminDistinctions, validerPages } from './AdminPersonnalisation';
+import { useModale } from '../lib/useModale';
+import { AdminChamps } from './AdminChamps';
 
 interface AdminPortalProps {
   data: ELCData;
@@ -21,10 +26,32 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
 
   // Working copy of data
   const [formData, setFormData] = useState<ELCData>(JSON.parse(JSON.stringify(data)));
-  const [activeTab, setActiveTab] = useState<'general' | 'actualites' | 'pages' | 'disciplines' | 'calendrier' | 'moba' | 'tps' | 'pantheon' | 'videos'>('general');
+  const [activeTab, setActiveTab] = useState<AdminModule>('dashboard');
   const [saveStatus, setSaveStatus] = useState<{ loading: boolean; success?: string; error?: string }>({
     loading: false
   });
+
+  const [savedData, setSavedData] = useState(() => JSON.stringify(data));
+  const dirty = JSON.stringify(formData) !== savedData;
+  const closeState = useRef({ dirty, loading: saveStatus.loading, onClose });
+  closeState.current = { dirty, loading: saveStatus.loading, onClose };
+  const closeAdmin = useCallback(() => {
+    const state = closeState.current;
+    if (state.loading) return;
+    if (!state.dirty || window.confirm('Quitter sans enregistrer les modifications ?')) state.onClose();
+  }, []);
+  const dialog = useModale(true, closeAdmin);
+  useEffect(() => {
+    if (!dirty) return;
+    const prevent = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = ''; };
+    window.addEventListener('beforeunload', prevent);
+    return () => window.removeEventListener('beforeunload', prevent);
+  }, [dirty]);
+  const resetData = () => {
+    if (window.confirm('Annuler les modifications non enregistrées ?')) {
+      setFormData(JSON.parse(savedData)); setSaveStatus({ loading: false });
+    }
+  };
 
   // Video Form State
   const [newVideoUrl, setNewVideoUrl] = useState('');
@@ -65,6 +92,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
     try {
       const json = await res.json();
       if (res.ok && json.ok) {
+        const response = await fetch('/api/data', { headers: { 'x-admin-key': enTeteCle }, cache: 'no-store' });
+        if (!response.ok) { setAuthError('Impossible de charger les contenus. Réessayez avant de modifier le site.'); return; }
+        const current = await response.json() as ELCData;
+        if (!current.meta || !current.competition) { setAuthError('Les contenus reçus sont incomplets.'); return; }
+        setFormData(current);
+        setSavedData(JSON.stringify(current));
         setIsAuthenticated(true);
       } else {
         setAuthError(json.error || 'Code administrateur invalide.');
@@ -82,44 +115,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
 
   // Save to /api/data
   const handleSave = async () => {
-    setSaveStatus({ loading: true });
-    try {
-      const res = await fetch('/api/data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-key': enTeteCle
-        },
-        body: JSON.stringify(formData)
-      });
-
-      const json = await res.json();
-      if (res.ok && json.ok) {
-        setSaveStatus({
-          loading: false,
-          success: `Enregistré avec succès (${new Date(json.savedAt).toLocaleTimeString('fr-FR')}) !`
-        });
-        onUpdateData(formData);
-        setTimeout(() => setSaveStatus({ loading: false }), 4000);
-      } else {
-        setSaveStatus({
-          loading: false,
-          error: json.error || "Impossible d'enregistrer les données."
-        });
-      }
-    } catch (err: any) {
-      setSaveStatus({
-        loading: false,
-        error: "Erreur réseau lors de l'enregistrement."
-      });
-    }
-  };
-
-  // Enregistrement immédiat, pour les actions sur les vidéos : elles n'ont pas
-  // de bouton « Enregistrer » à elles. Un échec doit se voir — le masquer
-  // laisserait croire que la modification est partie alors qu'elle n'existe
-  // que dans cet onglet.
-  const autoSave = async (payload: ELCData, successMessage: string) => {
+    if (saveStatus.loading) return;
+    const pageError = validerPages(formData.site?.pages ?? []);
+    if (pageError) { setSaveStatus({ loading: false, error: pageError }); return; }
+    if (!window.confirm('Enregistrer ces modifications et les publier sur le site ?')) return;
+    const payload = JSON.parse(JSON.stringify(formData)) as ELCData;
     setSaveStatus({ loading: true });
     try {
       const res = await fetch('/api/data', {
@@ -130,10 +130,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
         },
         body: JSON.stringify(payload)
       });
+
       const json = await res.json();
       if (res.ok && json.ok) {
-        setSaveStatus({ loading: false, success: successMessage });
-        setTimeout(() => setSaveStatus({ loading: false }), 4000);
+        setSaveStatus({
+          loading: false,
+          success: `Enregistré avec succès (${new Date(json.savedAt).toLocaleTimeString('fr-FR')}) !`
+        });
+        setSavedData(JSON.stringify(payload));
+        onUpdateData(payload);
+
       } else {
         setSaveStatus({
           loading: false,
@@ -266,9 +272,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
     };
 
     setFormData(updatedFormData);
-    onUpdateData(updatedFormData);
 
-    autoSave(updatedFormData, 'Vidéo ajoutée et enregistrée avec succès !');
+
+    setSaveStatus({ loading: false });
 
     setNewVideoUrl('');
     setNewVideoTitle('');
@@ -279,15 +285,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
   };
 
   const handleRemoveVideo = (id: string) => {
+    if (!window.confirm('Retirer cette vidéo ? La suppression sera appliquée à l’enregistrement.')) return;
     const updatedVideos = (formData.videos || []).filter(v => v.id !== id);
     const updatedFormData = {
       ...formData,
       videos: updatedVideos
     };
     setFormData(updatedFormData);
-    onUpdateData(updatedFormData);
 
-    autoSave(updatedFormData, 'Vidéo supprimée avec succès !');
+
+    setSaveStatus({ loading: false });
   };
 
   const handleToggleFeatured = (id: string) => {
@@ -297,67 +304,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
       videos: updatedVideos
     };
     setFormData(updatedFormData);
-    onUpdateData(updatedFormData);
 
-    autoSave(updatedFormData, 'Statut mis à jour avec succès !');
+
+    setSaveStatus({ loading: false });
   };
 
-  // Login Screen
   if (!isAuthenticated) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
-        <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl text-center">
-          <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-amber-500/20 to-emerald-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
-            <KeyRound className="w-7 h-7" />
-          </div>
-
-          <h2 className="font-display text-2xl font-bold text-white mb-2">
-            Espace Administrateur ELC
-          </h2>
-          <p className="text-xs text-slate-400 mb-6">
-            Entrez votre code d'accès administrateur pour modifier les équipes, scores, règlements et liens du championnat.
-          </p>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <input
-                type="password"
-                placeholder="Code administrateur"
-                value={adminKey}
-                onChange={(e) => setAdminKey(e.target.value)}
-                className="w-full text-center tracking-widest font-mono text-sm bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
-                autoFocus
-              />
-            </div>
-
-            {authError && (
-              <div className="p-3 rounded-xl bg-red-950/40 border border-red-800/50 text-red-300 text-xs flex items-center justify-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{authError}</span>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isVerifying}
-              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-bold text-sm shadow-lg transition-all cursor-pointer disabled:opacity-50"
-            >
-              {isVerifying ? 'Vérification...' : 'Déverrouiller le panneau'}
-            </button>
-
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-xs text-slate-500 hover:text-slate-300 underline cursor-pointer"
-            >
-              Retour au site public
-            </button>
-          </form>
-        </div>
-      </div>
-    );
+    return <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="admin-title">
+      <AdminLogin code={adminKey} onCode={setAdminKey} onSubmit={handleLogin} loading={isVerifying}
+        error={authError} onClose={closeAdmin} saison={formData.meta.saison || '2027'} />
+    </div>;
   }
-
 
   // --- Rankings : bilan des équipes MOBA et points Battle Royale ----------
   // Ces chiffres alimentent les tableaux « Ranking » du site public.
@@ -477,176 +434,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-md">
-      <div className="relative w-full max-w-6xl max-h-[95vh] bg-slate-900 border border-slate-750 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
-        {/* Header Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
-              <Shield className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-display font-bold text-lg text-white">
-                  Panneau d'Administration ELC 2027
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  Mode Édition Actif
-                </span>
-              </div>
-              <p className="text-xs text-slate-400">
-                Les modifications sont publiées sur le site après « Enregistrer tout ».
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {saveStatus.success && (
-              <span className="hidden sm:inline-flex items-center gap-1 text-xs text-emerald-400 font-medium">
-                <CheckCircle2 className="w-4 h-4" />
-                {saveStatus.success}
-              </span>
-            )}
-
-            {saveStatus.error && (
-              <span className="hidden sm:inline-flex items-center gap-1 text-xs text-red-400 font-medium">
-                <AlertCircle className="w-4 h-4" />
-                {saveStatus.error}
-              </span>
-            )}
-
-            <button
-              onClick={handleSave}
-              disabled={saveStatus.loading}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg transition-all cursor-pointer disabled:opacity-50"
-            >
-              <Save className="w-4 h-4" />
-              <span>{saveStatus.loading ? 'Enregistrement...' : 'Enregistrer tout'}</span>
-            </button>
-
-            <button
-              onClick={onClose}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
-            >
-              Quitter
-            </button>
-          </div>
-        </div>
-
-        {/* Tab Navigation */}
-        <div className="flex items-center gap-1 px-6 py-2 bg-slate-950/50 border-b border-slate-800 overflow-x-auto">
-          <button
-            onClick={() => setActiveTab('general')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'general'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Globe className="w-3.5 h-3.5" />
-            <span>Général & Liens</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('actualites')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'actualites'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Newspaper className="w-3.5 h-3.5" />
-            <span>Actualités</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('pages')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'pages'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <LayoutTemplate className="w-3.5 h-3.5" />
-            <span>Pages (À propos, Hall of Fame)</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('disciplines')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'disciplines'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Swords className="w-3.5 h-3.5" />
-            <span>Disciplines</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('calendrier')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'calendrier'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Calendrier & Roadmap</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('moba')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'moba'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Trophy className="w-3.5 h-3.5" />
-            <span>Tournois MOBA</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('tps')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'tps'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Users className="w-3.5 h-3.5" />
-            <span>Roster Battle Royale</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('pantheon')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'pantheon'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Trophy className="w-3.5 h-3.5" />
-            <span>Panthéon ({formData.pantheon?.curated?.length || 0})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('videos')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'videos'
-                ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Film className="w-3.5 h-3.5" />
-            <span>Vidéos & Médias ({formData.videos?.length || 0})</span>
-          </button>
-        </div>
-
-        {/* Tab Contents */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 text-sm text-slate-200">
-          
+    <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="admin-title">
+      <AdminShell active={activeTab} onSelect={setActiveTab} onClose={closeAdmin} onSave={handleSave}
+        onReset={resetData} dirty={dirty} loading={saveStatus.loading} success={saveStatus.success}
+        error={saveStatus.error} saison={formData.meta.saison || '2027'}>
+          {activeTab === 'dashboard' && <AdminDashboard data={formData} onSelect={setActiveTab} />}
+          {activeTab === 'personnalisation' && <AdminPersonnalisation data={formData} onChange={setFormData} />}
+          {activeTab === 'pages-libres' && <AdminPagesLibres data={formData} onChange={setFormData} />}
+          {activeTab === 'donnees' && <AdminChamps data={formData} onChange={setFormData} />}
           {/* TAB 1: GENERAL & LIENS */}
           {activeTab === 'general' && (
             <div className="space-y-6">
@@ -1608,6 +1403,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
           {/* TAB 6: PANTHEON */}
           {activeTab === 'pantheon' && (
             <div className="space-y-6">
+              <AdminDistinctions data={formData} onChange={setFormData} />
               {/* Panthéon General Texts */}
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
                 <h4 className="font-display font-bold text-amber-400 text-sm flex items-center gap-2">
@@ -1674,7 +1470,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
               {/* Distinctions Titles & Descriptions */}
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
                 <h4 className="font-display font-bold text-amber-400 text-sm">
-                  Textes des 4 Distinctions Officielles
+                  Textes et visuels des distinctions
                 </h4>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1683,6 +1479,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     { key: 'godlike', defaultTitle: 'GodLike', defaultSub: 'Meilleur joueur MOBA', defaultDesc: 'Performance exceptionnelle dans les disciplines MOBA (Honor of Kings, Mobile Legends). Élu sur les stats de la saison entière.', color: 'text-blue-400 border-blue-500/30' },
                     { key: 'demonking', defaultTitle: 'Demon King', defaultSub: 'Meilleur joueur TPS', defaultDesc: 'Domination absolue dans les disciplines Battle Royale (PUBG Mobile, Free Fire). Calculé sur le cumul des points saison.', color: 'text-red-400 border-red-500/30' },
                     { key: 'mvp', defaultTitle: 'MVP', defaultSub: 'Most Valuable Player', defaultDesc: 'Élu par les pairs et les organisateurs pour son impact en jeu et son fair-play exemplaire tout au long de la saison.', color: 'text-teal-400 border-teal-500/30' },
+                    ...(formData.pantheon?.distinctions ?? []).filter(d => !['goat','godlike','demonking','mvp'].includes(d.key)).map(d => ({ key:d.key, defaultTitle:d.title, defaultSub:d.subtitle, defaultDesc:d.desc, color:'text-amber-400 border-amber-500/30' })),
                   ].map((card) => {
                     const current = (formData.pantheon?.distinctions || []).find(d => d.key === card.key) || {
                       key: card.key,
@@ -2418,8 +2215,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
             </div>
           )}
 
-        </div>
-      </div>
+      </AdminShell>
     </div>
   );
 };
