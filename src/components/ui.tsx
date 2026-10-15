@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 // Briques visuelles de la maquette « Ligue de l'Est ».
 //
@@ -11,8 +12,8 @@ import { ArrowUpRight, Info, AlertCircle } from 'lucide-react';
 import { Section, cheminDe } from '../lib/routes';
 
 /** Largeur du contenu de la maquette, avec ses marges latérales. */
-export const Conteneur: React.FC<{ className?: string; children: React.ReactNode }> = ({
-  className = '',
+export const Conteneur: React.FC<{ image?: string; className?: string; children: React.ReactNode }> = ({
+  image, className = '',
   children,
 }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return (<div className={`mx-auto w-full max-w-[1120px] px-5 sm:px-8 ${className}`}>{texteSite(children)}</div>); };
 
@@ -214,7 +215,7 @@ export const EnTetePage: React.FC<{
 }> = ({ image = '/img/hero-joueur.webp', className = '', children }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <section className={`relative isolate overflow-hidden ${className}`}>
     <div aria-hidden="true" className="absolute inset-0 -z-10">
-      <img
+      <ImagePublique
         src={imageSite(image)}
         srcSet={sourcesSite(image === '/img/hero-joueur.webp' ? '/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w' : undefined)}
         sizes="100vw"
@@ -231,13 +232,14 @@ export const EnTetePage: React.FC<{
 )); };
 
 /** Fond « planète violette » des bandes de la maquette. */
-export const BandePlanete: React.FC<{ className?: string; children: React.ReactNode }> = ({
+export const BandePlanete: React.FC<{ image?: string; className?: string; children: React.ReactNode }> = ({
+  image,
   className = '',
   children,
 }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <section className={`relative isolate overflow-hidden ${className}`}>
     <div aria-hidden="true" className="absolute inset-0 -z-10">
-      <img src={imageSite("/img/fond-planete.webp")} alt={texteSite("")} loading="lazy" className="h-full w-full object-cover opacity-40" />
+      <ImagePublique src={imageSite(image || "/img/fond-planete.webp")} alt={texteSite("")} loading="lazy" className="h-full w-full object-cover opacity-40" />
       <div className="absolute inset-0 bg-gradient-to-b from-nuit via-nuit/70 to-nuit" />
     </div>
     {texteSite(children)}

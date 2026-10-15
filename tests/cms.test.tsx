@@ -20,6 +20,47 @@ import { PageLibre } from '../src/components/PageLibre';
 import { slugPage, validerPages } from '../src/components/AdminPersonnalisation';
 import { sectionDepuisChemin } from '../src/lib/routes';
 import type { ELCData, ELCPageLibre } from '../src/types';
+import { urlImage, lienPartagePhoto } from '../src/lib/images';
+import { urlSure, urlCss } from '../src/lib/urls';
+import { CarteActualite } from '../src/components/CarteActualite';
+import { CarteFaitMarquant } from '../src/components/CarteFaitMarquant';
+import { BlocInscription, miniatureDe } from '../src/components/Blocs';
+import { AdminImageInput } from '../src/components/AdminImageInput';
+import { OngletActualites } from '../src/components/AdminContenu';
+
+const importedImage='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aV1sAAAAASUVORK5CYII=';
+
+test('Les imports raster sont acceptés uniquement comme images ; les liens de partage sont expliqués',()=>{
+  assert.equal(urlImage(importedImage),importedImage);
+  assert.equal(urlCss(importedImage),importedImage);
+  assert.equal(urlSure(importedImage),'');
+  for(const bad of ['javascript:alert(1)','data:text/html;base64,PHNjcmlwdD4=','data:image/svg+xml;base64,PHN2Zz4=','mailto:a@b.com','file:///photo.png'])assert.equal(urlImage(bad),'');
+  assert.equal(urlImage('https://lh3.googleusercontent.com/photo'),'https://lh3.googleusercontent.com/photo');
+  assert.equal(lienPartagePhoto('https://photos.app.goo.gl/example'),true);
+  const html=render(<AdminImageInput value="https://photos.app.goo.gl/example" onChange={noop}/>);
+  assert.match(html,/Téléchargez la photo/);assert.ok(!html.includes('<img'));
+});
+
+test('La couverture de l’actualité reste visible avec une vidéo et dispose de son propre champ',()=>{
+  const html=render(<CarteActualite actu={{titre:'Article illustré',rubrique:'Ligue',texte:'Article',image:importedImage,video:'https://youtu.be/dQw4w9WgXcQ'}}/>);
+  assert.ok(html.includes(`src="${importedImage}"`));assert.match(html,/Illustration : Article illustré/);assert.match(html,/Lire la vidéo/);
+  const editor=render(<OngletActualites formData={{...initialELCData,contenu:{saison:{actualites:[{titre:'Article',rubrique:'Ligue',texte:''}]}}}} setFormData={noop}/>);
+  assert.match(editor,/Image de couverture de l’article/);assert.match(editor,/Importer une image/);
+});
+
+test('Les bannières, portraits et logos importés sont raccordés aux pages publiques',()=>{
+  const data=structuredClone(initialELCData);
+  data.meta.heroImage=importedImage;data.meta.ctaImage=importedImage;data.meta.videosBannerImage=importedImage;data.meta.inscriptionBannerImage=importedImage;data.meta.formBannerImage=importedImage;data.meta.pantheonBannerImage=importedImage;
+  for(const game of Object.values(data.competition)){game.heroImage=importedImage;game.logoImage=importedImage;}
+  for(const node of [<PageAccueil data={data} onNaviguer={noop}/>,<BlocInscription data={data} onNaviguer={noop}/>,<PageVideos data={data} onNaviguer={noop}/>,<PageInscription data={data} onNaviguer={noop} onOpenRegulations={noop}/>,<PageClassements data={data} jeu="hok" etat="pret" onReessayer={noop} onNaviguer={noop}/>,<PageLibre page={{...page,image:importedImage}}/>])assert.ok(render(node).includes(`src="${importedImage}"`));
+  data.pantheon.distinctions=[{key:'goat',title:'GOAT',subtitle:'Prix',desc:'Test',nomineNom:'Lauréat',nominePhoto:importedImage,nomineHero:importedImage,fondImage:importedImage,logoImage:importedImage}];
+  const hall=render(<PageHallOfFame data={data} etat="pret" onReessayer={noop} onNaviguer={noop}/>);
+  assert.ok(hall.split(`src="${importedImage}"`).length>=4);assert.ok(hall.includes(`url(&quot;${importedImage}&quot;)`));
+  const fait={nom:'Portrait test',distinction:'MVP',description:'Test',photo:importedImage};
+  assert.ok(!render(<CarteFaitMarquant fait={{...fait,publie:false}}/>).includes(importedImage));
+  assert.ok(render(<CarteFaitMarquant fait={{...fait,publie:true}}/>).includes(importedImage));
+  assert.equal(miniatureDe({titre:'Test',url:'https://youtu.be/dQw4w9WgXcQ',miniature:importedImage} as any),importedImage);
+});
 
 const noop=()=>{};
 const page:ELCPageLibre={id:'privacy',slug:'politique-de-confidentialite',titre:'Politique de confidentialité',categorie:'Informations légales',texte:'Contenu rédigé par la ligue.',publie:true,menu:true,piedDePage:true};
@@ -101,10 +142,12 @@ test('API : sauvegarde complète, confidentialité des brouillons et rejet des p
   try {
     const publicRead=await call('GET');assert.equal(publicRead.status,200);assert.equal(publicRead.body.site.pages.length,1);
     const adminRead=await call('GET',undefined,true);assert.equal(adminRead.body.site.pages.length,2);
-    const updated={...stored,site:{...stored.site,textes:{Titre:'Titre sauvegardé'}}};
+    const updated={...stored,meta:{...stored.meta,heroImage:importedImage},site:{...stored.site,images:{'/img/logo-ligue-est.webp':importedImage},textes:{Titre:'Titre sauvegardé'}}};
     assert.equal((await call('POST',updated)).status,401);
     assert.equal((await call('POST',updated,true)).status,200);
     assert.equal((await call('GET')).body.site.textes.Titre,'Titre sauvegardé');
+    assert.equal((await call('GET')).body.meta.heroImage,importedImage);
+    assert.equal((await call('GET')).body.site.images['/img/logo-ligue-est.webp'],importedImage);
     assert.equal((await call('POST',{...stored,site:{pages:[page,page]}},true)).status,400);
     assert.equal((await call('POST',{...stored,site:{textes:{Titre:{invalide:true}}}},true)).status,400);
   } finally {globalThis.fetch=originalFetch;}

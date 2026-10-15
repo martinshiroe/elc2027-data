@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { ELCData } from '../types';
@@ -98,8 +99,8 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
               <li key={m.nom}>
                 <Carte className="flex h-full flex-col p-5">
                   {texteSite(m.photo ? (
-                    <img
-                      src={imageSite(urlSure(m.photo))}
+                    <ImagePublique
+                      src={imageSite(m.photo)}
                       alt={texteSite(`Portrait de ${m.nom}`)}
                       loading="lazy"
                       referrerPolicy="no-referrer"

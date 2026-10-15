@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React, { useState } from 'react';
 import { ExternalLink, Play } from 'lucide-react';
@@ -43,7 +44,7 @@ const VideoActualite: React.FC<{ url: string; titre: string }> = ({ url, titre }
     <div className="relative mb-5 aspect-video overflow-hidden border border-bord-fort bg-encre">
       {texteSite(lecture ? (
         <iframe
-          src={imageSite(`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`)}
+          src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`}
           title={texteSite(titre)}
           className="absolute inset-0 h-full w-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -56,7 +57,7 @@ const VideoActualite: React.FC<{ url: string; titre: string }> = ({ url, titre }
           className="group absolute inset-0 cursor-pointer"
           aria-label={texteSite(`Lire la vidéo : ${titre}`)}
         >
-          <img
+          <ImagePublique
             src={imageSite(`https://i.ytimg.com/vi/${id}/hqdefault.jpg`)}
             alt={texteSite("")}
             loading="lazy"
@@ -80,10 +81,10 @@ export const CarteActualite: React.FC<{ actu: ELCActualite; grand?: boolean }> =
   const date = dateLisible(actu.date);
   return (
     <Carte as="article" className="flex h-full flex-col p-5 sm:p-7">
-      {texteSite(actu.image && !actu.video && (
-        <img
-          src={imageSite(urlSure(actu.image))}
-          alt={texteSite("")}
+      {texteSite(actu.image && (
+        <ImagePublique
+          src={imageSite(actu.image)}
+          alt={texteSite(`Illustration : ${actu.titre}`)}
           loading="lazy"
           referrerPolicy="no-referrer"
           onError={masquerSiCassee}

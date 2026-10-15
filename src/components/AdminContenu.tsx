@@ -1,3 +1,4 @@
+import { AdminImageInput } from './AdminImageInput';
 // Éditeurs de l'admin pour le contenu ajouté avec la refonte : actualités
 // (avec lien et vidéo), pages « À propos » et « Saison news », fait marquant.
 //
@@ -35,7 +36,7 @@ const Champ: React.FC<{
       <label htmlFor={id} className="block text-[11px] text-slate-400 mb-1">
         {label}
       </label>
-      {multiligne ? (
+      {/photo|image|logo/i.test(label) ? <AdminImageInput id={id} value={valeur ?? ''} onChange={e=>onChange(e.target.value)} /> : multiligne ? (
         <textarea id={id} rows={lignes} value={valeur ?? ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} className={CLASSE_CHAMP} />
       ) : (
         <input id={id} type={type} value={valeur ?? ''} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} className={CLASSE_CHAMP} />
@@ -204,6 +205,7 @@ export const OngletActualites: React.FC<{ formData: ELCData; setFormData: Maj }>
                   <Champ label="Note de bas de carte (facultatif)" valeur={a.note} placeholder="Ex. : dates à confirmer" onChange={(v) => majActu(i, { note: v })} />
                 </div>
                 <Champ label="Titre" valeur={a.titre} onChange={(v) => majActu(i, { titre: v })} />
+                <Champ label="Image de couverture de l’article" valeur={a.image} onChange={(v) => majActu(i, { image: v || undefined })} aide="Affichée en haut de l’article, même avec une vidéo." />
                 <Champ label="Texte" valeur={a.texte} multiligne lignes={4} onChange={(v) => majActu(i, { texte: v })} />
 
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -243,13 +245,7 @@ export const OngletActualites: React.FC<{ formData: ELCData; setFormData: Maj }>
                         {youtube ? 'Vidéo YouTube : lecture directement sur le site.' : 'Cette vidéo s’ouvrira dans un nouvel onglet.'}
                       </p>
                     )}
-                    <Champ
-                      label="Image (si pas de vidéo)"
-                      type="url"
-                      valeur={a.image}
-                      placeholder="https://…/image.jpg"
-                      onChange={(v) => majActu(i, { image: v || undefined })}
-                    />
+
                   </div>
                 </div>
               </article>
@@ -356,7 +352,7 @@ export const OngletPages: React.FC<{ formData: ELCData; setFormData: Maj }> = ({
       <Bloc titre="Fait marquant (À propos et Hall of Fame)" icone={<Star className="w-4 h-4" />}>
         <label className="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
           <input type="checkbox" checked={Boolean(faitMarquant.publie)} onChange={(e) => majFait({ publie: e.target.checked })} />
-          Accord de publication obtenu (affiche la photo et retire la mention « Accord de publication à obtenir »)
+          Publier le portrait — je confirme avoir obtenu l’accord de publication (sans cette case, la photo reste masquée sur le site)
         </label>
         <div className="grid gap-2 sm:grid-cols-3">
           <Champ label="Nom" valeur={faitMarquant.nom} onChange={(v) => majFait({ nom: v })} />

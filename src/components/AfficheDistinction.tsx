@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { Camera } from 'lucide-react';
@@ -86,8 +87,8 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
 
         {/* Héros du jeu, en retrait à droite, fondu sur les bords */}
         {texteSite(d.heros && (
-          <img
-            src={imageSite(urlSure(d.heros))}
+          <ImagePublique
+            src={imageSite(d.heros)}
             alt={texteSite("")}
             aria-hidden="true"
             referrerPolicy="no-referrer"
@@ -104,8 +105,8 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
 
         {/* Photo du joueur au premier plan, recadrée sur le visage */}
         {texteSite(d.photo ? (
-          <img
-            src={imageSite(urlSure(d.photo))}
+          <ImagePublique
+            src={imageSite(d.photo)}
             alt={texteSite(d.nom ? `Portrait de ${d.nom}` : 'Portrait du nominé')}
             referrerPolicy="no-referrer"
             loading="lazy"

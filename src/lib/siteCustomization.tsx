@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { ELCSiteCustomization } from '../types';
-import { urlSure } from './urls';
+import { urlImage } from './images';
 
 const SiteContext = createContext<ELCSiteCustomization>({});
 export const SiteCustomizationProvider = SiteContext.Provider;
@@ -16,7 +16,7 @@ export function useSiteCustomization() {
   function imageSite(original: string | undefined): string | undefined {
     if (!original) return original;
     const replacement = content.images?.[original];
-    return replacement ? urlSure(replacement) || original : original;
+    return urlImage(replacement || original) || undefined;
   }
   function sourcesSite(original: string | undefined): string | undefined {
     // Une image personnalisée ne doit pas être masquée par une ancienne source responsive.

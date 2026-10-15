@@ -1,3 +1,4 @@
+import { AdminImageInput } from './AdminImageInput';
 import React from 'react';
 import { ELCData } from '../types';
 import { contenuDe } from '../data/contenu';
@@ -9,6 +10,7 @@ type Value=string|number|boolean|null|Value[]|{[key:string]:Value};
 function ChampStructure({value,label,onChange}: {value:Value;label:string;onChange:(value:Value)=>void}) {
   if (typeof value==='boolean') return <label className="admin-checkbox"><input type="checkbox" checked={value} onChange={e=>onChange(e.target.checked)}/>{label}</label>;
   if (typeof value==='number') return <label className="admin-field">{label}<input type="number" step="any" value={value} onChange={e=>{if(Number.isFinite(e.target.valueAsNumber))onChange(e.target.valueAsNumber);}}/></label>;
+  if ((typeof value==='string'||value===null) && /photo|image|logo|thumbnail|nomine hero/i.test(label)) return <label className="admin-field">{label}<AdminImageInput value={value??''} onChange={e=>onChange(e.target.value)}/></label>;
   if(typeof value==='string'||value===null) return <label className="admin-field">{label}<textarea rows={String(value??'').length>150?4:2} value={value??''} onChange={e=>onChange(e.target.value)}/></label>;
   if(Array.isArray(value))return <details className="admin-panel"><summary>{label} ({value.length})</summary><div className="admin-content-list mt-4">
     {value.map((item,i)=><div key={i}><ChampStructure value={item} label={`${label} ${i+1}`} onChange={next=>onChange(value.map((v,j)=>j===i?next:v))}/><div className="admin-toolbar mt-2">

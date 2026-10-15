@@ -1,3 +1,5 @@
+import { ImagePublique } from './ImagePublique';
+import { urlImage } from '../lib/images';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Play, Search, ExternalLink, X } from 'lucide-react';
@@ -81,7 +83,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data, onNaviguer }) => {
 
   return (
     <>
-      <EnTetePage image={data.meta.videosBannerImage ? urlSure(data.meta.videosBannerImage) : undefined}>
+      <EnTetePage image={data.meta.videosBannerImage ? urlImage(data.meta.videosBannerImage) : undefined}>
         <Conteneur>
           <p className="surtitre mb-4">{texteSite("Diffusion · Vidéos officielles")}</p>
           <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">{texteSite("Le jeu en direct.")}<span className="block">{texteSite("Les moments forts.")}</span>
@@ -115,8 +117,8 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data, onNaviguer }) => {
                 <Carte haute className="group relative mb-12 grid overflow-hidden lg:grid-cols-[7fr_5fr]">
                   <div className="relative aspect-video bg-encre">
                     {texteSite(miniatureDe(aLaUne) && (
-                      <img
-                        src={imageSite(urlSure(miniatureDe(aLaUne)))}
+                      <ImagePublique
+                        src={imageSite(miniatureDe(aLaUne))}
                         onError={masquerSiCassee}
                         alt={texteSite("")}
                         referrerPolicy="no-referrer"
@@ -196,8 +198,8 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data, onNaviguer }) => {
                         <Carte as="article" className="group relative flex h-full flex-col overflow-hidden transition-colors hover:border-magenta/70">
                           <div className="relative aspect-video bg-encre">
                             {texteSite(mini && (
-                              <img
-                                src={imageSite(urlSure(mini))}
+                              <ImagePublique
+                                src={imageSite(mini)}
                         onError={masquerSiCassee}
                                 alt={texteSite("")}
                                 loading="lazy"
@@ -266,7 +268,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data, onNaviguer }) => {
             <div className="relative flex aspect-video w-full items-center justify-center bg-black">
               {texteSite(enLecture.plateforme !== 'tiktok' && idYoutube(enLecture.url) ? (
                 <iframe
-                  src={imageSite(`https://www.youtube-nocookie.com/embed/${idYoutube(enLecture.url)}?autoplay=1&rel=0`)}
+                  src={`https://www.youtube-nocookie.com/embed/${idYoutube(enLecture.url)}?autoplay=1&rel=0`}
                   title={texteSite(enLecture.titre)}
                   className="h-full w-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

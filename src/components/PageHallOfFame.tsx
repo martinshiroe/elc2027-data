@@ -1,3 +1,5 @@
+import { ImagePublique } from './ImagePublique';
+import { urlImage } from '../lib/images';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { Crown, Swords, Flame, Shield, Newspaper, ListOrdered, CircleDashed } from 'lucide-react';
@@ -99,7 +101,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
     return {
       ...def,
       couleur: perso?.couleur && /^#[0-9a-f]{6}$/i.test(perso.couleur) ? perso.couleur : def.couleur,
-      icone: perso?.logoImage && urlSure(perso.logoImage) ? <img src={imageSite(urlSure(perso.logoImage))} alt={texteSite("")} className="h-6 w-6 object-contain" /> : <def.Icone className="h-6 w-6" />,
+      icone: perso?.logoImage && urlImage(perso.logoImage) ? <ImagePublique src={imageSite(perso.logoImage)} alt={texteSite("")} className="h-6 w-6 object-contain" /> : <def.Icone className="h-6 w-6" />,
       title: perso?.title || def.title,
       subtitle: perso?.subtitle || def.subtitle,
       desc: perso?.desc || def.desc,
