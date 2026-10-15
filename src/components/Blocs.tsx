@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 // Blocs partagés par l'accueil et le calendrier.
 //
@@ -77,8 +78,8 @@ export const BlocDisciplines: React.FC<{ data: ELCData; onNaviguer: Naviguer; ni
               <Carte className="group relative flex h-full flex-col overflow-hidden transition-colors hover:border-magenta/70">
                 <div className="relative h-32 overflow-hidden bg-carte-haute">
                   {texteSite(image && (
-                    <img
-                      src={imageSite(urlSure(image))}
+                    <ImagePublique
+                      src={imageSite(image)}
                       alt={texteSite("")}
                       loading="lazy"
                       referrerPolicy="no-referrer"
@@ -87,8 +88,8 @@ export const BlocDisciplines: React.FC<{ data: ELCData; onNaviguer: Naviguer; ni
                   ))}
                   <div className="absolute inset-0 bg-gradient-to-t from-carte to-transparent" />
                   {texteSite(logo && (
-                    <img
-                      src={imageSite(urlSure(logo))}
+                    <ImagePublique
+                      src={imageSite(logo)}
                       alt={texteSite("")}
                       loading="lazy"
                       className="absolute bottom-3 left-5 h-9 w-auto max-w-[70%] object-contain"
@@ -169,11 +170,11 @@ export function idYoutube(url: string): string | null {
 }
 
 /**
- * Miniature d'une vidéo. Pour YouTube, l'adresse publique stable tirée de
- * l'identifiant passe avant la miniature saisie : celles copiées depuis
- * YouTube Studio (`i9.ytimg.com/...?sqp=`) sont signées et expirent.
+ * La couverture choisie par l'admin prime. Seules les anciennes miniatures
+ * signées de YouTube Studio sont remplacées par la miniature publique stable.
  */
 export function miniatureDe(video: ELCVideo): string {
+  if (video.miniature && !/^https?:\/\/i9\.ytimg\.com\//i.test(video.miniature)) return video.miniature;
   const id = video.url ? idYoutube(video.url) : null;
   if (id) return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
   return video.miniature ?? '';
@@ -206,8 +207,8 @@ export const BlocVideos: React.FC<{ data: ELCData; onNaviguer: Naviguer }> = ({ 
                 <Carte className="group relative h-full overflow-hidden transition-colors hover:border-magenta/70">
                   <div className="relative aspect-video bg-carte-haute">
                     {texteSite(mini && (
-                      <img
-                        src={imageSite(urlSure(mini))}
+                      <ImagePublique
+                        src={imageSite(mini)}
                         onError={masquerSiCassee}
                         alt={texteSite("")}
                         loading="lazy"
@@ -249,7 +250,7 @@ export const BlocInscription: React.FC<{ data: ELCData; onNaviguer: Naviguer }> 
 
   const ouvert = Boolean(data.meta.googleFormUrl);
   return (
-    <BandePlanete className="py-12 sm:py-20">
+    <BandePlanete image={data.meta.ctaImage || undefined} className="py-12 sm:py-20">
       <Conteneur>
         <Carte haute className="bg-carte-haute/80 p-7 sm:p-10">
           <TitreSection

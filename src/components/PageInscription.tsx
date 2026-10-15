@@ -1,3 +1,5 @@
+import { ImagePublique } from './ImagePublique';
+import { urlImage } from '../lib/images';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
@@ -58,7 +60,7 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
 
   return (
     <>
-      <EnTetePage image={meta.inscriptionBannerImage ? urlSure(meta.inscriptionBannerImage) : undefined}>
+      <EnTetePage image={meta.inscriptionBannerImage ? urlImage(meta.inscriptionBannerImage) : undefined}>
         <Conteneur>
           <p className="surtitre mb-4">{texteSite("Saison ")}{texteSite(meta.saison || '2027')}{texteSite(" · Inscriptions")}</p>
           <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">{texteSite("Entre dans")}<span className="block">{texteSite("la compétition.")}</span>
@@ -105,8 +107,8 @@ export const PageInscription: React.FC<PageInscriptionProps> = ({ data, onNavigu
                  connexion. La page de connexion répond X-Frame-Options: DENY
                  et ne s'affiche jamais dans un cadre. On ouvre un nouvel onglet. */
               <div className="mx-auto max-w-2xl px-6 py-10 text-center">
-                <img
-                  src={imageSite(urlSure(meta.formBannerImage || '/img/bandeau-inscription.png'))}
+                <ImagePublique
+                  src={imageSite(meta.formBannerImage || '/img/bandeau-inscription.png')}
                   alt={texteSite("ELC — inscriptions ouvertes")}
                   width={1600}
                   height={400}

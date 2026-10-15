@@ -23,6 +23,18 @@ Les pages publiées ont une adresse `/pages/adresse-choisie`. Les brouillons son
 
 ## Enregistrer
 
+## Images, portraits et couvertures
+
+Chaque champ image propose une adresse directe, un aperçu et **Importer une image**. Formats importés : PNG, JPG, WebP, GIF et AVIF, jusqu’à 15 Mo avant réduction. L’import produit une image fixe de 1 600 pixels maximum, compressée et enregistrée avec les contenus. Exporter les SVG/HEIC en PNG avant import ; les liens directs vers des SVG restent possibles. Les anciens imports raster sont à nouveau affichables.
+
+Un lien Google Photos de partage ouvre une page, pas un fichier image : télécharger la photo depuis Google Photos, puis l’importer ici. Un lien direct public vers une image reste utilisable ; les liens privés, expirés ou bloqués par l’hébergeur sont signalés par l’aperçu.
+
+La rubrique Actualités contient désormais un champ **Image de couverture de l’article**, indépendant de la vidéo. Le portrait du fait marquant est publié uniquement après activation de la case confirmant l’accord de publication. Les bannières d’accueil, d’inscription, de vidéo, de discipline et d’attribution sont reliées à leurs champs.
+
+Le document complet est limité à 3 Mo dans l’éditeur pour éviter un refus lors de l’enregistrement. Au-delà, remplacer certains imports par des liens d’images hébergées. Aucun import n’est envoyé sur le site avant **Enregistrer et publier**.
+
+## Sauvegarde
+
 Toutes les modifications, y compris les vidéos, restent dans la copie de travail jusqu’à **Enregistrer et publier**, puis confirmation. Ce bouton utilise l’API et le stockage Supabase déjà en place. Un échec conserve les changements pour réessayer. **Annuler** restaure la dernière version chargée ou enregistrée. Une confirmation protège la fermeture lorsqu’il reste des modifications.
 
 Il n’y a pas de nouvelle table Supabase ni de nouveau secret à configurer. Les champs facultatifs `site.textes`, `site.images` et `site.pages` sont conservés dans le document existant.

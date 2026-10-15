@@ -1,3 +1,4 @@
+import { urlImage } from './images';
 // Validation des URL venant des données du site.
 //
 // Tout ce qui est affiché ici — liens des réseaux, formulaire d'inscription,
@@ -48,7 +49,7 @@ export function urlSure(valeur: string | undefined | null): string {
  * caractères capables de sortir du `url()`.
  */
 export function urlCss(valeur: string | undefined | null): string {
-  const sure = urlSure(valeur);
+  const sure = urlImage(valeur);
   if (!sure) return '';
   return sure
     .replace(/\\/g, '%5C')

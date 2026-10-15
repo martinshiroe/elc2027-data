@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React, { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
@@ -115,8 +116,8 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
                     </div>
                     <div className="mb-4 flex items-center gap-4">
                       {texteSite(p.photo ? (
-                        <img
-                          src={imageSite(urlSure(p.photo))}
+                        <ImagePublique
+                          src={imageSite(p.photo)}
                           alt={texteSite("")}
                           loading="lazy"
                           referrerPolicy="no-referrer"

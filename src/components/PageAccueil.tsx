@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { ELCData } from '../types';
@@ -25,9 +26,9 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
       {/* ---------- Héros plein écran (cadre « LIGUE DE L'EST SITE WEB ») ---------- */}
       <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden md:min-h-[100svh]" aria-labelledby="titre-accueil">
         <div aria-hidden="true" className="absolute inset-0 -z-10">
-          <img
-            src={imageSite("/img/hero-joueur.webp")}
-            srcSet={sourcesSite("/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w")}
+          <ImagePublique
+            src={imageSite(data.site?.images?.['/img/hero-joueur.webp'] || data.meta.heroImage || "/img/hero-joueur.webp")}
+            srcSet={data.meta.heroImage ? undefined : sourcesSite("/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w")}
             sizes="100vw"
             alt={texteSite("")}
             // React 18 ne connaît pas encore `fetchPriority` : attribut HTML brut.
@@ -71,8 +72,8 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
             return (
               <li key={j.id} className="flex h-11 w-32 items-center justify-center">
                 {logo ? (
-                  <img
-                    src={imageSite(urlSure(logo))}
+                  <ImagePublique
+                    src={imageSite(logo)}
                     alt={texteSite(j.nom)}
                     referrerPolicy="no-referrer"
                     className="max-h-full max-w-full object-contain [filter:drop-shadow(0_0_1px_rgba(255,255,255,0.9))_drop-shadow(0_0_6px_rgba(255,255,255,0.25))]"
@@ -97,8 +98,8 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
               return (
                 <li key={j.id} className="flex h-9 w-28 items-center justify-end">
                   {logo ? (
-                    <img
-                      src={imageSite(urlSure(logo))}
+                    <ImagePublique
+                      src={imageSite(logo)}
                       alt={texteSite(j.nom)}
                       referrerPolicy="no-referrer"
                       className="max-h-full max-w-full object-contain [filter:drop-shadow(0_0_1px_rgba(255,255,255,0.9))_drop-shadow(0_0_6px_rgba(255,255,255,0.25))]"

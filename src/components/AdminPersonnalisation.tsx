@@ -1,3 +1,5 @@
+import { AdminImageInput } from './AdminImageInput';
+import { urlImage } from '../lib/images';
 import React, { useState } from 'react';
 import { ELCData, ELCPageLibre } from '../types';
 import catalogue from '../data/siteContentCatalog.json';
@@ -25,9 +27,9 @@ export function AdminPersonnalisation({data,onChange}:Props) {
       return <details className="admin-panel" key={entry.valeur}>
         <summary>{entry.valeur.length>130?entry.valeur.slice(0,130)+'…':entry.valeur}</summary>
         <p className="text-xs">{entry.fichiers.map(nom).join(' · ')}</p>
-        {mode==='images'&&<img src={urlSure(value)} className="admin-image-preview" alt="Aperçu du visuel" />}
+
         <label className="admin-field">{mode==='textes'?'Texte affiché':'Adresse de l’image ou du logo'}
-          {mode==='textes'?<textarea rows={value.length>120?4:2} value={value} onChange={e=>update(entry.valeur,e.target.value)}/>:<input value={value} onChange={e=>update(entry.valeur,e.target.value)} placeholder="https://… ou /img/…"/>}
+          {mode==='textes'?<textarea rows={value.length>120?4:2} value={value} onChange={e=>update(entry.valeur,e.target.value)}/>:<AdminImageInput value={value} onChange={e=>update(entry.valeur,e.target.value)} placeholder="https://… ou /img/…"/>}
         </label>
         <button type="button" className="admin-text-button" onClick={()=>update(entry.valeur,'',true)}>Rétablir la valeur d’origine</button>
       </details>;
@@ -46,7 +48,7 @@ export function validerPages(pages:ELCPageLibre[]):string|null {
     if(seen.has(p.slug))return `L’adresse « ${p.slug} » est déjà utilisée.`;
     seen.add(p.slug);
     if(p.publie&&!p.texte.trim())return `Ajoutez le contenu de « ${p.titre} » avant de la publier.`;
-    if(p.image && !urlSure(p.image))return `L’image de « ${p.titre} » n’a pas une adresse valide.`;
+    if(p.image && !urlImage(p.image))return `L’image de « ${p.titre} » n’a pas une adresse valide.`;
   }
   return null;
 }
@@ -69,7 +71,7 @@ export function AdminPagesLibres({data,onChange}:Props){
       <label className="admin-field">Titre<input value={current.titre} onChange={e=>update({titre:e.target.value})}/></label>
       <label className="admin-field">Adresse de la page<input value={current.slug} onChange={e=>update({slug:slugPage(e.target.value)})}/><small>/pages/{current.slug}</small></label>
       <label className="admin-field">Catégorie<input list="categories-pages" value={current.categorie} onChange={e=>update({categorie:e.target.value})}/><datalist id="categories-pages">{[...new Set(pages.map(p=>p.categorie))].map(c=><option key={c} value={c}/>)}</datalist></label>
-      <label className="admin-field">Image de couverture (facultative)<input value={current.image??''} onChange={e=>update({image:e.target.value})}/></label>
+      <label className="admin-field">Image de couverture (facultative)<AdminImageInput value={current.image??''} onChange={e=>update({image:e.target.value})}/></label>
       <label className="admin-field admin-wide">Contenu<textarea rows={16} value={current.texte} onChange={e=>update({texte:e.target.value})}/><small>Texte libre. Les sauts de ligne sont conservés.</small></label>
       <div className="admin-wide"><label className="admin-checkbox"><input type="checkbox" checked={current.publie} onChange={e=>{
         if(e.target.checked){const message=validerPages(pages.map(p=>p.id===current.id?{...p,publie:true}:p));if(message){setError(message);return;}}update({publie:e.target.checked});
@@ -94,7 +96,7 @@ export function AdminDistinctions({data,onChange}:Props){
     <div className="admin-content-list mt-4">{entries.map(d=>{const current=saved.find(v=>v.key===d.key);return <div className="admin-page-grid" key={d.key}>
       <label className="admin-checkbox"><input type="checkbox" checked={current?.visible!==false} onChange={e=>update(d.key,{visible:e.target.checked})}/>{current?.title||d.title}</label>
       <label className="admin-field">Couleur<input type="color" value={current?.couleur??d.couleur??'#f4b544'} onChange={e=>update(d.key,{couleur:e.target.value})}/></label>
-      <label className="admin-field admin-wide">Logo de la distinction (facultatif)<input value={current?.logoImage??''} placeholder="https://… ou /img/…" onChange={e=>update(d.key,{logoImage:e.target.value})}/></label>
+      <label className="admin-field admin-wide">Logo de la distinction (facultatif)<AdminImageInput value={current?.logoImage??''} placeholder="https://… ou /img/…" onChange={e=>update(d.key,{logoImage:e.target.value})}/></label>
     </div>;})}</div>
     <button type="button" className="admin-primary mt-5" onClick={()=>update('distinction-'+crypto.randomUUID(),{title:'Nouvelle distinction',subtitle:'',desc:'',visible:true,couleur:'#f4b544'})}>+ Ajouter une distinction</button>
   </section>;

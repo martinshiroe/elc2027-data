@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React, { useMemo, useState } from 'react';
 import { ListOrdered, Trophy, ExternalLink, Search, Newspaper, CircleDashed } from 'lucide-react';
@@ -51,7 +52,7 @@ export const PageClassements: React.FC<PageClassementsProps> = ({ data, jeu, eta
 
   return (
     <>
-      <EnTetePage>
+      <EnTetePage image={data.competition[jeu]?.heroImage || undefined}>
         <Conteneur>
           <p className="surtitre mb-4">{texteSite("Saison news · ELC ")}{data.meta.saison || '2027'}</p>
           <h1 className="titre text-[1.6rem] sm:text-5xl lg:text-[3.6rem]">{texteSite("Ranking —")}<span className="block">{texteSite(info.nom)}</span>
@@ -152,7 +153,7 @@ const ChiffresCles: React.FC<{ chiffres: { valeur: string; legende: string; deta
 const CelluleEquipe: React.FC<{ nom: string; logo?: string }> = ({ nom, logo }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <div className="flex items-center gap-3">
     {logo ? (
-      <img src={imageSite(urlSure(logo))} alt={texteSite("")} loading="lazy" referrerPolicy="no-referrer" className="h-9 w-9 shrink-0 border border-bord-fort object-cover" />
+      <ImagePublique src={imageSite(logo)} alt={texteSite("")} loading="lazy" referrerPolicy="no-referrer" className="h-9 w-9 shrink-0 border border-bord-fort object-cover" />
     ) : (
       <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center border border-bord-fort bg-carte-haute text-[0.65rem] font-extrabold italic text-doux">
         {initiales(nom)}

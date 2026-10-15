@@ -1,3 +1,5 @@
+import { ImagePublique } from './ImagePublique';
+import { AdminImageInput } from './AdminImageInput';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Shield, KeyRound, Save, CheckCircle2, AlertCircle, RefreshCw,
@@ -118,6 +120,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
     if (saveStatus.loading) return;
     const pageError = validerPages(formData.site?.pages ?? []);
     if (pageError) { setSaveStatus({ loading: false, error: pageError }); return; }
+    if (new Blob([JSON.stringify(formData)]).size > 3 * 1024 * 1024) { setSaveStatus({loading:false,error:'Le contenu dépasse 3 Mo. Remplacez certaines images importées par des liens directs avant d’enregistrer.'}); return; }
     if (!window.confirm('Enregistrer ces modifications et les publier sur le site ?')) return;
     const payload = JSON.parse(JSON.stringify(formData)) as ELCData;
     setSaveStatus({ loading: true });
@@ -662,7 +665,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image du Héro d'accueil (Hero)
                     </label>
-                    <input
+                    <AdminImageInput
                       type="url"
                       value={formData.meta.heroImage || ''}
                       onChange={(e) => updateMeta('heroImage', e.target.value)}
@@ -675,7 +678,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image Bannière — Honor of Kings (HOK)
                     </label>
-                    <input
+                    <AdminImageInput
                       type="url"
                       value={formData.competition.hok.heroImage || ''}
                       onChange={(e) => {
@@ -697,7 +700,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image Bannière — Mobile Legends (MLBB)
                     </label>
-                    <input
+                    <AdminImageInput
                       type="url"
                       value={formData.competition.mlbb.heroImage || ''}
                       onChange={(e) => {
@@ -719,7 +722,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image Bannière — PUBG Mobile (PUBGM)
                     </label>
-                    <input
+                    <AdminImageInput
                       type="url"
                       value={formData.competition.pubgm.heroImage || ''}
                       onChange={(e) => {
@@ -737,11 +740,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     />
                   </div>
 
+                  <label className="admin-field">Bannière — Free Fire<AdminImageInput value={formData.competition.ff.heroImage || ''} onChange={e=>setFormData(prev=>({...prev,competition:{...prev.competition,ff:{...prev.competition.ff,heroImage:e.target.value}}}))}/></label>
                   <div>
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image Bannière — Rejoignez l'ELC (CTA Banner)
                     </label>
-                    <input
+                    <AdminImageInput
                       type="url"
                       value={formData.meta.ctaImage || ''}
                       onChange={(e) => updateMeta('ctaImage', e.target.value)}
@@ -754,7 +758,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image Bannière — Replays & Vidéos
                     </label>
-                    <input
+                    <AdminImageInput
                       type="url"
                       value={formData.meta.videosBannerImage || ''}
                       onChange={(e) => updateMeta('videosBannerImage', e.target.value)}
@@ -767,7 +771,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image Bannière — Panthéon / Attributions
                     </label>
-                    <input
+                    <AdminImageInput
                       type="url"
                       value={formData.meta.pantheonBannerImage || ''}
                       onChange={(e) => updateMeta('pantheonBannerImage', e.target.value)}
@@ -780,7 +784,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     <label className="block text-xs font-semibold text-slate-400 mb-1">
                       Image Bannière — Page Inscription
                     </label>
-                    <input
+                    <AdminImageInput
                       type="url"
                       value={formData.meta.inscriptionBannerImage || ''}
                       onChange={(e) => updateMeta('inscriptionBannerImage', e.target.value)}
@@ -799,7 +803,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     <span>Images & Logos des 4 Jeux (Vitrine)</span>
                   </div>
                   <span className="text-[11px] text-slate-400 font-light">
-                    L'image importée remplacera directement l'espace <code className="text-amber-300 font-mono">[ Image JEU ]</code> sur la vitrine.
+                    Le logo choisi apparaît sur les cartes de discipline et sur l’accueil. Vérifiez l’aperçu puis enregistrez les modifications.
                   </span>
                 </div>
 
@@ -828,7 +832,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     </div>
                     <div className="flex items-center gap-3">
                       {formData.competition.hok.logoImage ? (
-                        <img
+                        <ImagePublique
                           src={formData.competition.hok.logoImage}
                           alt="HOK"
                           className="w-10 h-10 object-contain rounded-lg bg-black/40 p-1 border border-amber-500/40 shrink-0"
@@ -839,7 +843,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                         </div>
                       )}
                       <div className="flex-1 space-y-1">
-                        <input
+                        <AdminImageInput
                           type="text"
                           placeholder="URL du logo ou charger un fichier"
                           value={formData.competition.hok.logoImage || ''}
@@ -855,32 +859,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                           }}
                           className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
                         />
-                        <label className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-amber-400 cursor-pointer">
-                          <Upload className="w-3 h-3" />
-                          <span>Charger une image (PNG/SVG)</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (!file) return;
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                if (typeof reader.result === 'string') {
-                                  setFormData(prev => ({
-                                    ...prev,
-                                    competition: {
-                                      ...prev.competition,
-                                      hok: { ...prev.competition.hok, logoImage: reader.result as string }
-                                    }
-                                  }));
-                                }
-                              };
-                              reader.readAsDataURL(file);
-                            }}
-                            className="hidden"
-                          />
-                        </label>
+
                       </div>
                     </div>
                   </div>
@@ -909,7 +888,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     </div>
                     <div className="flex items-center gap-3">
                       {formData.competition.mlbb.logoImage ? (
-                        <img
+                        <ImagePublique
                           src={formData.competition.mlbb.logoImage}
                           alt="MLBB"
                           className="w-10 h-10 object-contain rounded-lg bg-black/40 p-1 border border-blue-500/40 shrink-0"
@@ -920,7 +899,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                         </div>
                       )}
                       <div className="flex-1 space-y-1">
-                        <input
+                        <AdminImageInput
                           type="text"
                           placeholder="URL du logo ou charger un fichier"
                           value={formData.competition.mlbb.logoImage || ''}
@@ -936,32 +915,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                           }}
                           className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
                         />
-                        <label className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-blue-400 cursor-pointer">
-                          <Upload className="w-3 h-3" />
-                          <span>Charger une image (PNG/SVG)</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (!file) return;
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                if (typeof reader.result === 'string') {
-                                  setFormData(prev => ({
-                                    ...prev,
-                                    competition: {
-                                      ...prev.competition,
-                                      mlbb: { ...prev.competition.mlbb, logoImage: reader.result as string }
-                                    }
-                                  }));
-                                }
-                              };
-                              reader.readAsDataURL(file);
-                            }}
-                            className="hidden"
-                          />
-                        </label>
+
                       </div>
                     </div>
                   </div>
@@ -990,7 +944,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     </div>
                     <div className="flex items-center gap-3">
                       {formData.competition.pubgm.logoImage ? (
-                        <img
+                        <ImagePublique
                           src={formData.competition.pubgm.logoImage}
                           alt="PUBGM"
                           className="w-10 h-10 object-contain rounded-lg bg-black/40 p-1 border border-emerald-500/40 shrink-0"
@@ -1001,7 +955,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                         </div>
                       )}
                       <div className="flex-1 space-y-1">
-                        <input
+                        <AdminImageInput
                           type="text"
                           placeholder="URL du logo ou charger un fichier"
                           value={formData.competition.pubgm.logoImage || ''}
@@ -1017,32 +971,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                           }}
                           className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
                         />
-                        <label className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-emerald-400 cursor-pointer">
-                          <Upload className="w-3 h-3" />
-                          <span>Charger une image (PNG/SVG)</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (!file) return;
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                if (typeof reader.result === 'string') {
-                                  setFormData(prev => ({
-                                    ...prev,
-                                    competition: {
-                                      ...prev.competition,
-                                      pubgm: { ...prev.competition.pubgm, logoImage: reader.result as string }
-                                    }
-                                  }));
-                                }
-                              };
-                              reader.readAsDataURL(file);
-                            }}
-                            className="hidden"
-                          />
-                        </label>
+
                       </div>
                     </div>
                   </div>
@@ -1071,7 +1000,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     </div>
                     <div className="flex items-center gap-3">
                       {formData.competition.ff.logoImage ? (
-                        <img
+                        <ImagePublique
                           src={formData.competition.ff.logoImage}
                           alt="FF"
                           className="w-10 h-10 object-contain rounded-lg bg-black/40 p-1 border border-orange-500/40 shrink-0"
@@ -1082,7 +1011,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                         </div>
                       )}
                       <div className="flex-1 space-y-1">
-                        <input
+                        <AdminImageInput
                           type="text"
                           placeholder="URL du logo ou charger un fichier"
                           value={formData.competition.ff.logoImage || ''}
@@ -1098,32 +1027,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                           }}
                           className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
                         />
-                        <label className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-orange-400 cursor-pointer">
-                          <Upload className="w-3 h-3" />
-                          <span>Charger une image (PNG/SVG)</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (!file) return;
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                if (typeof reader.result === 'string') {
-                                  setFormData(prev => ({
-                                    ...prev,
-                                    competition: {
-                                      ...prev.competition,
-                                      ff: { ...prev.competition.ff, logoImage: reader.result as string }
-                                    }
-                                  }));
-                                }
-                              };
-                              reader.readAsDataURL(file);
-                            }}
-                            className="hidden"
-                          />
-                        </label>
+
                       </div>
                     </div>
                   </div>
@@ -1502,42 +1406,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       });
                     };
 
-                    const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        if (typeof reader.result === 'string') {
-                          updateDistinction('nominePhoto', reader.result);
-                        }
-                      };
-                      reader.readAsDataURL(file);
-                    };
-
-                    const handleFondUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        if (typeof reader.result === 'string') {
-                          updateDistinction('fondImage', reader.result);
-                        }
-                      };
-                      reader.readAsDataURL(file);
-                    };
-
-                    const handleHeroUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        if (typeof reader.result === 'string') {
-                          updateDistinction('nomineHero', reader.result);
-                        }
-                      };
-                      reader.readAsDataURL(file);
-                    };
-
                     return (
                       <div key={card.key} className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
@@ -1595,7 +1463,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                             <div className="relative group shrink-0">
                               {current.nominePhoto ? (
                                 <div className="relative">
-                                  <img
+                                  <ImagePublique
                                     src={current.nominePhoto}
                                     alt={current.nomineNom || 'Nominé'}
                                     className="w-14 h-14 rounded-xl object-cover border border-amber-500/40 shadow"
@@ -1622,23 +1490,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                               <div>
                                 <label className="block text-[10px] text-slate-400 mb-0.5">URL de la photo ou fichier</label>
                                 <div className="flex gap-1.5">
-                                  <input
+                                  <AdminImageInput
                                     type="text"
                                     value={current.nominePhoto || ''}
                                     onChange={(e) => updateDistinction('nominePhoto', e.target.value)}
                                     placeholder="https://... ou charger ->"
                                     className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder:text-slate-600"
                                   />
-                                  <label className="px-2 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded text-slate-300 text-[10px] flex items-center gap-1 cursor-pointer shrink-0">
-                                    <Upload className="w-3 h-3" />
-                                    <span>Fichier</span>
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      onChange={handlePhotoUpload}
-                                      className="hidden"
-                                    />
-                                  </label>
+
                                 </div>
                               </div>
 
@@ -1647,23 +1506,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                                   Image du héros / personnage du jeu
                                 </label>
                                 <div className="flex gap-1.5">
-                                  <input
+                                  <AdminImageInput
                                     type="text"
                                     value={current.nomineHero || ''}
                                     onChange={(e) => updateDistinction('nomineHero', e.target.value)}
                                     placeholder="https://... (PNG détouré de préférence)"
                                     className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder:text-slate-600"
                                   />
-                                  <label className="px-2 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded text-slate-300 text-[10px] flex items-center gap-1 cursor-pointer shrink-0">
-                                    <Upload className="w-3 h-3" />
-                                    <span>Fichier</span>
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      onChange={handleHeroUpload}
-                                      className="hidden"
-                                    />
-                                  </label>
+
                                 </div>
                               </div>
 
@@ -1672,23 +1522,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                                   Image de fond de l'affiche
                                 </label>
                                 <div className="flex gap-1.5">
-                                  <input
+                                  <AdminImageInput
                                     type="text"
                                     value={current.fondImage || ''}
                                     onChange={(e) => updateDistinction('fondImage', e.target.value)}
                                     placeholder="https://... (laisser vide = fond sombre par défaut)"
                                     className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder:text-slate-600"
                                   />
-                                  <label className="px-2 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded text-slate-300 text-[10px] flex items-center gap-1 cursor-pointer shrink-0">
-                                    <Upload className="w-3 h-3" />
-                                    <span>Fichier</span>
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      onChange={handleFondUpload}
-                                      className="hidden"
-                                    />
-                                  </label>
+
                                 </div>
                               </div>
                             </div>
@@ -2031,7 +1872,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
                         Image miniature (URL) — auto-détectée pour YouTube
                       </label>
-                      <input
+                      <AdminImageInput
                         type="url"
                         placeholder="https://..."
                         value={newVideoThumbnail}
@@ -2044,7 +1885,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     {newVideoThumbnail && (
                       <div className="sm:col-span-2 flex items-center gap-4 p-3 bg-slate-900/60 rounded-xl border border-slate-800">
                         <div className="w-32 aspect-video rounded-lg overflow-hidden bg-black border border-slate-700 shrink-0">
-                          <img
+                          <ImagePublique
                             src={newVideoThumbnail}
                             alt="Aperçu miniature"
                             className="w-full h-full object-cover"
@@ -2131,7 +1972,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                       >
                         <div className="flex items-center gap-3.5 min-w-0">
                           <div className="relative w-24 aspect-video rounded-lg overflow-hidden bg-black shrink-0 border border-slate-800">
-                            <img
+                            <ImagePublique
                               src={vid.miniature}
                               alt={vid.titre}
                               className="w-full h-full object-cover"

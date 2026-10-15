@@ -1,3 +1,4 @@
+import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React, { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
@@ -83,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
     <header id="elc-header" className="absolute inset-x-0 top-0 z-40">
       <div className="flex h-20 w-full items-start justify-between px-4 pt-3 sm:h-36 sm:px-8 sm:pt-6 lg:px-[5%]">
         <LienPage section="accueil" onNaviguer={aller} aria-label="Ligue Esport Est Cameroun — accueil" className="shrink-0">
-          <img
+          <ImagePublique
             src={imageSite("/img/logo-ligue-est.webp")}
             alt={texteSite("")}
             width={282}
@@ -170,7 +171,7 @@ export const Header: React.FC<HeaderProps> = ({ data, activeSection, onNaviguer 
         >
           <div className="mx-auto flex min-h-full max-w-[1120px] flex-col px-5 py-6 sm:px-8">
             <div className="flex items-center justify-between">
-              <img src={imageSite("/img/logo-ligue-est.webp")} alt={texteSite("")} width={282} height={400} className="h-16 w-auto" />
+              <ImagePublique src={imageSite("/img/logo-ligue-est.webp")} alt={texteSite("")} width={282} height={400} className="h-16 w-auto" />
               <button
                 type="button"
                 onClick={() => setMenuOuvert(false)}
