@@ -26,7 +26,26 @@ import { CarteActualite } from '../src/components/CarteActualite';
 import { CarteFaitMarquant } from '../src/components/CarteFaitMarquant';
 import { BlocInscription, miniatureDe } from '../src/components/Blocs';
 import { AdminImageInput } from '../src/components/AdminImageInput';
-import { OngletActualites } from '../src/components/AdminContenu';
+import { OngletActualites, OngletPages } from '../src/components/AdminContenu';
+import { contenuDe } from '../src/data/contenu';
+
+test('Le portrait survit à la fusion des contenus et reste visible dans le formulaire et les deux pages',()=>{
+  for (const photo of ['https://example.com/portrait.jpg', importedImage]) {
+    const data=structuredClone(initialELCData);
+    data.contenu={...data.contenu,faitMarquant:{...contenuDe(data).faitMarquant,photo,publie:true}};
+    assert.equal(contenuDe(data).faitMarquant.photo,photo);
+    const editor=render(<OngletPages formData={data} setFormData={noop}/>);
+    assert.ok(editor.includes(`src="${photo}"`),'Aperçu du formulaire');
+    const saved=JSON.parse(JSON.stringify(data));
+    for (const node of [<PageAPropos data={saved} onNaviguer={noop}/>,<PageHallOfFame data={saved} etat="pret" onReessayer={noop} onNaviguer={noop}/>]) {
+      assert.ok(render(node).includes(`src="${photo}"`),'Portrait public');
+    }
+    const updated={...data,contenu:{...data.contenu,faitMarquant:{...contenuDe(data).faitMarquant,description:'Texte modifié'}}};
+    assert.equal(contenuDe(updated).faitMarquant.photo,photo,'Une autre modification conserve la photo');
+    updated.contenu.faitMarquant.photo=undefined;
+    assert.equal(contenuDe(updated).faitMarquant.photo,undefined,'La suppression reste possible');
+  }
+});
 
 const importedImage='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aV1sAAAAASUVORK5CYII=';
 
