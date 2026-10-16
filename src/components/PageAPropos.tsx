@@ -104,7 +104,7 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
                       alt={texteSite(`Portrait de ${m.nom}`)}
                       loading="lazy"
                       referrerPolicy="no-referrer"
-                      className="mb-5 aspect-[4/3] w-full border border-bord object-cover object-top"
+                      className="mb-5 block h-auto w-full border border-bord"
                     />
                   ) : (
                     <div className="mb-5 flex items-center gap-4">

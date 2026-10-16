@@ -29,14 +29,14 @@ export const CarteFaitMarquant: React.FC<{ fait: ELCFaitMarquant; compact?: bool
         alt={texteSite(`Portrait de ${fait.nom}`)}
         loading="lazy"
         referrerPolicy="no-referrer"
-        className={`${taille} shrink-0 border border-bord-fort object-cover object-top`}
+        className={`${taille} h-auto self-start shrink-0 border border-bord-fort`}
       />
     ) : null;
 
   if (compact) {
     return (
       <div className="flex flex-col gap-6 border border-bord-fort bg-carte-haute p-6 sm:flex-row sm:items-center">
-        {texteSite(portrait('h-40 w-40') ?? (
+        {texteSite(portrait('w-full sm:w-40') ?? (
           <div className="flex h-40 w-40 shrink-0 items-center justify-center rounded-lg border border-bord-fort bg-carte px-2 text-center text-[0.7rem] font-bold italic uppercase tracking-[0.15em] text-doux">
             {texteSite(enAttente ? 'Accord de publication à obtenir' : 'Aucun portrait publié')}
           </div>
@@ -63,7 +63,7 @@ export const CarteFaitMarquant: React.FC<{ fait: ELCFaitMarquant; compact?: bool
         </div>
       ))}
       <div className="flex flex-col gap-8 p-6 sm:p-8 md:flex-row">
-        {texteSite(portrait('h-64 w-full md:w-60') ?? (
+        {texteSite(portrait('w-full md:w-60') ?? (
           <div className="relative flex h-64 w-full shrink-0 flex-col items-center justify-center overflow-hidden border border-bord-fort md:w-60">
             <ImagePublique src={imageSite("/img/fond-planete.webp")} alt={texteSite("")} aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-50" />
             <div className="absolute inset-0 bg-nuit/50" />
