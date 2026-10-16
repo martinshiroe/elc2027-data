@@ -93,7 +93,7 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
             aria-hidden="true"
             referrerPolicy="no-referrer"
             loading="lazy"
-            className="absolute right-0 top-[6%] h-[56%] w-[40%] object-cover object-top opacity-85"
+            className="absolute right-0 top-[6%] h-[56%] w-[40%] object-contain object-top opacity-85"
             style={{
               maskImage: 'linear-gradient(to left, black 55%, transparent 100%), linear-gradient(to top, transparent 0%, black 35%)',
               maskComposite: 'intersect',
@@ -110,7 +110,7 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
             alt={texteSite(d.nom ? `Portrait de ${d.nom}` : 'Portrait du nominé')}
             referrerPolicy="no-referrer"
             loading="lazy"
-            className="absolute bottom-[15%] left-[40%] h-[64%] w-[42%] -translate-x-1/2 object-cover object-top"
+            className="absolute bottom-[15%] left-[40%] h-[64%] w-[42%] -translate-x-1/2 object-contain object-bottom"
             style={{
               maskImage: 'linear-gradient(to top, transparent 0%, black 18%)',
               WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 18%)',
