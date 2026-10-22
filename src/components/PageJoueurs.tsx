@@ -121,7 +121,7 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
                           alt={texteSite("")}
                           loading="lazy"
                           referrerPolicy="no-referrer"
-                          className="h-auto w-14 shrink-0 self-start border border-bord-fort"
+                          className="h-14 w-14 shrink-0 self-start border border-bord-fort object-contain"
                         />
                       ) : (
                         <span aria-hidden="true" className="titre flex h-14 w-14 shrink-0 items-center justify-center border border-bord-fort bg-carte-haute text-lg text-doux">
