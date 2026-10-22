@@ -60,7 +60,7 @@ export const AfficheDistinction: React.FC<{ d: Affiche; saison: string }> = ({ d
         />
         {/* Fond personnalisé choisi dans l'admin, voilé pour garder le texte lisible */}
         {texteSite(d.fond && (
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${urlCss(imageSite(d.fond))}")` }}>
+          <div className="absolute inset-0 bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url("${urlCss(imageSite(d.fond))}")` }}>
             <div
               className="absolute inset-0"
               style={{ background: 'linear-gradient(180deg, rgba(12,10,24,0.70) 0%, rgba(12,10,24,0.86) 100%)' }}

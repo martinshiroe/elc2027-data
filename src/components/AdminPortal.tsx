@@ -1466,7 +1466,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                                   <ImagePublique
                                     src={current.nominePhoto}
                                     alt={current.nomineNom || 'Nominé'}
-                                    className="w-14 h-14 rounded-xl object-cover border border-amber-500/40 shadow"
+                                    className="w-14 h-14 rounded-xl object-contain border border-amber-500/40 shadow"
                                   />
                                   <button
                                     type="button"
@@ -1888,7 +1888,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                           <ImagePublique
                             src={newVideoThumbnail}
                             alt="Aperçu miniature"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                             onError={(e: any) => {
                               e.target.src = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80';
                             }}
@@ -1975,7 +1975,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                             <ImagePublique
                               src={vid.miniature}
                               alt={vid.titre}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-contain"
                               onError={(e: any) => {
                                 e.target.src = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80';
                               }}

@@ -83,7 +83,7 @@ export const BlocDisciplines: React.FC<{ data: ELCData; onNaviguer: Naviguer; ni
                       alt={texteSite("")}
                       loading="lazy"
                       referrerPolicy="no-referrer"
-                      className="h-full w-full object-cover opacity-60 transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-contain opacity-60 transition-transform duration-500"
                     />
                   ))}
                   <div className="absolute inset-0 bg-gradient-to-t from-carte to-transparent" />
@@ -213,7 +213,7 @@ export const BlocVideos: React.FC<{ data: ELCData; onNaviguer: Naviguer }> = ({ 
                         alt={texteSite("")}
                         loading="lazy"
                         referrerPolicy="no-referrer"
-                        className="h-full w-full object-cover opacity-80 transition-opacity group-hover:opacity-100"
+                        className="h-full w-full object-contain opacity-80 transition-opacity group-hover:opacity-100"
                       />
                     ))}
                     <span className="absolute inset-0 flex items-center justify-center">
