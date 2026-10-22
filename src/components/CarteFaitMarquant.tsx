@@ -65,7 +65,7 @@ export const CarteFaitMarquant: React.FC<{ fait: ELCFaitMarquant; compact?: bool
       <div className="flex flex-col gap-8 p-6 sm:p-8 md:flex-row">
         {texteSite(portrait('w-full md:w-60') ?? (
           <div className="relative flex h-64 w-full shrink-0 flex-col items-center justify-center overflow-hidden border border-bord-fort md:w-60">
-            <ImagePublique src={imageSite("/img/fond-planete.webp")} alt={texteSite("")} aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-contain opacity-50" />
+            <ImagePublique src={imageSite("/img/fond-planete.webp")} alt={texteSite("")} aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-50" />
             <div className="absolute inset-0 bg-nuit/50" />
             <span className="relative flex h-24 w-24 items-center justify-center rounded-full border-2 border-magenta text-magenta">
               <Trophy className="h-10 w-10" aria-hidden="true" />

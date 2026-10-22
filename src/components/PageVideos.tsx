@@ -122,7 +122,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data, onNaviguer }) => {
                         onError={masquerSiCassee}
                         alt={texteSite("")}
                         referrerPolicy="no-referrer"
-                        className="h-full w-full object-contain transition-transform duration-500"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                       />
                     ))}
                     <span className="absolute inset-0 flex items-center justify-center">
@@ -204,7 +204,7 @@ export const PageVideos: React.FC<PageVideosProps> = ({ data, onNaviguer }) => {
                                 alt={texteSite("")}
                                 loading="lazy"
                                 referrerPolicy="no-referrer"
-                                className="h-full w-full object-contain opacity-85 transition-opacity group-hover:opacity-100"
+                                className="h-full w-full object-cover opacity-85 transition-opacity group-hover:opacity-100"
                               />
                             ))}
                             <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 bg-nuit/85 px-2.5 py-1 text-xs font-semibold text-white">

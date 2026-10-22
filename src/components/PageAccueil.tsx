@@ -33,7 +33,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
             alt={texteSite("")}
             // React 18 ne connaît pas encore `fetchPriority` : attribut HTML brut.
             {...{ fetchpriority: 'high' }}
-            className="h-full w-full object-contain object-center"
+            className="h-full w-full object-cover object-[62%_center]"
           />
           {/* Voile léger : l'illustration reste vive, le texte reste lisible. */}
           <div className="absolute inset-0 bg-gradient-to-r from-nuit/70 via-nuit/20 to-transparent" />

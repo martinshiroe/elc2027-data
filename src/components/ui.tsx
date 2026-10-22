@@ -220,7 +220,7 @@ export const EnTetePage: React.FC<{
         srcSet={sourcesSite(image === '/img/hero-joueur.webp' ? '/img/hero-joueur-1200.webp 1200w, /img/hero-joueur.webp 2400w' : undefined)}
         sizes="100vw"
         alt={texteSite("")}
-        className="h-full w-full object-contain object-center opacity-45"
+        className="h-full w-full object-cover object-[60%_30%] opacity-45"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-nuit/60 via-nuit/75 to-nuit" />
       <div className="absolute inset-0 bg-gradient-to-r from-nuit/85 via-nuit/40 to-transparent" />
@@ -239,7 +239,7 @@ export const BandePlanete: React.FC<{ image?: string; className?: string; childr
 }) => { const { texteSite, imageSite, sourcesSite } = useSiteCustomization(); return ((
   <section className={`relative isolate overflow-hidden ${className}`}>
     <div aria-hidden="true" className="absolute inset-0 -z-10">
-      <ImagePublique src={imageSite(image || "/img/fond-planete.webp")} alt={texteSite("")} loading="lazy" className="h-full w-full object-contain opacity-40" />
+      <ImagePublique src={imageSite(image || "/img/fond-planete.webp")} alt={texteSite("")} loading="lazy" className="h-full w-full object-cover opacity-40" />
       <div className="absolute inset-0 bg-gradient-to-b from-nuit via-nuit/70 to-nuit" />
     </div>
     {texteSite(children)}

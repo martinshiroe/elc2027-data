@@ -186,7 +186,7 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
               {data.meta.pantheonBannerImage && (
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 -z-10 bg-contain bg-center bg-no-repeat opacity-30"
+                  className="absolute inset-0 -z-10 bg-cover bg-center opacity-30"
                   style={{ backgroundImage: `url("${urlCss(imageSite(data.meta.pantheonBannerImage))}")` }}
                 />
               )}

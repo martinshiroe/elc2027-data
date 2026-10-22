@@ -25,7 +25,7 @@ return (
       {/* Visuel « 404 », coins coupés et liseré magenta comme sur la maquette */}
       <div className="coins-coupes relative bg-magenta p-0.5" aria-hidden="true">
         <div className="coins-coupes relative isolate flex aspect-[6/5] flex-col items-center justify-center overflow-hidden bg-nuit">
-          <ImagePublique src={imageSite("/img/hero-joueur.webp")} alt={texteSite("")} className="absolute inset-0 -z-10 h-full w-full object-contain opacity-80" />
+          <ImagePublique src={imageSite("/img/hero-joueur.webp")} alt={texteSite("")} className="absolute inset-0 -z-10 h-full w-full object-cover opacity-80" />
           <div className="absolute inset-0 -z-10 bg-nuit/25" />
           <p className="titre text-[6.5rem] leading-none drop-shadow-[0_6px_24px_rgba(0,0,0,0.55)] sm:text-[9rem]">{texteSite("404")}</p>
           <p className="mt-4 text-sm font-extrabold italic uppercase tracking-[0.2em] text-white">{texteSite("Retour dans la partie")}</p>

@@ -62,7 +62,7 @@ const VideoActualite: React.FC<{ url: string; titre: string }> = ({ url, titre }
             alt={texteSite("")}
             loading="lazy"
             onError={masquerSiCassee}
-            className="h-full w-full object-contain opacity-85 transition-opacity group-hover:opacity-100"
+            className="h-full w-full object-cover opacity-85 transition-opacity group-hover:opacity-100"
           />
           <span className="absolute inset-0 flex items-center justify-center">
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-magenta-plein text-white shadow-xl transition-transform group-hover:scale-110">
@@ -88,7 +88,7 @@ export const CarteActualite: React.FC<{ actu: ELCActualite; grand?: boolean }> =
           loading="lazy"
           referrerPolicy="no-referrer"
           onError={masquerSiCassee}
-          className="-mx-5 -mt-5 mb-5 aspect-[16/9] w-[calc(100%+2.5rem)] max-w-none border-b border-bord object-contain sm:-mx-7 sm:-mt-7 sm:w-[calc(100%+3.5rem)]"
+          className="-mx-5 -mt-5 mb-5 aspect-[16/9] w-[calc(100%+2.5rem)] max-w-none border-b border-bord object-cover sm:-mx-7 sm:-mt-7 sm:w-[calc(100%+3.5rem)]"
         />
       ))}
       <p className="surtitre mb-4 text-[0.7rem]">
