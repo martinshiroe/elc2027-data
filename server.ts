@@ -1,4 +1,5 @@
 import express from 'express';
+import challengermodeHandler from './api/challengermode.js';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
@@ -54,6 +55,8 @@ async function startServer() {
   app.use(express.json({ limit: '15mb' }));
 
   // --- API Routes FIRST ---
+
+  app.all('/api/challengermode', challengermodeHandler);
 
   // Read data
   app.get('/api/data', (req, res) => {
