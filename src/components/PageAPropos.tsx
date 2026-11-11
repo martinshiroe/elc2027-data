@@ -38,7 +38,7 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
           </h1>
           <p className="mt-6 text-lg font-semibold italic text-white sm:text-xl">{texteSite("Délégation Régionale de l'Est, FECASES")}</p>
           <div className="mt-8 flex flex-wrap gap-4">
-            <LienPage section="classements" onNaviguer={onNaviguer} bouton="plein" className="uppercase tracking-[0.12em]">{texteSite("Voir les classements")}</LienPage>
+            <LienPage section="joueurs" onNaviguer={onNaviguer} bouton="plein" className="uppercase tracking-[0.12em]">{texteSite("Découvrir les équipes")}</LienPage>
             <LienPage section="contact" onNaviguer={onNaviguer} bouton="contour" className="uppercase tracking-[0.12em]">{texteSite("Nous contacter")}</LienPage>
           </div>
         </Conteneur>
@@ -179,7 +179,7 @@ export const PageAPropos: React.FC<PageAProposProps> = ({ data, onNaviguer }) =>
             className="mb-6 sm:mb-8"
           />
           <ul className="grid gap-5 md:grid-cols-3">
-            {texteSite(apropos.partenaires.map((p, i) => (
+            {texteSite(apropos.partenaires.filter(p => p.texte && !p.texte.includes('Zone à compléter')).map((p, i) => (
               <li key={p.titre}>
                 <Carte haute={i === apropos.partenaires.length - 1} className="h-full p-6">
                   {p.logo && (/^https?:\/\//i.test(p.url?.trim() ?? '') && urlSure(p.url) ? (

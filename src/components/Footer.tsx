@@ -13,13 +13,11 @@ interface FooterProps {
 
 const LIENS: { label: string; id: Section }[] = [
   { label: 'À propos', id: 'apropos' },
-  { label: 'Saison news', id: 'saison' },
+  { label: 'Actualités', id: 'saison' },
   { label: 'Calendrier', id: 'competition' },
-  { label: 'Rankings', id: 'classements' },
   { label: 'Hall of Fame', id: 'pantheon' },
-  { label: 'Joueurs', id: 'joueurs' },
+  { label: 'Équipes & joueurs', id: 'joueurs' },
   { label: 'Vidéos', id: 'videos' },
-  { label: 'Inscription', id: 'inscription' },
   { label: 'Contact', id: 'contact' },
 ];
 

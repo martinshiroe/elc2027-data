@@ -15,9 +15,8 @@ export const ADMIN_MODULES = [
   { id:'disciplines', groupe:'Contenus', titre:'Disciplines', description:'Modifier les jeux, leurs logos et leur visibilité.' },
   { id:'calendrier', groupe:'Contenus', titre:'Calendrier & Roadmap', description:'Préparer les phases et les dates de la saison.' },
   { id:'videos', groupe:'Contenus', titre:'Vidéos & Médias', description:'Ajouter, modifier et mettre en avant les vidéos.' },
-  { id:'moba', groupe:'Compétition', titre:'Tournois MOBA', description:'Équipes, rencontres, résultats et règlements MOBA.' },
-  { id:'tps', groupe:'Compétition', titre:'Roster Battle Royale', description:'Joueurs, points et règlements Battle Royale.' },
-  { id:'pantheon', groupe:'Compétition', titre:'Hall of Fame', description:'Distinctions, lauréats, photos et règles d’attribution.' },
+  { id:'joueurs', groupe:'Contenus', titre:'Équipes & joueurs', description:'Présentations, photos et rosters de la communauté.' },
+  { id:'pantheon', groupe:'Contenus', titre:'Hall of Fame', description:'Distinctions, lauréats et portraits publiés.' },
 ] as const;
 export type AdminModule = typeof ADMIN_MODULES[number]['id'];
 
@@ -64,7 +63,7 @@ export function AdminShell({active,onSelect,onClose,onSave,onReset,dirty,loading
     <aside className={menu ? 'admin-sidebar is-open' : 'admin-sidebar'} id="admin-navigation">
       <div className="admin-brand">ELC / {saison}<small>CONSOLE ADMINISTRATEUR</small></div>
       <nav aria-label="Modules d’administration">
-        {['Pilotage','Contenus','Compétition'].map(group=><div key={group}><p className="admin-nav-group">{group}</p>
+        {['Pilotage','Contenus'].map(group=><div key={group}><p className="admin-nav-group">{group}</p>
           {ADMIN_MODULES.filter(m=>m.groupe===group).map(m=><button key={m.id} type="button" aria-current={active===m.id?'page':undefined}
             onClick={()=>{onSelect(m.id);setMenu(false);}}>{active===m.id && <span aria-hidden="true">› </span>}{m.titre}</button>)}
         </div>)}

@@ -34,50 +34,46 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
   const { saison, apropos } = contenuDe(data);
   const jeux = jeuxActifs(data);
   const actifs = jeux.map((j) => j.id as string);
-  const premierRanking = jeux[0] ? (
-    <LienPage section="classements" jeu={jeux[0].id} onNaviguer={onNaviguer} bouton="contour">{texteSite("Voir le ranking ")}{texteSite(jeux[0].court)}
-    </LienPage>
-  ) : undefined;
 
   const reperes: React.ComponentProps<typeof CarteLien>[] = [
     {
-      section: 'classements',
+      section: 'joueurs',
       jeu: 'hok',
       onNaviguer,
-      surtitre: 'Ranking · HoK',
+      surtitre: 'Communauté · HoK',
       titre: 'Honor of Kings',
-      texte: 'Le classement des équipes MOBA, le tableau final à élimination directe et le barème.',
-      action: 'Voir le ranking HoK',
+      texte: 'Découvrez les joueurs et les équipes qui font vivre cette discipline.',
+      action: 'Découvrir les joueurs HoK',
       icone: <ListOrdered className="h-6 w-6" />,
     },
     {
-      section: 'classements',
+      section: 'joueurs',
       jeu: 'mlbb',
       onNaviguer,
-      surtitre: 'Ranking · MLBB',
+      surtitre: 'Communauté · MLBB',
       titre: 'Mobile Legends: Bang Bang',
-      texte: 'Un classement dédié au jeu, avec ses équipes, ses séries et son tableau final.',
-      action: 'Voir le ranking MLBB',
+      texte: 'Découvrez les joueurs et les équipes qui font vivre cette discipline.',
+      action: 'Découvrir les joueurs MLBB',
       icone: <ListOrdered className="h-6 w-6" />,
     },
     {
-      section: 'classements',
+      section: 'joueurs',
       jeu: 'pubgm',
       onNaviguer,
-      surtitre: 'Ranking · PUBG M',
+      surtitre: 'Communauté · PUBG M',
       titre: 'PUBG Mobile',
-      texte: 'Le classement individuel Battle Royale : points de placement et éliminations.',
-      action: 'Voir le ranking PUBG M',
+      texte: 'Découvrez les joueurs et les équipes qui font vivre cette discipline.',
+      action: 'Découvrir les joueurs PUBG M',
       icone: <ListOrdered className="h-6 w-6" />,
     },
     {
-      section: 'classements',
+      section: 'joueurs',
       jeu: 'ff',
       onNaviguer,
-      surtitre: 'Ranking · Free Fire',
+      surtitre: 'Communauté · Free Fire',
       titre: 'Free Fire',
-      texte: 'Le classement individuel Battle Royale : points de placement et éliminations.',
-      action: 'Voir le ranking Free Fire',
+      texte: 'Découvrez les joueurs et les équipes qui font vivre cette discipline.',
+      action: 'Découvrir les joueurs Free Fire',
       icone: <ListOrdered className="h-6 w-6" />,
     },
     {
@@ -85,7 +81,7 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
       onNaviguer,
       surtitre: 'Mémoire de la ligue',
       titre: 'Hall of Fame',
-      texte: 'Les faits connus, les distinctions à confirmer et les moments qui font vivre la ligue.',
+      texte: 'Les distinctions publiées et les moments qui font vivre la ligue.',
       action: 'Explorer le Hall of Fame',
       icone: <Trophy className="h-6 w-6" />,
     },
@@ -110,7 +106,7 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
               <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">{texteSite("La scène de l'Est.")}<span className="block">{texteSite("Toute une saison")}</span>
                 <span className="block">{texteSite("à construire.")}</span>
               </h1>
-              <p className="mt-7 max-w-2xl text-base leading-relaxed text-texte sm:text-lg">{texteSite("Actualités de la ligue, classements par jeu et faits marquants : suivez l'ELC depuis Bertoua, au cœur de l'Est Cameroun.")}</p>
+              <p className="mt-7 max-w-2xl text-base leading-relaxed text-texte sm:text-lg">{texteSite("Actualités de la ligue, portraits des équipes et faits marquants : suivez l'ELC depuis Bertoua, au cœur de l'Est Cameroun.")}</p>
             </div>
             <Carte haute className="bg-carte-haute/85 p-7 backdrop-blur-sm">
               <p className="surtitre mb-4">{texteSite("Le prochain chapitre")}</p>
@@ -162,10 +158,10 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
               titre="Le flux d'actualités est indisponible."
               erreur
               onReessayer={onReessayer}
-              actions={premierRanking}
+              actions={<LienPage section="joueurs" onNaviguer={onNaviguer} bouton="contour">Découvrir les équipes</LienPage>}
             >{texteSite("Nous n'avons pas pu charger les nouvelles de la ligue. Cela ne signifie pas qu'aucune actualité n'a été publiée. Réessayez ou poursuivez votre visite sur les autres pages.")}</CarteEtat>
           ) : saison.actualites.length === 0 ? (
-            <CarteEtat icone={<Newspaper className="h-6 w-6" />} titre="Aucune nouvelle actualité publiée." actions={premierRanking}>{texteSite("Les prochaines nouvelles apparaîtront ici après publication. Les repères de la ligue restent disponibles ; aucune date de saison n'est encore validée.")}</CarteEtat>
+            <CarteEtat icone={<Newspaper className="h-6 w-6" />} titre="Aucune nouvelle actualité publiée." actions={<LienPage section="joueurs" onNaviguer={onNaviguer} bouton="contour">Découvrir les équipes</LienPage>}>{texteSite("Les prochaines nouvelles apparaîtront ici après publication. Les repères de la ligue restent disponibles ; aucune date de saison n'est encore validée.")}</CarteEtat>
           ) : (
             <ul className="grid gap-5 md:grid-cols-2">
               {saison.actualites.map((a, i) => (
@@ -185,7 +181,7 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
             <div className="p-7 sm:p-9">
               <TitreSection surtitre="Bertoua · Est Cameroun" titre="Une communauté, avant les résultats.">
                 {apropos.equipes.length > 0
-                  ? `${apropos.equipes.join(', ')} sont citées dans la présentation de la ligue. Leur jeu et leurs statistiques de classement ne sont pas établis.`
+                  ? `${apropos.equipes.join(', ')} sont citées dans la présentation de la ligue.`
                   : "Les équipes de la communauté seront présentées ici dès qu'elles pourront l'être."}
               </TitreSection>
               {apropos.equipes.length > 0 && (
@@ -198,7 +194,7 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
                 </ul>
               )}
               <div className="mt-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-xl text-sm text-doux">{texteSite("Les résultats officiels seront publiés après validation, dans les rankings de chaque jeu.")}</p>
+                <p className="max-w-xl text-sm text-doux">{texteSite("Retrouvez les portraits et les rosters des équipes de la communauté.")}</p>
                 <LienPage section="pantheon" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">{texteSite("Découvrir le Hall of Fame")}<ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </LienPage>
               </div>
@@ -214,10 +210,10 @@ export const PageSaison: React.FC<PageSaisonProps> = ({ data, etat, onReessayer,
             {jeux.slice(0, 2).map((j) => (
               <LienCourt
                 key={j.id}
-                section="classements"
+                section="joueurs"
                 jeu={j.id}
                 onNaviguer={onNaviguer}
-                titre={`Ranking ${j.nom.replace(': Bang Bang', '')}`}
+                titre={`Joueurs · ${j.nom.replace(': Bang Bang', '')}`}
                 action={`Suivre ${j.nom.replace(': Bang Bang', '')}`}
                 icone={<ListOrdered className="h-6 w-6" />}
               />

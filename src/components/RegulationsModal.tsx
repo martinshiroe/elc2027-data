@@ -1,3 +1,5 @@
+import { lienChallengermode } from '../lib/vitrine';
+import { urlSure } from '../lib/urls';
 import { useSiteCustomization } from '../lib/siteCustomization';
 import React from 'react';
 import { useModale } from '../lib/useModale';
@@ -21,6 +23,7 @@ export const RegulationsModal: React.FC<RegulationsModalProps> = ({
 
   if (!isOpen) return null;
 
+  const lien = lienChallengermode(data.meta.challengermodeUrl);
   const { meta, visual2, visual3 } = data;
 
   return (
@@ -72,50 +75,11 @@ export const RegulationsModal: React.FC<RegulationsModalProps> = ({
             </p>
           </div>
 
-          {/* Technical Requirements */}
           <div className="space-y-3">
-            <h4 className="titre font-bold text-white text-base flex items-center gap-2">
-              <Smartphone className="w-4 h-4 text-magenta" />
-              <span>{texteSite("Contrôle Technique & Terminaux Personnels")}</span>
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-encre border border-bord-fort space-y-1">
-                <div className="font-bold text-white">{texteSite("Systèmes autorisés")}</div>
-                <div className="text-doux">{texteSite("Terminaux Android et iOS natifs uniquement. L'utilisation d'émulateurs PC, de macros ou d'accessoires de modification matérielle non homologués est strictement interdite.")}</div>
-              </div>
-
-              <div className="p-3 rounded-xl bg-encre border border-bord-fort space-y-1">
-                <div className="font-bold text-white">{texteSite("Inspection technique")}</div>
-                <div className="text-doux">{texteSite("Chaque joueur doit soumettre son identifiant joueur (UID) et faire vérifier son terminal avant chaque manche par les commissaires de la Ligue.")}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Rules & Fair Play */}
-          <div className="space-y-3">
-            <h4 className="titre font-bold text-white text-base flex items-center gap-2">
-              <FileText className="w-4 h-4 text-magenta" />
-              <span>{texteSite("Format des Compétitions & Déroulement")}</span>
-            </h4>
-            <ul className="list-disc pl-5 space-y-2 text-xs text-doux">
-              <li>
-                <strong className="text-texte">{texteSite("Qualifications :")}</strong>{texteSite(" Déroulement 100% en ligne sous la supervision d'arbitres en temps réel.")}</li>
-              <li>
-                <strong className="text-texte">{texteSite("MOBA (Honor of Kings & Mobile Legends) :")}</strong>{texteSite(" Tournois à 16 équipes en élimination directe au format Best of 3 (BO3).")}</li>
-              <li>
-                <strong className="text-texte">{texteSite("Battle Royale / TPS (PUBG Mobile & Free Fire) :")}</strong>{texteSite(" Groupes de 32 joueurs, attribution des points basée sur le placement officiel (15 à 1 pts) et 1 point par élimination confirmée.")}</li>
-              <li>
-                <strong className="text-texte">{texteSite("Grande Finale :")}</strong>{texteSite(" Conjointe pour les 4 disciplines, organisée en présentiel en Novembre 2027 dans la Région de l'Est du Cameroun.")}</li>
-            </ul>
-          </div>
-
-          {/* Sanctions */}
-          <div className="p-4 rounded-xl bg-red-950/30 border border-red-800/40 flex items-start gap-3 text-xs text-texte">
-            <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-            <div>
-              <div className="font-bold text-red-300 mb-1">{texteSite("Discipline & Sanctions Arbitrales")}</div>
-              <p className="text-doux leading-relaxed">{texteSite("Tout comportement anti-sportif, tentative de triche, déconnexion volontaire ou usurpation d'identité entraîne la disqualification immédiate du joueur ou de l'équipe, ainsi qu'un signalement officiel transmis à la FECASES pour inscription au registre national des sanctions.")}</p>
-            </div>
+            <h4 className="titre font-bold text-white text-base">Informations sur les événements</h4>
+            <p className="text-xs leading-relaxed text-texte">Le calendrier présente les rendez-vous de la ligue. Les inscriptions, les rencontres et les règlements de chaque compétition sont disponibles sur Challengermode.</p>
+            {lien && <a href={lien} target="_blank" rel="noopener noreferrer" className="font-bold text-magenta hover:underline">ELC sur Challengermode</a>}
+            {Boolean(urlSure(meta.liens.statuts)) && <a href={urlSure(meta.liens.statuts)} target="_blank" rel="noopener noreferrer" className="block font-bold text-magenta hover:underline">Consulter les statuts</a>}
           </div>
         </div>
 

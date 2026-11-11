@@ -9,6 +9,7 @@ import React from 'react';
 import { Play, ArrowRight } from 'lucide-react';
 import { ELCData, ELCVideo } from '../types';
 import { Section } from '../lib/routes';
+import { lienChallengermode } from '../lib/vitrine';
 import { urlSure } from '../lib/urls';
 import { Carte, TitreCarte, TitreSection, LienPage, BoutonLien, Pastille, BandePlanete, Conteneur } from './ui';
 
@@ -46,7 +47,7 @@ export function listeDesJeux(jeux: { nom: string }[]): string {
 
 type Naviguer = (section: Section, jeu?: string) => void;
 
-/** Les disciplines actives, chacune menant à son ranking. */
+/** Les titres annoncés, chacun menant au calendrier. */
 export const BlocDisciplines: React.FC<{ data: ELCData; onNaviguer: Naviguer; niveau?: 2 | 3 }> = ({
   data,
   onNaviguer,
@@ -104,14 +105,16 @@ export const BlocDisciplines: React.FC<{ data: ELCData; onNaviguer: Naviguer; ni
                   <div className="mb-5 flex flex-wrap gap-2">
                     {texteSite(t?.badge && <Pastille>{texteSite(t.badge)}</Pastille>)}
                     {texteSite(t?.lancement && <Pastille>{texteSite(t.lancement)}</Pastille>)}
+                    {t?.format && <Pastille>{texteSite(t.format)}</Pastille>}
+                    {t?.dotation && <Pastille>{texteSite(`Dotation : ${t.dotation}`)}</Pastille>}
                   </div>
                   <LienPage
-                    section="classements"
+                    section="competition"
                     jeu={jeu.id}
                     onNaviguer={onNaviguer}
                     className="mt-auto flex items-center justify-between font-bold italic text-magenta after:absolute after:inset-0"
                   >
-                    <span>{texteSite("Voir le ranking")}</span>
+                    <span>{texteSite("Voir le calendrier")}</span>
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </LienPage>
                 </div>
@@ -248,22 +251,22 @@ export const BlocVideos: React.FC<{ data: ELCData; onNaviguer: Naviguer }> = ({ 
 export const BlocInscription: React.FC<{ data: ELCData; onNaviguer: Naviguer }> = ({ data, onNaviguer }) => {
   const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
 
-  const ouvert = Boolean(data.meta.googleFormUrl);
+  const lien = lienChallengermode(data.meta.challengermodeUrl);
   return (
     <BandePlanete image={data.meta.ctaImage || undefined} className="py-12 sm:py-20">
       <Conteneur>
         <Carte haute className="bg-carte-haute/80 p-7 sm:p-10">
           <TitreSection
             surtitre={`Saison ${data.meta.saison || '2027'}`}
-            titre={ouvert ? 'Les inscriptions sont ouvertes.' : 'Préparez votre équipe.'}
+            titre={lien ? 'Vivez la compétition avec ELC.' : 'Faites vivre la scène de l’Est.'}
           >
-            {texteSite(ouvert
-              ? 'Équipes MOBA et joueurs Battle Royale : inscrivez-vous pour la prochaine saison de la ligue.'
-              : "Les inscriptions ouvriront prochainement. Écrivez-nous dès maintenant pour pré-enregistrer votre équipe.")}
+            {texteSite(lien
+              ? 'Retrouvez les compétitions et les inscriptions de la ligue sur Challengermode.'
+              : 'Découvrez les équipes, suivez nos actualités et échangez avec la ligue.')}
           </TitreSection>
           <div className="mt-8 flex flex-wrap gap-4">
-            {texteSite(ouvert ? (
-              <LienPage section="inscription" onNaviguer={onNaviguer} bouton="plein">{texteSite("S'inscrire")}</LienPage>
+            {texteSite(lien ? (
+              <BoutonLien href={lien} target="_blank" rel="noopener noreferrer">{texteSite("ELC sur Challengermode")}</BoutonLien>
             ) : (
               <LienPage section="contact" onNaviguer={onNaviguer} bouton="plein">{texteSite("Nous contacter")}</LienPage>
             ))}

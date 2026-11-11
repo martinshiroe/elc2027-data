@@ -27,11 +27,14 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
   const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
 
   const [recherche, setRecherche] = useState('');
-  const [filtre, setFiltre] = useState('tous');
+  const [filtre, setFiltre] = useState(() => {
+    const jeu = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('jeu');
+    return FILTRES.some(f => f.id === jeu) ? jeu! : 'tous';
+  });
 
   const joueurs: ELCJoueurProfil[] = useMemo(
     () =>
-      (data.joueurs ?? []).map((j, i) => ({
+      (data.joueurs ?? []).filter(j => (j.pseudo || j.nom || '').trim()).map((j, i) => ({
         id: j.id || `joueur-${i}`,
         pseudo: j.pseudo || j.nom || 'Joueur',
         nomReel: j.nomReel,
@@ -40,9 +43,8 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
         role: j.role,
         ville: j.ville,
         photo: j.photo,
-        statut: j.statut || 'Inscrit',
-        kills: j.kills,
-        points: j.points,
+        statut: j.role || '',
+        biographie: j.biographie,
       })),
     [data.joueurs]
   );
@@ -64,9 +66,9 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
       <EnTetePage>
         <Conteneur>
           <p className="surtitre mb-4">{texteSite("Communauté et joueurs")}</p>
-          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">{texteSite("Les joueurs")}<span className="block">{texteSite("qui font la ligue.")}</span>
+          <h1 className="titre text-[1.7rem] sm:text-5xl lg:text-[3.6rem]">{texteSite("Les équipes et joueurs")}<span className="block">{texteSite("qui font la ligue.")}</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">{texteSite("Les joueurs et les équipes engagés dans les disciplines de la ligue, validés par le comité de l'ELC et la FECASES.")}</p>
+          <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">{texteSite("Découvrez les équipes, leurs rosters et les talents de la communauté ELC.")}</p>
         </Conteneur>
       </EnTetePage>
 
@@ -133,20 +135,10 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
                         <p className="truncate text-sm text-doux">{texteSite(p.equipe || p.role || 'Compétiteur')}</p>
                       </div>
                     </div>
-                    {texteSite((p.points !== undefined || p.kills !== undefined || p.ville) && (
+                    {texteSite((p.role || p.ville || p.biographie) && (
                       <dl className="mt-auto space-y-1.5 border-t border-bord pt-4 text-sm">
-                        {texteSite(p.points !== undefined && (
-                          <div className="flex justify-between">
-                            <dt className="text-doux">{texteSite("Points ELC")}</dt>
-                            <dd className="font-bold text-magenta">{texteSite(p.points)}</dd>
-                          </div>
-                        ))}
-                        {texteSite(p.kills !== undefined && (
-                          <div className="flex justify-between">
-                            <dt className="text-doux">{texteSite("Éliminations")}</dt>
-                            <dd className="font-semibold text-white">{texteSite(p.kills)}</dd>
-                          </div>
-                        ))}
+                        {p.role && <div className="flex justify-between"><dt className="text-doux">Rôle</dt><dd className="text-white">{texteSite(p.role)}</dd></div>}
+                        {p.biographie && <div><dt className="sr-only">Présentation</dt><dd className="text-doux">{texteSite(p.biographie)}</dd></div>}
                         {texteSite(p.ville && (
                           <div className="flex justify-between">
                             <dt className="text-doux">{texteSite("Zone")}</dt>
@@ -171,7 +163,7 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
               </p>
               {texteSite(joueurs.length === 0 && (
                 <div className="flex flex-wrap justify-center gap-4">
-                  <LienPage section="inscription" onNaviguer={onNaviguer} bouton="plein">{texteSite("S'inscrire")}</LienPage>
+                  <LienPage section="contact" onNaviguer={onNaviguer} bouton="plein">{texteSite("Présenter mon équipe")}</LienPage>
                   <LienPage section="apropos" onNaviguer={onNaviguer} bouton="contour">{texteSite("Les équipes de la communauté")}</LienPage>
                 </div>
               ))}

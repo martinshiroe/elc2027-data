@@ -38,7 +38,7 @@ const DISTINCTIONS = [
     couleur: '#3b82f6',
     title: 'GodLike',
     subtitle: 'Meilleur joueur MOBA',
-    desc: 'Performance exceptionnelle dans les disciplines MOBA (Honor of Kings, Mobile Legends). Élu sur les stats de la saison entière.',
+    desc: 'Performance exceptionnelle dans les disciplines MOBA (Honor of Kings, Mobile Legends).',
     Icone: Swords,
   },
   {
@@ -46,7 +46,7 @@ const DISTINCTIONS = [
     couleur: '#ef4444',
     title: 'Demon King',
     subtitle: 'Meilleur joueur Battle Royale',
-    desc: 'Domination absolue dans les disciplines Battle Royale (PUBG Mobile, Free Fire). Calculé sur le cumul des points saison.',
+    desc: 'Domination absolue dans les disciplines Battle Royale (PUBG Mobile, Free Fire).',
     Icone: Flame,
   },
   {
@@ -56,29 +56,6 @@ const DISTINCTIONS = [
     subtitle: 'Most Valuable Player',
     desc: "Élu par les pairs et les organisateurs pour son impact en jeu et son fair-play exemplaire tout au long de la saison.",
     Icone: Shield,
-  },
-];
-
-const ETAPES_PAR_DEFAUT = [
-  {
-    step: '01',
-    title: 'Fin de saison',
-    desc: "Les distinctions sont décernées à l'issue de la dernière journée de compétition, une fois tous les résultats validés.",
-  },
-  {
-    step: '02',
-    title: 'Calcul des stats',
-    desc: 'G.O.A.T, GodLike et Demon King sont calculés à partir du cumul des points saison par discipline.',
-  },
-  {
-    step: '03',
-    title: 'Vote MVP',
-    desc: 'Le MVP est élu par les joueurs participants et les organisateurs via un formulaire de vote interne.',
-  },
-  {
-    step: '04',
-    title: 'Annonce officielle',
-    desc: "Les lauréats sont annoncés sur les réseaux sociaux de l'ELC et mis en avant sur cette page.",
   },
 ];
 
@@ -116,14 +93,13 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
   });
 
   const aucunLaureat = distinctions.every((d) => !d.nom);
-  const etapes = pantheon.attributionSteps?.length ? pantheon.attributionSteps : ETAPES_PAR_DEFAUT;
   const saison = data.meta.saison || '2027';
   // GodLike récompense le MOBA, Demon King le Battle Royale : sans aucune
   // discipline active dans la famille, la distinction n'a pas lieu d'être.
   const jeux = jeuxActifs(data);
   const familles = new Set(jeux.map((j) => j.famille));
   const distinctionsVisibles = distinctions.filter(
-    (d) => (d.key !== 'godlike' || familles.has('MOBA')) && (d.key !== 'demonking' || familles.has('Battle Royale'))
+    (d) => Boolean(d.nom?.trim()) && (d.key !== 'godlike' || familles.has('MOBA')) && (d.key !== 'demonking' || familles.has('Battle Royale'))
   );
 
   return (
@@ -148,15 +124,15 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
       {etat === 'pret' ? (
         <>
         {/* ---------- Le fait marquant ---------- */}
-        <section className="pb-10 sm:pb-16">
+        {faitMarquant.publie && <section className="pb-10 sm:pb-16">
           <Conteneur>
             <TitreSection surtitre="Dans la présentation de la ligue" titre="Une performance à retenir." className="mb-6 sm:mb-8" />
             <CarteFaitMarquant fait={faitMarquant} />
           </Conteneur>
-        </section>
+        </section>}
 
         {/* ---------- Les distinctions ---------- */}
-        <section className="py-10 sm:py-16">
+        {distinctionsVisibles.length > 0 && <section className="py-10 sm:py-16">
           <Conteneur>
             <TitreSection
               surtitre={aucunLaureat ? 'Le prochain chapitre' : `Distinctions officielles · Saison ${saison}`}
@@ -177,33 +153,8 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
               ))}
             </ul>
           </Conteneur>
-        </section>
+        </section>}
 
-        {/* ---------- Attribution ---------- */}
-        <section className="py-10 sm:py-16">
-          <Conteneur>
-            <div className="relative isolate overflow-hidden border border-bord-fort bg-carte p-7 sm:p-10">
-              {data.meta.pantheonBannerImage && (
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 -z-10 bg-cover bg-center opacity-30"
-                  style={{ backgroundImage: `url("${urlCss(imageSite(data.meta.pantheonBannerImage))}")` }}
-                />
-              )}
-              <TitreSection surtitre="Les règles" titre={pantheon.titreAttribution || 'Comment sont-elles attribuées ?'} className="mb-6 sm:mb-8" />
-              <ol className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                {etapes.map((e) => (
-                  <li key={e.step}>
-                    <p className="titre mb-3 text-3xl text-magenta">{texteSite(e.step)}</p>
-                    <p className="mb-2 font-bold italic text-white">{texteSite(e.title)}</p>
-                    <p className="text-sm leading-relaxed text-texte">{texteSite(e.desc)}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-          </Conteneur>
-        </section>
         </>
       ) : (
         <section className="pb-4">
@@ -258,11 +209,11 @@ export const PageHallOfFame: React.FC<PageHallOfFameProps> = ({ data, etat, onRe
             {jeux.slice(0, 2).map((j) => (
               <LienCourt
                 key={j.id}
-                section="classements"
+                section="joueurs"
                 jeu={j.id}
                 onNaviguer={onNaviguer}
-                titre={`Ranking ${j.nom.replace(': Bang Bang', '')}`}
-                action={`Voir le ranking ${j.court}`}
+                titre={`Joueurs · ${j.nom.replace(': Bang Bang', '')}`}
+                action={`Découvrir les joueurs ${j.court}`}
                 icone={<ListOrdered className="h-6 w-6" />}
               />
             ))}
