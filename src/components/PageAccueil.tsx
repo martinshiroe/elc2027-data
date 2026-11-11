@@ -19,7 +19,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
  const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
 
   const { saison } = contenuDe(data);
-  const inscriptionOuverte = Boolean(data.meta.googleFormUrl);
+
 
   return (
     <>
@@ -47,7 +47,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
 
         <div className="flex flex-1 items-center px-5 pt-[13.5rem] pb-56 sm:px-[11.5%] sm:pt-60 md:pb-40 lg:pt-40">
           <div className="mx-auto w-full max-w-md border border-white/10 bg-white/[0.07] px-6 py-7 text-center shadow-2xl backdrop-blur-md sm:mx-0 sm:px-12 sm:py-9">
-            <h1 id="titre-accueil" className="titre text-[1.4rem] leading-[1.18] tracking-[0.04em] sm:text-[2rem]">{texteSite("Affronte les meilleurs — sans compromis")}</h1>
+            <h1 id="titre-accueil" className="titre text-[1.4rem] leading-[1.18] tracking-[0.04em] sm:text-[2rem]">{texteSite("Les talents de l’Est — une même passion")}</h1>
             <p className="mx-auto mt-4 max-w-xs text-center text-base sm:text-left font-medium italic leading-snug tracking-wide text-white sm:mt-5 sm:text-lg">{texteSite("Pour que l'esport rayonne dans toute la région de l'Est.")}</p>
             <p className="sr-only">{texteSite("Ligue Régionale d'Esport de l'Est Cameroun — ELC, East League of Cameroon. Délégation régionale de la FECASES.")}</p>
           </div>
@@ -119,12 +119,12 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         <div className="absolute inset-x-0 bottom-6 flex items-center px-5 sm:bottom-8 sm:px-[13%]">
           <span aria-hidden="true" className="h-0.5 flex-1 bg-magenta/90" />
           <LienPage
-            section={inscriptionOuverte ? 'inscription' : 'contact'}
+            section="joueurs"
             onNaviguer={onNaviguer}
             className="relative isolate mx-2 px-10 py-3 text-base font-extrabold italic uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03] sm:px-20 sm:py-4 sm:text-lg"
           >
             <span aria-hidden="true" className="biseau absolute inset-0 -z-10 bg-magenta-plein" />
-            {inscriptionOuverte ? "S'inscrire" : 'Nous rejoindre'}
+            {texteSite('Nos équipes')}
           </LienPage>
           <span aria-hidden="true" className="h-0.5 flex-1 bg-magenta/90" />
         </div>
@@ -143,7 +143,7 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         <Conteneur>
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <TitreSection surtitre="La vie de l'ELC" titre="Les nouvelles de la ligue." />
-            <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">{texteSite("Saison news")}</LienPage>
+            <LienPage section="saison" onNaviguer={onNaviguer} bouton="contour" className="shrink-0">{texteSite("Actualités")}</LienPage>
           </div>
           <ul className="grid gap-5 md:grid-cols-2">
             {saison.actualites.slice(0, 2).map((a, i) => (
@@ -167,11 +167,11 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
       </section>
 
       {/* ---------- Vidéos ---------- */}
-      <section className="pb-12 sm:pb-20">
+      {!!data.videos?.length && <section className="pb-12 sm:pb-20">
         <Conteneur>
           <BlocVideos data={data} onNaviguer={onNaviguer} />
         </Conteneur>
-      </section>
+      </section>}
 
       <BlocInscription data={data} onNaviguer={onNaviguer} />
     </>

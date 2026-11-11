@@ -25,12 +25,12 @@ export const CONTENU_PAR_DEFAUT: ContenuComplet = {
     activites: [
       { titre: 'Matchs custom', texte: 'Bi-mensuels · Bo3 ou Bo5 · Jeu tiré au sort.' },
       { titre: 'Diffusion', texte: 'Matchs en direct et vidéos des moments forts.' },
-      { titre: 'Classements', texte: 'Suivi multi-disciplines des équipes et joueurs sur le portail.' },
+      { titre: 'Communauté', texte: 'Présentation des équipes, des rosters et des talents de la région.' },
     ],
     competition: {
       titre: 'Compétition ELC 2027',
       texte:
-        'Programme à confirmer : Honor of Kings et Mobile Legends envisagés. Autres disciplines après validation.',
+        'Honor of Kings démarre le 11 janvier 2027 et Mobile Legends le 30 janvier 2027. Huit équipes et 250 000 FCFA de dotation pour chaque jeu.',
       projet: "Projet à venir : Gaming House à Bertoua (siège, centre d'entraînement, salle d'événements).",
     },
     dateBureau: '17 février 2026',
@@ -49,23 +49,22 @@ export const CONTENU_PAR_DEFAUT: ContenuComplet = {
     },
     partenaires: [
       { titre: 'FECASES', texte: 'Affiliation institutionnelle.' },
-      { titre: 'Partenaires locaux', texte: 'Zone à compléter après accord écrit et fourniture des logos.' },
       { titre: 'Devenir partenaire', texte: "Contactez-nous pour discuter d'une collaboration." },
     ],
   },
   saison: {
     chapitre: {
       annee: '2027',
-      statut: 'Programme à confirmer',
-      texte: 'Honor of Kings et Mobile Legends envisagés. Autres disciplines après validation.',
+      statut: 'HoK & MLBB : calendrier confirmé',
+      texte: 'Inscriptions dès le 16 novembre 2026. Honor of Kings démarre le 11 janvier 2027 et Mobile Legends le 30 janvier 2027.',
     },
     actualites: [
       {
         rubrique: 'Compétition',
-        titre: 'ELC 2027 : un programme en préparation.',
+        titre: 'Honor of Kings : les dates sont annoncées.',
         texte:
-          'Honor of Kings et Mobile Legends sont envisagés. Les autres disciplines seront annoncées après validation.',
-        note: 'Programme, dates et calendrier à confirmer',
+          'Les inscriptions ouvrent le 16 novembre 2026 à 08 h 00. Le tournoi débute le 11 janvier 2027 à 09 h 12 et les inscriptions restent ouvertes jusqu’au 6 février 2027 à 23 h 30 (UTC+1).',
+        note: 'Calendrier Honor of Kings confirmé · Heure du Cameroun',
       },
       {
         rubrique: 'Matchs custom',

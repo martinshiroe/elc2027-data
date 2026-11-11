@@ -3,6 +3,7 @@ import React from 'react';
 import { ArrowRight, ExternalLink, Smartphone, Tv, Users, Swords } from 'lucide-react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
+import { lienChallengermode } from '../lib/vitrine';
 import { urlSure } from '../lib/urls';
 import { Conteneur, EnTetePage, Carte, TitreCarte, TitreSection, LienPage, Bouton, BoutonLien } from './ui';
 import { BlocPhases, BlocInscription, jeuxActifs, nombreDeJeux } from './Blocs';
@@ -17,13 +18,7 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
   const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
 
   const v2 = data.visual2;
-  const structure = v2?.structure;
-  const faits = [
-    structure?.equipesMoba && { Icone: Users, valeur: structure.equipesMoba, legende: 'par discipline MOBA' },
-    structure?.joueursTps && { Icone: Users, valeur: structure.joueursTps, legende: 'en Battle Royale' },
-    structure?.qualifsFinales && { Icone: Swords, valeur: structure.qualifsFinales, legende: 'qualifications et finales' },
-    structure?.cashPrize && { Icone: Swords, valeur: structure.cashPrize, legende: 'cash prize' },
-  ].filter(Boolean) as { Icone: typeof Users; valeur: string; legende: string }[];
+  const lien = lienChallengermode(data.meta.challengermodeUrl);
 
   return (
     <>
@@ -34,11 +29,11 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
           </h1>
           {texteSite(v2?.bandeauSousTitre && <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">{texteSite(v2.bandeauSousTitre)}{texteSite(".")}</p>)}
           <div className="mt-8 flex flex-wrap gap-4">
-            {texteSite(data.meta.startGgUrl && (
-              <BoutonLien href={urlSure(data.meta.startGgUrl)} target="_blank" rel="noopener noreferrer">{texteSite("Brackets sur start.gg")}<ExternalLink className="h-4 w-4" aria-hidden="true" />
+            {texteSite(lien && (
+              <BoutonLien href={lien} target="_blank" rel="noopener noreferrer">{texteSite("Suivre sur Challengermode")}<ExternalLink className="h-4 w-4" aria-hidden="true" />
               </BoutonLien>
             ))}
-            <Bouton variante={data.meta.startGgUrl ? 'contour' : 'plein'} type="button" onClick={onOpenRegulations}>{texteSite("Règlement FECASES")}</Bouton>
+            <Bouton variante={lien ? 'contour' : 'plein'} type="button" onClick={onOpenRegulations}>{texteSite("Règlement FECASES")}</Bouton>
           </div>
         </Conteneur>
       </EnTetePage>
@@ -59,7 +54,7 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
               return (
                 <li key={j.id}>
                   <Carte className="flex h-full flex-col p-6">
-                    <p className="surtitre mb-2 text-[0.68rem]">{texteSite(j.famille)}</p>
+                    <p className="surtitre mb-2 text-[0.68rem]">{texteSite(j.famille)}{j.id !== 'hok' && j.id !== 'mlbb' ? ' · Calendrier prévisionnel' : ' · Calendrier confirmé'}</p>
                     <TitreCarte className="mb-5 text-xl sm:text-2xl">{texteSite(j.nom)}</TitreCarte>
                     <ol className="mb-6 divide-y divide-bord">
                       {texteSite((jeu?.calendrier ?? []).map((c, i) => (
@@ -73,11 +68,11 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
                       )))}
                     </ol>
                     <LienPage
-                      section="classements"
+                      section="joueurs"
                       jeu={j.id}
                       onNaviguer={onNaviguer}
                       className="mt-auto inline-flex items-center gap-2 self-start font-bold italic text-magenta hover:underline"
-                    >{texteSite("Voir le ranking ")}{texteSite(j.court)}
+                    >{texteSite("Découvrir les joueurs ")}{texteSite(j.court)}
                       <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </LienPage>
                   </Carte>
@@ -91,17 +86,7 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
       {/* ---------- Format ---------- */}
       <section className="py-10 sm:py-16">
         <Conteneur>
-          <TitreSection surtitre={"Format de compétition"} titre={"Comment se joue la saison."} className="mb-6 sm:mb-8" />
-          {texteSite(faits.length > 0 && (
-            <dl className="mb-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {texteSite(faits.map((f) => (
-                <div key={f.legende} className="border border-bord bg-carte p-5">
-                  <dd className="titre text-xl">{texteSite(f.valeur)}</dd>
-                  <dt className="mt-2 text-sm text-doux">{texteSite(f.legende)}</dt>
-                </div>
-              )))}
-            </dl>
-          ))}
+          <TitreSection surtitre={"Informations pratiques"} titre={"Suivre les rendez-vous de la ligue."} className="mb-6 sm:mb-8" />
           <div className="grid gap-5 md:grid-cols-2">
             {texteSite(v2?.plateformes && (
               <Carte className="flex gap-4 p-6">

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { remonter } from './lib/scroll';
 import { ROUTES, Section } from './lib/routes';
 import { useRoute } from './lib/useRoute';
+import { preparerVitrine } from './lib/vitrine';
 import { initialELCData } from './data/initialData';
 import { ELCData } from './types';
 import { Header } from './components/Header';
@@ -10,11 +11,9 @@ import { PageAccueil } from './components/PageAccueil';
 import { PageAPropos } from './components/PageAPropos';
 import { PageSaison } from './components/PageSaison';
 import { PageCalendrier } from './components/PageCalendrier';
-import { PageClassements } from './components/PageClassements';
 import { PageHallOfFame } from './components/PageHallOfFame';
 import { PageJoueurs } from './components/PageJoueurs';
 import { PageVideos } from './components/PageVideos';
-import { PageInscription } from './components/PageInscription';
 import { PageContact } from './components/PageContact';
 import { PageIntrouvable } from './components/PageIntrouvable';
 import { RegulationsModal } from './components/RegulationsModal';
@@ -60,7 +59,7 @@ export function App() {
       .then((distant) => {
         if (!actif) return;
         if (!distant?.meta) throw new Error('Réponse sans données');
-        setData(distant);
+        setData(preparerVitrine(distant));
         setEtatDonnees('pret');
       })
       .catch((err) => {
@@ -155,24 +154,16 @@ export function App() {
         return <PageAPropos data={data} onNaviguer={allerA} />;
       case 'saison':
         return <PageSaison data={data} etat={etatDonnees} onReessayer={reessayer} onNaviguer={allerA} />;
+      case 'classements':
+      case 'inscription':
       case 'competition':
         return <PageCalendrier data={data} onNaviguer={allerA} onOpenRegulations={ouvrirReglement} />;
-      case 'classements': {
-        // Un lien vers le ranking d'une discipline désactivée mène au premier
-        // ranking actif plutôt qu'à une page vide.
-        const actifs = jeuxActifs(data);
-        const jeuAffiche = actifs.find((j) => j.id === jeu)?.id ?? actifs[0]?.id;
-        if (!jeuAffiche) return <PageSaison data={data} etat={etatDonnees} onReessayer={reessayer} onNaviguer={allerA} />;
-        return <PageClassements key={jeuAffiche} data={data} jeu={jeuAffiche} etat={etatDonnees} onReessayer={reessayer} onNaviguer={allerA} />;
-      }
       case 'pantheon':
         return <PageHallOfFame data={data} etat={etatDonnees} onReessayer={reessayer} onNaviguer={allerA} />;
       case 'joueurs':
         return <PageJoueurs data={data} onNaviguer={allerA} />;
       case 'videos':
         return <PageVideos data={data} onNaviguer={allerA} />;
-      case 'inscription':
-        return <PageInscription data={data} onNaviguer={allerA} onOpenRegulations={ouvrirReglement} />;
       case 'contact':
         return <PageContact data={data} onNaviguer={allerA} />;
       case 'page':

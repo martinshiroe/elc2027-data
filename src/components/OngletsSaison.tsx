@@ -8,14 +8,12 @@ import { LienPage } from './ui';
 // La maquette prévoit deux rankings ; la ligue en compte jusqu'à quatre, selon
 // les disciplines actives de la saison.
 
-export type OngletSaison = 'actualites' | 'hok' | 'mlbb' | 'pubgm' | 'ff' | 'halloffame';
+export type OngletSaison = 'actualites' | 'hok' | 'mlbb' | 'pubgm' | 'ff' | 'halloffame' | 'equipes' | 'videos';
 
 const ONGLETS: { id: OngletSaison; label: string; section: Section; jeu?: string }[] = [
   { id: 'actualites', label: 'Actualités', section: 'saison' },
-  { id: 'hok', label: 'Ranking HoK', section: 'classements', jeu: 'hok' },
-  { id: 'mlbb', label: 'Ranking MLBB', section: 'classements', jeu: 'mlbb' },
-  { id: 'pubgm', label: 'Ranking PUBG M', section: 'classements', jeu: 'pubgm' },
-  { id: 'ff', label: 'Ranking Free Fire', section: 'classements', jeu: 'ff' },
+  { id: 'equipes', label: 'Équipes & joueurs', section: 'joueurs' },
+  { id: 'videos', label: 'Vidéos', section: 'videos' },
   { id: 'halloffame', label: 'Hall of Fame', section: 'pantheon' },
 ];
 

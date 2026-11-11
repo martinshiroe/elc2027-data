@@ -1,3 +1,5 @@
+import { lienChallengermode, preparerVitrine } from '../lib/vitrine';
+import { AdminJoueurs } from './AdminJoueurs';
 import { ImagePublique } from './ImagePublique';
 import { AdminImageInput } from './AdminImageInput';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -98,8 +100,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
         if (!response.ok) { setAuthError('Impossible de charger les contenus. Réessayez avant de modifier le site.'); return; }
         const current = await response.json() as ELCData;
         if (!current.meta || !current.competition) { setAuthError('Les contenus reçus sont incomplets.'); return; }
-        setFormData(current);
-        setSavedData(JSON.stringify(current));
+        setFormData(preparerVitrine(current));
+        setSavedData(JSON.stringify(preparerVitrine(current)));
         setIsAuthenticated(true);
       } else {
         setAuthError(json.error || 'Code administrateur invalide.');
@@ -118,6 +120,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
   // Save to /api/data
   const handleSave = async () => {
     if (saveStatus.loading) return;
+    if (formData.meta.challengermodeUrl?.trim() && !lienChallengermode(formData.meta.challengermodeUrl)) { setSaveStatus({ loading: false, error: 'Saisissez une adresse HTTPS valide sur challengermode.com.' }); return; }
     const pageError = validerPages(formData.site?.pages ?? []);
     if (pageError) { setSaveStatus({ loading: false, error: pageError }); return; }
     if (new Blob([JSON.stringify(formData)]).size > 3 * 1024 * 1024) { setSaveStatus({loading:false,error:'Le contenu dépasse 3 Mo. Remplacez certaines images importées par des liens directs avant d’enregistrer.'}); return; }
@@ -319,123 +322,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
     </div>;
   }
 
-  // --- Rankings : bilan des équipes MOBA et points Battle Royale ----------
-  // Ces chiffres alimentent les tableaux « Ranking » du site public.
-  const majEquipe = (jeu: 'hok' | 'mlbb', index: number, champ: string, valeur: string | number) => {
-    const equipes = formData.competition[jeu].bracket.equipes.map((eq, i) =>
-      i === index ? { ...eq, [champ]: valeur } : eq
-    );
-    setFormData({
-      ...formData,
-      competition: {
-        ...formData.competition,
-        [jeu]: { ...formData.competition[jeu], bracket: { ...formData.competition[jeu].bracket, equipes } },
-      },
-    });
-  };
-
-  const majJoueur = (jeu: 'pubgm' | 'ff', index: number, champ: string, valeur: string | number) => {
-    const roster = formData.competition[jeu].roster.map((p, i) => (i === index ? { ...p, [champ]: valeur } : p));
-    setFormData({
-      ...formData,
-      competition: { ...formData.competition, [jeu]: { ...formData.competition[jeu], roster } },
-    });
-  };
-
-  const nombre = (v: string) => Math.max(0, Math.floor(Number(v) || 0));
-
-  const CHAMPS_MOBA: { cle: 'victoires' | 'nuls' | 'defaites' | 'manchesGagnees' | 'manchesPerdues'; court: string; long: string }[] = [
-    { cle: 'victoires', court: 'V', long: 'Séries gagnées' },
-    { cle: 'nuls', court: 'N', long: 'Séries nulles' },
-    { cle: 'defaites', court: 'D', long: 'Séries perdues' },
-    { cle: 'manchesGagnees', court: 'M+', long: 'Manches gagnées' },
-    { cle: 'manchesPerdues', court: 'M−', long: 'Manches perdues' },
-  ];
-
-  const renderEquipesMoba = (jeu: 'hok' | 'mlbb') => (
-    <>
-      <div className="grid grid-cols-[1.5rem_1fr_repeat(5,2.75rem)] gap-1.5 text-[10px] font-mono text-slate-500 px-0.5">
-        <span />
-        <span>Nom de l'équipe</span>
-        {CHAMPS_MOBA.map((c) => (
-          <span key={c.cle} title={c.long} className="text-center">{c.court}</span>
-        ))}
-      </div>
-      {formData.competition[jeu].bracket.equipes.map((eq, i) => (
-        <div key={eq.id} className="grid grid-cols-[1.5rem_1fr_repeat(5,2.75rem)] gap-1.5 items-center">
-          <span className="text-[10px] font-mono text-slate-500">#{i + 1}</span>
-          <input
-            type="text"
-            value={eq.nom}
-            aria-label={`Nom de l'équipe ${i + 1}`}
-            onChange={(e) => majEquipe(jeu, i, 'nom', e.target.value)}
-            className="min-w-0 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
-          />
-          {CHAMPS_MOBA.map((c) => (
-            <input
-              key={c.cle}
-              type="number"
-              min={0}
-              inputMode="numeric"
-              value={eq[c.cle] ?? 0}
-              aria-label={`${c.long} — équipe ${i + 1}`}
-              title={c.long}
-              onChange={(e) => majEquipe(jeu, i, c.cle, nombre(e.target.value))}
-              className="w-full bg-slate-800 border border-slate-700 rounded px-1 py-1 text-xs text-white text-center"
-            />
-          ))}
-        </div>
-      ))}
-      <p className="text-[10px] text-slate-500 pt-1">
-        Les points se calculent seuls à partir du barème. Un nom laissé à « Équipe N » n'apparaît pas au classement.
-      </p>
-    </>
-  );
-
-  const renderRosterTps = (jeu: 'pubgm' | 'ff') => (
-    <>
-      <div className="grid grid-cols-[1.5rem_1fr_3.5rem_3rem] gap-1.5 text-[10px] font-mono text-slate-500 px-0.5">
-        <span />
-        <span>Nom du joueur</span>
-        <span className="text-center" title="Points cumulés">Pts</span>
-        <span className="text-center" title="Éliminations">Kills</span>
-      </div>
-      {formData.competition[jeu].roster.map((p, i) => (
-        <div key={p.id} className="grid grid-cols-[1.5rem_1fr_3.5rem_3rem] gap-1.5 items-center">
-          <span className="text-[10px] font-mono text-slate-500">#{i + 1}</span>
-          <input
-            type="text"
-            value={p.nom}
-            aria-label={`Nom du joueur ${i + 1}`}
-            onChange={(e) => majJoueur(jeu, i, 'nom', e.target.value)}
-            className="min-w-0 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
-          />
-          <input
-            type="number"
-            min={0}
-            inputMode="numeric"
-            value={p.scoreTotal ?? 0}
-            aria-label={`Points cumulés — joueur ${i + 1}`}
-            onChange={(e) => majJoueur(jeu, i, 'scoreTotal', nombre(e.target.value))}
-            className="w-full bg-slate-800 border border-slate-700 rounded px-1 py-1 text-xs text-white text-center"
-          />
-          <input
-            type="number"
-            min={0}
-            inputMode="numeric"
-            value={p.kills ?? 0}
-            aria-label={`Éliminations — joueur ${i + 1}`}
-            onChange={(e) => majJoueur(jeu, i, 'kills', nombre(e.target.value))}
-            className="w-full bg-slate-800 border border-slate-700 rounded px-1 py-1 text-xs text-white text-center"
-          />
-        </div>
-      ))}
-      <p className="text-[10px] text-slate-500 pt-1">
-        Un nom laissé à « Joueur N » n'apparaît pas au classement.
-      </p>
-    </>
-  );
-
   return (
     <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="admin-title">
       <AdminShell active={activeTab} onSelect={setActiveTab} onClose={closeAdmin} onSave={handleSave}
@@ -498,46 +384,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                 </div>
               </div>
 
-              {/* Inscriptions & start.gg URLs */}
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
-                <div className="font-bold text-amber-400 text-xs uppercase tracking-wider flex items-center gap-2">
-                  <Link className="w-4 h-4" />
-                  <span>Liens Clés d'Inscription & Tournoi</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      URL du Formulaire d'Inscription Google
-                    </label>
-                    <input
-                      type="url"
-                      placeholder="https://forms.gle/..."
-                      value={formData.meta.googleFormUrl || ''}
-                      onChange={(e) => updateMeta('googleFormUrl', e.target.value)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
-                    />
-                    <span className="text-[11px] text-slate-400 mt-1 block">
-                      Permet aux visiteurs de postuler directement via le bouton d'inscription.
-                    </span>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Lien Tournoi start.gg (Bracket Officiel)
-                    </label>
-                    <input
-                      type="url"
-                      placeholder="https://www.start.gg/tournament/..."
-                      value={formData.meta.startGgUrl || ''}
-                      onChange={(e) => updateMeta('startGgUrl', e.target.value)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
-                    />
-                    <span className="text-[11px] text-slate-400 mt-1 block">
-                      Lien sortant officiel vers la plateforme de tournoi start.gg.
-                    </span>
-                  </div>
-                </div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">Espace ELC sur Challengermode
+                  <input type="url" placeholder="https://www.challengermode.com/s/..." value={formData.meta.challengermodeUrl || ''} onChange={e => updateMeta('challengermodeUrl', e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500" />
+                </label>
+                <p className="text-[11px] text-slate-400">Lien officiel pour suivre les compétitions et y participer. Laissez vide tant que l’espace n’est pas disponible.</p>
               </div>
 
               {/* Réseaux sociaux & Contact */}
@@ -1037,6 +888,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
           )}
 
           {/* ACTUALITÉS : liste, lien, vidéo, encadré « prochain chapitre » */}
+          {activeTab === 'joueurs' && <AdminJoueurs data={formData} onChange={setFormData} />}
           {activeTab === 'actualites' && <OngletActualites formData={formData} setFormData={setFormData} />}
 
           {/* PAGES : À propos, bureau, équipes, partenaires, fait marquant */}
@@ -1047,7 +899,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
             <div className="space-y-4">
               <p className="text-xs text-slate-400">
                 Activez seulement les disciplines confirmées pour la saison. Une discipline désactivée disparaît de tout
-                le site public (accueil, Saison news, rankings, calendrier, joueurs, inscription) ; ses données sont
+                le site public (accueil, actualités, calendrier et joueurs) ; ses données sont
                 conservées et réapparaissent si vous la réactivez. Pensez à « Enregistrer tout ».
               </p>
 
@@ -1242,68 +1094,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
             </div>
           )}
 
-          {/* TAB 4: MOBA TOURNAMENTS */}
-          {activeTab === 'moba' && (
-            <div className="space-y-6">
-              <p className="text-xs text-slate-400">
-                Équipes engagées et bilan de saison (V = séries gagnées, N = nulles, D = perdues, M+ / M− = manches gagnées / perdues). Ces chiffres remplissent les tableaux « Ranking ».
-              </p>
-
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                {/* HOK Teams */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <h4 className="font-display font-bold text-amber-400 text-sm">
-                    Honor of Kings (16 Équipes)
-                  </h4>
-                  <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                    {renderEquipesMoba('hok')}
-                  </div>
-                </div>
-
-                {/* MLBB Teams */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <h4 className="font-display font-bold text-blue-400 text-sm">
-                    Mobile Legends (16 Équipes)
-                  </h4>
-                  <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                    {renderEquipesMoba('mlbb')}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: BATTLE ROYALE ROSTERS */}
-          {activeTab === 'tps' && (
-            <div className="space-y-6">
-              <p className="text-xs text-slate-400">
-                Les 32 compétiteurs Battle Royale de PUBG Mobile et Free Fire, avec leurs points cumulés et leurs éliminations.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {/* PUBG Mobile */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <h4 className="font-display font-bold text-emerald-400 text-sm">
-                    PUBG Mobile (32 Compétiteurs)
-                  </h4>
-                  <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                    {renderRosterTps('pubgm')}
-                  </div>
-                </div>
-
-                {/* Free Fire */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <h4 className="font-display font-bold text-orange-400 text-sm">
-                    Free Fire (32 Compétiteurs)
-                  </h4>
-                  <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                    {renderRosterTps('ff')}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* TAB 6: PANTHEON */}
           {activeTab === 'pantheon' && (
             <div className="space-y-6">
@@ -1334,23 +1124,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                      Titre de la section d'attribution
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.pantheon?.titreAttribution || 'Comment sont-elles attribuées ?'}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          pantheon: { ...formData.pantheon, titreAttribution: e.target.value }
-                        });
-                      }}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
-                      placeholder="Comment sont-elles attribuées ?"
-                    />
-                  </div>
+
 
                   <div className="sm:col-span-2">
                     <label className="block text-[11px] font-semibold text-slate-400 mb-1">
@@ -1380,8 +1154,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     { key: 'goat', defaultTitle: 'G.O.A.T', defaultSub: 'Greatest Of All Time', defaultDesc: 'Décerné au joueur le plus dominant de la saison, toutes disciplines confondues. Une seule attribution par saison.', color: 'text-amber-400 border-amber-500/30' },
-                    { key: 'godlike', defaultTitle: 'GodLike', defaultSub: 'Meilleur joueur MOBA', defaultDesc: 'Performance exceptionnelle dans les disciplines MOBA (Honor of Kings, Mobile Legends). Élu sur les stats de la saison entière.', color: 'text-blue-400 border-blue-500/30' },
-                    { key: 'demonking', defaultTitle: 'Demon King', defaultSub: 'Meilleur joueur TPS', defaultDesc: 'Domination absolue dans les disciplines Battle Royale (PUBG Mobile, Free Fire). Calculé sur le cumul des points saison.', color: 'text-red-400 border-red-500/30' },
+                    { key: 'godlike', defaultTitle: 'GodLike', defaultSub: 'Meilleur joueur MOBA', defaultDesc: 'Performance exceptionnelle dans les disciplines MOBA (Honor of Kings, Mobile Legends).', color: 'text-blue-400 border-blue-500/30' },
+                    { key: 'demonking', defaultTitle: 'Demon King', defaultSub: 'Meilleur joueur TPS', defaultDesc: 'Domination absolue dans les disciplines Battle Royale (PUBG Mobile, Free Fire).', color: 'text-red-400 border-red-500/30' },
                     { key: 'mvp', defaultTitle: 'MVP', defaultSub: 'Most Valuable Player', defaultDesc: 'Élu par les pairs et les organisateurs pour son impact en jeu et son fair-play exemplaire tout au long de la saison.', color: 'text-teal-400 border-teal-500/30' },
                     ...(formData.pantheon?.distinctions ?? []).filter(d => !['goat','godlike','demonking','mvp'].includes(d.key)).map(d => ({ key:d.key, defaultTitle:d.title, defaultSub:d.subtitle, defaultDesc:d.desc, color:'text-amber-400 border-amber-500/30' })),
                   ].map((card) => {
@@ -1577,70 +1351,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ data, onUpdateData, on
                               />
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Attribution Steps */}
-              <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-4">
-                <h4 className="font-display font-bold text-teal-400 text-sm">
-                  Étapes d'Attribution (Section « Comment sont-elles attribuées ? »)
-                </h4>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  {[
-                    { step: '01', defaultTitle: 'Fin de saison', defaultDesc: "Les distinctions sont décernées à l'issue de la dernière journée de compétition, une fois tous les résultats validés." },
-                    { step: '02', defaultTitle: 'Calcul des stats', defaultDesc: 'G.O.A.T, GodLike et Demon King sont calculés automatiquement à partir du cumul des points saison par discipline.' },
-                    { step: '03', defaultTitle: 'Vote MVP', defaultDesc: 'Le MVP est élu par les joueurs participants et les organisateurs via un formulaire de vote interne.' },
-                    { step: '04', defaultTitle: 'Annonce officielle', defaultDesc: "Les lauréats sont annoncés sur les réseaux sociaux de l'ELC et leur profil est mis en avant sur cette page." },
-                  ].map((s, sIdx) => {
-                    const currentStep = (formData.pantheon?.attributionSteps || [])[sIdx] || {
-                      step: s.step,
-                      title: s.defaultTitle,
-                      desc: s.defaultDesc
-                    };
-
-                    const updateStep = (field: 'title' | 'desc', val: string) => {
-                      const list = [...(formData.pantheon?.attributionSteps || [
-                        { step: '01', title: 'Fin de saison', desc: "Les distinctions sont décernées à l'issue de la dernière journée de compétition, une fois tous les résultats validés." },
-                        { step: '02', title: 'Calcul des stats', desc: 'G.O.A.T, GodLike et Demon King sont calculés automatiquement à partir du cumul des points saison par discipline.' },
-                        { step: '03', title: 'Vote MVP', desc: 'Le MVP est élu par les joueurs participants et les organisateurs via un formulaire de vote interne.' },
-                        { step: '04', title: 'Annonce officielle', desc: "Les lauréats sont annoncés sur les réseaux sociaux de l'ELC et leur profil est mis en avant sur cette page." }
-                      ])];
-                      list[sIdx] = { ...list[sIdx], [field]: val };
-                      setFormData({
-                        ...formData,
-                        pantheon: { ...formData.pantheon, attributionSteps: list }
-                      });
-                    };
-
-                    return (
-                      <div key={s.step} className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-teal-400 px-1.5 py-0.5 rounded bg-teal-500/10 border border-teal-500/20">
-                            Étape {s.step}
-                          </span>
-                        </div>
-                        <div>
-                          <label className="block text-[10px] text-slate-400 mb-0.5">Titre de l'étape</label>
-                          <input
-                            type="text"
-                            value={currentStep.title}
-                            onChange={(e) => updateStep('title', e.target.value)}
-                            className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[10px] text-slate-400 mb-0.5">Description de l'étape</label>
-                          <textarea
-                            value={currentStep.desc}
-                            onChange={(e) => updateStep('desc', e.target.value)}
-                            rows={2}
-                            className="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
-                          />
                         </div>
                       </div>
                     );

@@ -42,9 +42,9 @@ export const ROUTES: Record<Section, Route> = {
   },
   saison: {
     chemin: '/saison',
-    titre: 'Saison news',
+    titre: 'Actualités',
     description:
-      "Actualités de la ligue, rankings par jeu et faits marquants : suivez l'ELC depuis Bertoua.",
+      "Actualités de la ligue, équipes et faits marquants : suivez l'ELC depuis Bertoua.",
   },
   competition: {
     chemin: '/calendrier',
@@ -66,7 +66,7 @@ export const ROUTES: Record<Section, Route> = {
   },
   joueurs: {
     chemin: '/joueurs',
-    titre: 'Joueurs',
+    titre: 'Équipes & joueurs',
     description:
       'Les joueurs et équipes engagés dans les disciplines de la Ligue Esport Est Cameroun.',
   },
@@ -117,5 +117,6 @@ export function cheminDe(section: Section): string {
 export function sectionDepuisChemin(chemin: string): Section {
   if (/^\/pages\/[^/]+\/?$/.test(chemin)) return 'page';
   const propre = chemin.replace(/\/+$/, '') || '/';
+  if (propre === '/classements' || propre === '/inscription') return 'competition';
   return SECTIONS.find((s) => ROUTES[s].chemin === propre) ?? ALIAS[propre] ?? 'introuvable';
 }

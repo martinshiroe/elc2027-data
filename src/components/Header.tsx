@@ -17,8 +17,8 @@ interface HeaderProps {
 // et le Hall of Fame, qui sont ses onglets.
 const PRINCIPALES: { label: string; id: Section; actifSur: Section[] }[] = [
   { label: 'Home', id: 'accueil', actifSur: ['accueil'] },
-  { label: 'About us', id: 'apropos', actifSur: ['apropos', 'contact'] },
-  { label: 'Saison news', id: 'saison', actifSur: ['saison', 'classements', 'pantheon'] },
+  { label: 'La ligue', id: 'apropos', actifSur: ['apropos', 'contact'] },
+  { label: 'Actualités', id: 'saison', actifSur: ['saison', 'classements', 'pantheon'] },
   { label: 'Calendrier', id: 'competition', actifSur: ['competition'] },
 ];
 
@@ -27,13 +27,11 @@ const PRINCIPALES: { label: string; id: Section; actifSur: Section[] }[] = [
 const MENU: { label: string; id: Section }[] = [
   { label: 'Accueil', id: 'accueil' },
   { label: 'À propos', id: 'apropos' },
-  { label: 'Saison news', id: 'saison' },
+  { label: 'Actualités', id: 'saison' },
   { label: 'Calendrier', id: 'competition' },
-  { label: 'Rankings', id: 'classements' },
   { label: 'Hall of Fame', id: 'pantheon' },
-  { label: 'Joueurs', id: 'joueurs' },
+  { label: 'Équipes & joueurs', id: 'joueurs' },
   { label: 'Vidéos', id: 'videos' },
-  { label: 'Inscription', id: 'inscription' },
   { label: 'Contact', id: 'contact' },
 ];
 

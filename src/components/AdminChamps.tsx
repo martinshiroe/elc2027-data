@@ -20,10 +20,10 @@ function ChampStructure({value,label,onChange}: {value:Value;label:string;onChan
     {value.length>0&&<button type="button" className="admin-secondary" onClick={()=>{const copy=JSON.parse(JSON.stringify(value[value.length-1]));if(copy&&typeof copy==='object'&&!Array.isArray(copy)){if('id'in copy)copy.id=crypto.randomUUID();if('key'in copy)copy.key='element-'+crypto.randomUUID();}onChange([...value,copy]);}}>Dupliquer le dernier élément</button>}
     {!value.length&&<p>Liste vide. Utilisez le module dédié pour créer le premier élément.</p>}
   </div></details>;
-  return <details className="admin-panel"><summary>{label}</summary><div className="admin-content-list mt-4">{Object.entries(value).filter(([key])=>!['id','key'].includes(key)).map(([key,item])=><ChampStructure key={key} value={item} label={title(key)} onChange={next=>onChange({...value,[key]:next})}/>)}</div></details>;
+  return <details className="admin-panel"><summary>{label}</summary><div className="admin-content-list mt-4">{Object.entries(value).filter(([key])=>!['id','key','calendrierHokVersion','calendrierMobaVersion','bracket','bareme','manches','roster','kills','points','scoreTotal','attributionSteps','titreAttribution','googleFormUrl','startGgUrl','structure'].includes(key)).map(([key,item])=><ChampStructure key={key} value={item} label={title(key)} onChange={next=>onChange({...value,[key]:next})}/>)}</div></details>;
 }
 export function AdminChamps({data,onChange}: {data:ELCData;onChange:(data:ELCData)=>void}) {
   const complete={...data,contenu:contenuDe(data)};
   return <div className="admin-content-list"><div className="admin-notice">Les modifications s’appliquent aux mêmes contenus que les modules dédiés. Les textes fixes et les logos sont disponibles dans « Textes, images & logos ».</div>
-    {Object.entries(complete).filter(([key])=>key!=='site').map(([key,value])=><ChampStructure key={key} label={title(key)} value={value as Value} onChange={next=>onChange({...data,[key]:next})}/>)}</div>;
+    {Object.entries(complete).filter(([key])=>!['site','visual3','visual4'].includes(key)).map(([key,value])=><ChampStructure key={key} label={title(key)} value={value as Value} onChange={next=>onChange({...data,[key]:next})}/>)}</div>;
 }

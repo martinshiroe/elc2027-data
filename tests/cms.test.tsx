@@ -28,6 +28,60 @@ import { BlocInscription, miniatureDe } from '../src/components/Blocs';
 import { AdminImageInput } from '../src/components/AdminImageInput';
 import { OngletActualites, OngletPages } from '../src/components/AdminContenu';
 import { contenuDe } from '../src/data/contenu';
+import { preparerVitrine, lienChallengermode } from '../src/lib/vitrine';
+import { AdminJoueurs } from '../src/components/AdminJoueurs';
+
+test('La vitrine conserve jeux et calendrier sans rankings ni double inscription', () => {
+  const data = structuredClone(initialELCData);
+  data.meta.googleFormUrl = 'https://forms.gle/ancien-formulaire';
+  data.meta.startGgUrl = 'https://www.start.gg/ancien-tournoi';
+  for (const Component of [PageAccueil, PageCalendrier, PageSaison, PageAPropos, Footer]) {
+    const C = Component as React.ComponentType<any>;
+    const html = render(<C data={data} etat="pret" onNaviguer={noop} onReessayer={noop} onOpenRegulations={noop}/>);
+    assert.doesNotMatch(html, /href="\/(classements|inscription)|Voir le ranking|start\.gg|forms\.gle/);
+  }
+  const html = render(<PageCalendrier data={data} onNaviguer={noop} onOpenRegulations={noop}/>);
+  assert.match(html, /Honor of Kings/);
+  assert.match(html, /16 novembre 2026 à 08 h 00/);
+  assert.match(html, /11 janvier 2027 à 09 h 12/);
+  assert.match(html, /6 février 2027 à 23 h 30/);
+  assert.match(html, /UTC\+1/);
+  assert.equal(sectionDepuisChemin('/classements'), 'competition');
+  assert.equal(sectionDepuisChemin('/inscription/'), 'competition');
+});
+
+test('Challengermode : aucun lien inventé, ancien ou dangereux et un lien officiel configurable', () => {
+  for (const url of [undefined, '', 'javascript:alert(1)', 'https://challengermode.com.evil.test/s/elc', 'https://www.start.gg/tournament/elc']) assert.equal(lienChallengermode(url), null);
+  const data = structuredClone(initialELCData);
+  data.meta.challengermodeUrl = 'https://www.challengermode.com/s/elc-test';
+  const html = render(<PageCalendrier data={data} onNaviguer={noop} onOpenRegulations={noop}/>);
+  assert.match(html, /href="https:\/\/www.challengermode.com\/s\/elc-test"/);
+  assert.match(html, /rel="noopener noreferrer"/);
+});
+
+test('Le calendrier confirmé migre les anciennes données sans écraser les mises à jour suivantes', () => {
+  const old = structuredClone(initialELCData);
+  delete old.meta.calendrierHokVersion;
+  old.competition.hok.calendrier = [];
+  const before = JSON.stringify(old);
+  const migrated = preparerVitrine(old);
+  assert.equal(JSON.stringify(old), before);
+  assert.equal(migrated.competition.hok.calendrier.length, 3);
+  assert.deepEqual(migrated.competition.mlbb, old.competition.mlbb);
+  migrated.competition.hok.calendrier[0].periode = 'Date corrigée par la ligue';
+  assert.equal(preparerVitrine(migrated).competition.hok.calendrier[0].periode, 'Date corrigée par la ligue');
+});
+
+test('Les portraits et rosters gardent les informations humaines, sans statistiques de match', () => {
+  const data = structuredClone(initialELCData);
+  data.joueurs = [{ id:'portrait', pseudo:'Joueur test', equipe:'Équipe test', discipline:'Honor of Kings', role:'Capitaine', ville:'Bertoua', biographie:'Présentation du capitaine', photo:importedImage, points:9999, kills:8888 }];
+  const html = render(<PageJoueurs data={data} onNaviguer={noop}/>);
+  for (const text of ['Joueur test','Équipe test','Capitaine','Bertoua','Présentation du capitaine']) assert.ok(html.includes(text));
+  assert.doesNotMatch(html, /9999|8888|Points ELC|Éliminations/);
+  const editor = render(<AdminJoueurs data={data} onChange={noop}/>);
+  assert.match(editor, /Équipe \/ roster/);
+  assert.doesNotMatch(editor, /9999|8888/);
+});
 
 test('Le portrait survit à la fusion des contenus et reste visible dans le formulaire et les deux pages',()=>{
   for (const photo of ['https://example.com/portrait.jpg', importedImage]) {
@@ -107,7 +161,7 @@ const page:ELCPageLibre={id:'privacy',slug:'politique-de-confidentialite',titre:
 const render=(node:React.ReactNode,site:ELCData['site']={})=>renderToStaticMarkup(<SiteCustomizationProvider value={site??{}}>{node}</SiteCustomizationProvider>);
 
 test('Les états de chargement et erreur de la dernière version restent disponibles',()=>{
-  for(const Component of [PageSaison,PageHallOfFame,PageClassements]){
+  for(const Component of [PageSaison,PageHallOfFame]){
     const C=Component as React.ComponentType<any>;
     const loading=render(<C data={initialELCData} jeu="hok" etat="chargement" onReessayer={noop} onNaviguer={noop}/>);
     const error=render(<C data={initialELCData} jeu="hok" etat="erreur" onReessayer={noop} onNaviguer={noop}/>);
@@ -128,13 +182,13 @@ test('Les dix pages publiques se rendent avec les contenus existants',()=>{
 test('Un texte, un logo et leur rétablissement sont raccordés au rendu public',()=>{
   const node=<><Header data={initialELCData} activeSection="accueil" onNaviguer={noop}/><PageAccueil data={initialELCData} onNaviguer={noop}/></>;
   const original=render(node);
-  const custom=render(node,{textes:{'Affronte les meilleurs — sans compromis':'Bienvenue dans la ligue'},images:{'/img/logo-ligue-est.webp':'https://example.com/logo.png'}});
+  const custom=render(node,{textes:{'Les talents de l’Est — une même passion':'Bienvenue dans la ligue'},images:{'/img/logo-ligue-est.webp':'https://example.com/logo.png'}});
   assert.match(custom,/Bienvenue dans la ligue/);
   assert.match(custom,/src="https:\/\/example.com\/logo.png"/);
   assert.equal(render(node,{}),original);
 });
 test('Les textes du CMS sont échappés et les URLs exécutables refusées',()=>{
-  const html=render(<PageAccueil data={initialELCData} onNaviguer={noop}/>,{textes:{'Affronte les meilleurs — sans compromis':'<script>alert(1)</script>'},images:{'/img/hero-joueur.webp':'javascript:alert(1)'}});
+  const html=render(<PageAccueil data={initialELCData} onNaviguer={noop}/>,{textes:{'Les talents de l’Est — une même passion':'<script>alert(1)</script>'},images:{'/img/hero-joueur.webp':'javascript:alert(1)'}});
   assert.ok(!html.includes('<script>'));
   assert.ok(html.includes('&lt;script&gt;'));
   assert.ok(!html.includes('src="javascript:'));
@@ -156,7 +210,7 @@ test('Les adresses et contenus des pages sont validés avant publication',()=>{
 });
 test('Le Hall of Fame accepte les nouvelles distinctions et masque les désactivées',()=>{
   const data=structuredClone(initialELCData);
-  data.pantheon.distinctions=[...(data.pantheon.distinctions??[]).filter(d=>d.key!=='goat'),{key:'goat',title:'G.O.A.T',subtitle:'',desc:'',visible:false},{key:'fairplay',title:'Prix du fair-play',subtitle:'Esprit sportif',desc:'Pour un comportement exemplaire.',couleur:'#ffffff',logoImage:'https://example.com/prix.png'}];
+  data.pantheon.distinctions=[...(data.pantheon.distinctions??[]).filter(d=>d.key!=='goat'),{key:'goat',title:'G.O.A.T',subtitle:'',desc:'',visible:false},{key:'fairplay',nomineNom:'Joueur confirmé',title:'Prix du fair-play',subtitle:'Esprit sportif',desc:'Pour un comportement exemplaire.',couleur:'#ffffff',logoImage:'https://example.com/prix.png'}];
   const html=render(<PageHallOfFame data={data} etat="pret" onReessayer={noop} onNaviguer={noop}/>);
   assert.match(html,/Prix du fair-play/);assert.match(html,/prix.png/);
   assert.ok(!html.includes('id="distinction-goat"'));

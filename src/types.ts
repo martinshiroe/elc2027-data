@@ -36,7 +36,10 @@ export interface ELCMeta {
   /** Bandeau affiché au-dessus du bouton « Je m'inscris ». Vide = /img/bandeau-inscription.png. */
   formBannerImage?: string;
   googleFormUrl?: string;
-  startGgUrl?: string;
+  startGgUrl?: string; // Anciennes données conservées, sans affichage public.
+  challengermodeUrl?: string;
+  calendrierHokVersion?: number;
+  calendrierMobaVersion?: number;
   favicon?: string;
 }
 
@@ -55,6 +58,7 @@ export interface ELCJoueurProfil {
   id: string;
   pseudo: string;
   nomReel?: string;
+  biographie?: string;
   discipline: string;
   equipe?: string;
   role?: string;
@@ -73,6 +77,8 @@ export interface ELCTitre {
   sousTitre: string;
   lancement: string;
   plateforme: string;
+  format?: string;
+  dotation?: string;
 }
 
 export interface ELCVisual1 {
