@@ -1,8 +1,9 @@
 import { ImagePublique } from './ImagePublique';
 import { useSiteCustomization } from '../lib/siteCustomization';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import { ELCData, ELCJoueurProfil } from '../types';
+import type { EquipeChallengermode, VitrineChallengermode } from '../lib/challengermode';
 import { Section } from '../lib/routes';
 import { urlSure } from '../lib/urls';
 import { jeuxActifs } from './Blocs';
@@ -11,6 +12,7 @@ import { Conteneur, EnTetePage, Carte, TitreCarte, LienPage, Pastille, initiales
 interface PageJoueursProps {
   data: ELCData;
   onNaviguer: (section: Section, jeu?: string) => void;
+  equipesInitiales?: EquipeChallengermode[];
 }
 
 // Le champ `discipline` des fiches joueur est un libellé libre saisi dans
@@ -23,8 +25,39 @@ const FILTRES: { id: string; label: string; motifs: RegExp }[] = [
   { id: 'ff', label: 'Free Fire', motifs: /free ?fire|\bff\b/i },
 ];
 
-export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) => {
+export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer, equipesInitiales = [] }) => {
   const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
+
+  const [equipes, setEquipes] = useState<EquipeChallengermode[]>(equipesInitiales);
+  const [synchronisation, setSynchronisation] = useState<'chargement' | 'pret' | 'erreur' | 'ancien'>('chargement');
+  useEffect(() => {
+    const controller = new AbortController();
+    let enCours = false;
+    async function actualiser() {
+      if (enCours || document.visibilityState === 'hidden') return;
+      enCours = true;
+      try {
+        const res = await fetch('/api/challengermode', { signal: controller.signal });
+        if (!res.ok) throw new Error('Synchronisation indisponible');
+        const resultat: VitrineChallengermode = await res.json();
+        if (!Array.isArray(resultat.equipes)) throw new Error('Réponse invalide');
+        if (!controller.signal.aborted) {
+          setEquipes(resultat.equipes);
+          setSynchronisation(resultat.stale ? 'ancien' : 'pret');
+        }
+      } catch {
+        if (!controller.signal.aborted) setSynchronisation('erreur');
+      } finally { enCours = false; }
+    }
+    void actualiser();
+    const timer = window.setInterval(() => { void actualiser(); }, 5 * 60_000);
+    document.addEventListener('visibilitychange', actualiser);
+    return () => {
+      controller.abort();
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', actualiser);
+    };
+  }, []);
 
   const [recherche, setRecherche] = useState('');
   const [filtre, setFiltre] = useState(() => {
@@ -32,7 +65,7 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
     return FILTRES.some(f => f.id === jeu) ? jeu! : 'tous';
   });
 
-  const joueurs: ELCJoueurProfil[] = useMemo(
+  const fichesManuelles: ELCJoueurProfil[] = useMemo(
     () =>
       (data.joueurs ?? []).filter(j => (j.pseudo || j.nom || '').trim()).map((j, i) => ({
         id: j.id || `joueur-${i}`,
@@ -52,13 +85,26 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
   // Filtres : « Tous » puis les seules disciplines actives de la saison.
   const actifs = jeuxActifs(data).map((j) => j.id as string);
   const filtres = FILTRES.filter((f) => f.id === 'tous' || actifs.includes(f.id));
+  const joueurs: (ELCJoueurProfil & { membres?: EquipeChallengermode['membres']; tournoiUrl?: string })[] = [
+    ...equipes.filter(e => actifs.includes(e.jeu)).map(e => ({
+      id: `cm:${e.id}`, pseudo: e.nom, discipline: FILTRES.find(f => f.id === e.jeu)!.label,
+      photo: e.logo, statut: 'Équipe', membres: e.membres, tournoiUrl: e.tournoiUrl,
+      equipe: `${e.membres.length} joueurs`,
+    })),
+    ...fichesManuelles.filter(p => {
+      const jeu = FILTRES.find(f => f.id !== 'tous' && f.motifs.test(p.discipline));
+      return !jeu || actifs.includes(jeu.id);
+    }),
+  ];
+
 
   const q = recherche.trim().toLowerCase();
-  const motif = FILTRES.find((f) => f.id === filtre)!.motifs;
+  const filtreActif = filtres.some(f => f.id === filtre) ? filtre : 'tous';
+  const motif = FILTRES.find((f) => f.id === filtreActif)!.motifs;
   const affiches = joueurs.filter(
     (p) =>
       motif.test(p.discipline) &&
-      (!q || [p.pseudo, p.equipe, p.discipline, p.nomReel].some((v) => v?.toLowerCase().includes(q)))
+      (!q || [p.pseudo, p.equipe, p.discipline, p.nomReel, ...('membres' in p ? p.membres?.map(m => m.pseudo) ?? [] : [])].some((v) => v?.toLowerCase().includes(q)))
   );
 
   return (
@@ -77,7 +123,7 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
           <div className="mb-8 flex flex-col gap-4 border-b border-bord-fort pb-6 lg:flex-row lg:items-center lg:justify-between">
             <div role="group" aria-label={texteSite("Filtrer par discipline")} className="-mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
               {texteSite(filtres.map((f) => {
-                const actif = filtre === f.id;
+                const actif = filtreActif === f.id;
                 const nombre = f.id === 'tous' ? joueurs.length : joueurs.filter((p) => f.motifs.test(p.discipline)).length;
                 return (
                   <button
@@ -107,6 +153,14 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
             </label>
           </div>
 
+          {synchronisation !== 'pret' && (
+            <p role="status" className="mb-5 text-sm text-doux">
+              {synchronisation === 'chargement' ? 'Chargement des équipes Challengermode…'
+                : synchronisation === 'ancien' || equipes.length > 0
+                  ? 'Actualisation temporairement indisponible. Dernières équipes récupérées affichées.'
+                  : 'Les équipes Challengermode sont temporairement indisponibles. Les fiches publiées par la ligue restent disponibles.'}
+            </p>
+          )}
           {texteSite(affiches.length > 0 ? (
             <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {texteSite(affiches.map((p) => (
@@ -135,6 +189,15 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
                         <p className="truncate text-sm text-doux">{texteSite(p.equipe || p.role || 'Compétiteur')}</p>
                       </div>
                     </div>
+                    {p.membres && (
+                      <div className="mt-auto border-t border-bord pt-4 text-sm">
+                        <p className="mb-2 font-bold text-white">Roster</p>
+                        <ul className="space-y-1.5 text-doux">
+                          {p.membres.map(m => <li key={m.id}>{m.pseudo}{m.capitaine ? ' · Capitaine' : ''}</li>)}
+                        </ul>
+                        <a href={urlSure(p.tournoiUrl)} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block font-bold italic text-magenta">Voir sur Challengermode</a>
+                      </div>
+                    )}
                     {texteSite((p.role || p.ville || p.biographie) && (
                       <dl className="mt-auto space-y-1.5 border-t border-bord pt-4 text-sm">
                         {p.role && <div className="flex justify-between"><dt className="text-doux">Rôle</dt><dd className="text-white">{texteSite(p.role)}</dd></div>}
@@ -154,7 +217,7 @@ export const PageJoueurs: React.FC<PageJoueursProps> = ({ data, onNaviguer }) =>
           ) : (
             <Carte className="px-6 py-14 text-center sm:px-16">
               <TitreCarte className="mb-4 text-2xl">
-                {texteSite(joueurs.length === 0 ? 'Aucun joueur publié pour le moment.' : 'Aucun joueur ne correspond.')}
+                {texteSite(joueurs.length === 0 ? 'Aucune équipe ni aucun joueur publié pour le moment.' : 'Aucune équipe ni aucun joueur ne correspond.')}
               </TitreCarte>
               <p className="mx-auto mb-7 max-w-2xl leading-relaxed text-texte">
                 {texteSite(joueurs.length === 0
