@@ -1,5 +1,14 @@
 import type { ELCData } from '../types';
 
+/** Tournois officiels identifiés depuis les invitations fournies par la ligue. */
+export function inscriptionChallengermode(jeu: string): string | null {
+  const ids: Record<string, string> = {
+    hok: '2c12729a-7bcc-4eb9-e4bc-08df3e4c1535',
+    mlbb: '9ae20484-421e-45c3-e4c2-08df3e4c1535',
+  };
+  return ids[jeu] ? `https://www.challengermode.com/s/EastLeagueCameroon/tournaments/${ids[jeu]}` : null;
+}
+
 /** One-time migration of the old CMS calendar. Subsequent admin edits win. */
 function preparerHok(data: ELCData): ELCData {
   if (data.meta.calendrierHokVersion === 1) return data;

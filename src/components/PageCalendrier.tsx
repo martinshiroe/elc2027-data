@@ -3,7 +3,7 @@ import React from 'react';
 import { ArrowRight, ExternalLink, Smartphone, Tv, Users, Swords } from 'lucide-react';
 import { ELCData } from '../types';
 import { Section } from '../lib/routes';
-import { lienChallengermode } from '../lib/vitrine';
+import { inscriptionChallengermode, lienChallengermode } from '../lib/vitrine';
 import { urlSure } from '../lib/urls';
 import { Conteneur, EnTetePage, Carte, TitreCarte, TitreSection, LienPage, Bouton, BoutonLien } from './ui';
 import { BlocPhases, BlocInscription, jeuxActifs, nombreDeJeux } from './Blocs';
@@ -29,6 +29,11 @@ export const PageCalendrier: React.FC<PageCalendrierProps> = ({ data, onNaviguer
           </h1>
           {texteSite(v2?.bandeauSousTitre && <p className="mt-6 max-w-3xl text-base leading-relaxed text-texte sm:text-lg">{texteSite(v2.bandeauSousTitre)}{texteSite(".")}</p>)}
           <div className="mt-8 flex flex-wrap gap-4">
+            {jeuxActifs(data).filter(j => inscriptionChallengermode(j.id)).map(j => (
+              <BoutonLien key={j.id} href={inscriptionChallengermode(j.id)!} target="_blank" rel="noopener noreferrer">
+                {texteSite(`Inscription ${j.nom.replace(': Bang Bang', '')}`)}<ExternalLink className="h-4 w-4" aria-hidden="true" />
+              </BoutonLien>
+            ))}
             {texteSite(lien && (
               <BoutonLien href={lien} target="_blank" rel="noopener noreferrer">{texteSite("Suivre sur Challengermode")}<ExternalLink className="h-4 w-4" aria-hidden="true" />
               </BoutonLien>

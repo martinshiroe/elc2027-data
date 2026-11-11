@@ -57,6 +57,15 @@ test('Challengermode : aucun lien inventé, ancien ou dangereux et un lien offic
   const html = render(<PageCalendrier data={data} onNaviguer={noop} onOpenRegulations={noop}/>);
   assert.match(html, /href="https:\/\/www.challengermode.com\/s\/elc-test"/);
   assert.match(html, /rel="noopener noreferrer"/);
+  data.meta.challengermodeUrl = '';
+  const inscriptions = render(<PageCalendrier data={data} onNaviguer={noop} onOpenRegulations={noop}/>);
+  assert.match(inscriptions, /Inscription Honor of Kings/);
+  assert.match(inscriptions, /tournaments\/2c12729a-7bcc-4eb9-e4bc-08df3e4c1535/);
+  assert.match(inscriptions, /Inscription Mobile Legends/);
+  assert.match(inscriptions, /tournaments\/9ae20484-421e-45c3-e4c2-08df3e4c1535/);
+  data.competition.mlbb.actif = false;
+  const filtre = render(<PageCalendrier data={data} onNaviguer={noop} onOpenRegulations={noop}/>);
+  assert.doesNotMatch(filtre, /Inscription Mobile Legends|tournaments\/9ae20484/);
 });
 
 test('Le calendrier confirmé migre les anciennes données sans écraser les mises à jour suivantes', () => {

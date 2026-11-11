@@ -119,12 +119,12 @@ export const PageAccueil: React.FC<PageAccueilProps> = ({ data, onNaviguer }) =>
         <div className="absolute inset-x-0 bottom-6 flex items-center px-5 sm:bottom-8 sm:px-[13%]">
           <span aria-hidden="true" className="h-0.5 flex-1 bg-magenta/90" />
           <LienPage
-            section="joueurs"
+            section="competition"
             onNaviguer={onNaviguer}
             className="relative isolate mx-2 px-10 py-3 text-base font-extrabold italic uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03] sm:px-20 sm:py-4 sm:text-lg"
           >
             <span aria-hidden="true" className="biseau absolute inset-0 -z-10 bg-magenta-plein" />
-            {texteSite('Nos équipes')}
+            {texteSite('S’inscrire')}
           </LienPage>
           <span aria-hidden="true" className="h-0.5 flex-1 bg-magenta/90" />
         </div>

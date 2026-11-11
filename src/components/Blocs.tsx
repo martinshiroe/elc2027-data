@@ -9,7 +9,7 @@ import React from 'react';
 import { Play, ArrowRight } from 'lucide-react';
 import { ELCData, ELCVideo } from '../types';
 import { Section } from '../lib/routes';
-import { lienChallengermode } from '../lib/vitrine';
+import { inscriptionChallengermode, lienChallengermode } from '../lib/vitrine';
 import { urlSure } from '../lib/urls';
 import { Carte, TitreCarte, TitreSection, LienPage, BoutonLien, Pastille, BandePlanete, Conteneur } from './ui';
 
@@ -252,22 +252,28 @@ export const BlocInscription: React.FC<{ data: ELCData; onNaviguer: Naviguer }> 
   const { texteSite, imageSite, sourcesSite } = useSiteCustomization();
 
   const lien = lienChallengermode(data.meta.challengermodeUrl);
+  const inscriptions = jeuxActifs(data).filter(j => inscriptionChallengermode(j.id));
   return (
     <BandePlanete image={data.meta.ctaImage || undefined} className="py-12 sm:py-20">
       <Conteneur>
         <Carte haute className="bg-carte-haute/80 p-7 sm:p-10">
           <TitreSection
             surtitre={`Saison ${data.meta.saison || '2027'}`}
-            titre={lien ? 'Vivez la compétition avec ELC.' : 'Faites vivre la scène de l’Est.'}
+            titre={inscriptions.length ? 'Inscrivez votre équipe.' : lien ? 'Vivez la compétition avec ELC.' : 'Faites vivre la scène de l’Est.'}
           >
-            {texteSite(lien
+            {texteSite(inscriptions.length || lien
               ? 'Retrouvez les compétitions et les inscriptions de la ligue sur Challengermode.'
               : 'Découvrez les équipes, suivez nos actualités et échangez avec la ligue.')}
           </TitreSection>
           <div className="mt-8 flex flex-wrap gap-4">
+            {inscriptions.map(j => (
+              <BoutonLien key={j.id} href={inscriptionChallengermode(j.id)!} target="_blank" rel="noopener noreferrer">
+                {texteSite(`Inscription ${j.nom.replace(': Bang Bang', '')}`)}
+              </BoutonLien>
+            ))}
             {texteSite(lien ? (
               <BoutonLien href={lien} target="_blank" rel="noopener noreferrer">{texteSite("ELC sur Challengermode")}</BoutonLien>
-            ) : (
+            ) : inscriptions.length ? null : (
               <LienPage section="contact" onNaviguer={onNaviguer} bouton="plein">{texteSite("Nous contacter")}</LienPage>
             ))}
             {texteSite(data.meta.reseaux?.whatsapp && (
